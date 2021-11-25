@@ -7,7 +7,7 @@ function Clients() {
     fetch(`${process.env.REACT_APP_API}/clients`)
       .then((response) => response.json())
       .then((response) => {
-        saveClients(response.data);
+        saveClients(response);
       });
   }, []);
 
