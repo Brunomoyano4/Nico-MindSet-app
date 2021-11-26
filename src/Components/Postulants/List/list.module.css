@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.list {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 16px;
+  min-width: 400px;
+  max-width: 800px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.list thead tr {
+  background-color: #27ae60;
+  color: #ffffff;
+  text-align: center;
+}
+
+.list th,
+.list td {
+  padding: 12px 15px;
+}
+
+.list td {
+  cursor: pointer;
+}
+
+.list tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.list tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.list tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+.list tbody tr.active-row {
+  font-weight: bold;
+  color: #27ae60;
+}
