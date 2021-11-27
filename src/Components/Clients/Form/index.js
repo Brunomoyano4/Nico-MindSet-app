@@ -28,6 +28,9 @@ function Form() {
   const onSubmit = (event) => {
     event.preventDefault();
 
+    const params = new URLSearchParams(window.location.search);
+    const clientId = params.get('id');
+
     const options = {
       method: 'PUT',
       headers: {
@@ -48,10 +51,8 @@ function Form() {
     //   options.method = 'POST';
     //   url = `${window.location.origin}/api/clients`;
     // }
-    const params = new URLSearchParams(window.location.search);
-    const idClients = params.get('clientId');
     console.log(params.get('clientId'));
-    const url = `${process.env.REACT_APP_API}/clients/${idClients}`;
+    const url = `${process.env.REACT_APP_API}/clients/${clientId}`;
 
     fetch(url, options).then((response) => {
       if (response.status !== 200 && response.status !== 201) {
