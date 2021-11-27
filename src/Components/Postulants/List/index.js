@@ -2,6 +2,10 @@ import Postulant from '../Postulant';
 import styles from './list.module.css';
 
 const List = ({ thName, dataList }) => {
+  const openNewForm = () => {
+    window.location.href = `/postulants/form`;
+  };
+
   return (
     <div className={styles.container}>
       <table className={styles.list}>
@@ -18,6 +22,9 @@ const List = ({ thName, dataList }) => {
           })}
         </tbody>
       </table>
+      <button className={styles.button} onClick={openNewForm}>
+        ADD NEW POSTULANT
+      </button>
     </div>
   );
 };

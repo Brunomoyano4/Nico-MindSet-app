@@ -12,6 +12,7 @@ const DeleteBtn = ({ object }) => {
         }
       })
       .catch((error) => error);
+    // };
   };
   return (
     <>
