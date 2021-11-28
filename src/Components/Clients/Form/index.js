@@ -48,29 +48,31 @@ function Form() {
 
     if (clientId) {
       options.method = 'PUT';
+      url = `${process.env.REACT_APP_API}/clients/${clientId}`;
     } else {
       options.method = 'POST';
       // eslint-disable-next-line no-const-assign
-      url = `${window.location.origin}/api/clients`;
+      url = `${process.env.REACT_APP_API}/clients`;
     }
 
     console.log(params.get('clientId'));
 
-    fetch(url, options).then((response) => {
-      if (response.status !== 200 && response.status !== 201) {
-        return response.json().then(({ message }) => {
-          throw new Error(message);
-        });
-      }
-      return response.json();
-    });
-    //     .then(() => {
-    //       // eslint-disable-next-line no-underscore-dangle
-    //       window.location.href = `${window.location.origin}/views/clientsList.html`;
-    //     })
-    //     .catch((error) => {
-    //       error.innerText = error;
-    //     });
+    fetch(url, options)
+      .then((response) => {
+        if (response.status !== 200 && response.status !== 201) {
+          return response.json().then(({ message }) => {
+            throw new Error(message);
+          });
+        }
+        return response.json();
+      })
+      .then(() => {
+        // eslint-disable-next-line no-underscore-dangle
+        window.location.href = `${window.location.origin}/clients`;
+      })
+      .catch((error) => {
+        error.innerText = error;
+      });
   };
 
   return (

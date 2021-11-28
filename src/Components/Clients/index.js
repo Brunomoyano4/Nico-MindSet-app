@@ -4,6 +4,9 @@ import styles from './clients.module.css';
 function Clients() {
   const [clients, saveClients] = useState([]);
   console.log('inicio', clients);
+  const addNewClient = () => {
+    window.location.href = `/clients/form`;
+  };
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API}/clients`)
@@ -39,7 +42,7 @@ function Clients() {
           );
         })}
       </div>
-      <button className={styles.button} type="button">
+      <button className={styles.button} onClick={addNewClient} type="button">
         ADD CLIENT
       </button>
     </section>
