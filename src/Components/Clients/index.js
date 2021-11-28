@@ -19,25 +19,29 @@ function Clients() {
       <div>
         {clients.map((client) => {
           return (
-            // eslint-disable-next-line react/jsx-key
-            <table className={styles.list}>
-              <tr>
-                <th>
-                  <a href={`/clients/form?id=${client._id}`} key={client._id}>
-                    Name: {client.customerName}
-                  </a>
-                  <a href={`/clients/form?id=${client._id}`} key={client._id}>
-                    Phone: {client.phone}
-                  </a>
-                  <a href={`/clients/form?id=${client._id}`} key={client._id}>
-                    Phone: {client.branch}
-                  </a>
-                </th>
-              </tr>
-            </table>
+            <>
+              <table className={styles.list}>
+                <tr>
+                  <th>
+                    <a href={`/clients/form?id=${client._id}`} key={client._id}>
+                      Name: {client.customerName}
+                    </a>
+                    <a href={`/clients/form?id=${client._id}`} key={client._id.phone}>
+                      Phone: {client.phone}
+                    </a>
+                    <a href={`/clients/form?id=${client._id}`} key={client._id.branch}>
+                      Branch: {client.branch}
+                    </a>
+                  </th>
+                </tr>
+              </table>
+            </>
           );
         })}
       </div>
+      <button className={styles.button} type="button">
+        ADD CLIENT
+      </button>
     </section>
   );
 }

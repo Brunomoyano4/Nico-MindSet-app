@@ -30,9 +30,10 @@ function Form() {
 
     const params = new URLSearchParams(window.location.search);
     const clientId = params.get('id');
+    let url = `${process.env.REACT_APP_API}/clients/${clientId}`;
 
     const options = {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -45,14 +46,15 @@ function Form() {
       })
     };
 
-    // if (params.get('clientId')) {
-    //   options.method = 'PUT';
-    // } else {
-    //   options.method = 'POST';
-    //   url = `${window.location.origin}/api/clients`;
-    // }
+    if (clientId) {
+      options.method = 'PUT';
+    } else {
+      options.method = 'POST';
+      // eslint-disable-next-line no-const-assign
+      url = `${window.location.origin}/api/clients`;
+    }
+
     console.log(params.get('clientId'));
-    const url = `${process.env.REACT_APP_API}/clients/${clientId}`;
 
     fetch(url, options).then((response) => {
       if (response.status !== 200 && response.status !== 201) {
