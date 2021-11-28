@@ -40,6 +40,9 @@ function Profiles() {
     setShowModal(true);
   };
 
+  const toForm = (id) => {
+    window.location.href = id ? `/profiles/form?id=${id}` : '/profiles/form';
+  };
   const getProfiles = async () => {
     const unparsedProfiles = await fetch(`${process.env.REACT_APP_API}/profiles`);
     const fetchedProfiles = await unparsedProfiles.json();
@@ -68,10 +71,20 @@ function Profiles() {
               <DeleteBtn onClick={(e) => deleteProfile(e, _id, branch, profileName)}></DeleteBtn>
             );
             const tableListItems = [branch, profileName, description, deleteBtn];
-            return <ListItem key={_id} listItems={tableListItems} id={_id}></ListItem>;
+            return (
+              <ListItem
+                key={_id}
+                listItems={tableListItems}
+                id={_id}
+                onRowClick={() => toForm(_id)}
+              ></ListItem>
+            );
           })}
         </tbody>
       </table>
+      <button className={styles.addBtn} type="button" onClick={toForm}>
+        Add Profile
+      </button>
     </section>
   );
 }

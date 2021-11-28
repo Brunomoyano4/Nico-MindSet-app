@@ -1,6 +1,6 @@
 import styles from './listitem.module.css';
 
-const ListItem = ({ headerItems, listItems, id }) => {
+const ListItem = ({ headerItems, listItems, id, onRowClick }) => {
   // console.log(headerItems);
   return (
     <>
@@ -14,7 +14,7 @@ const ListItem = ({ headerItems, listItems, id }) => {
         </thead>
       )}
       {listItems && (
-        <tr>
+        <tr onClick={onRowClick}>
           {listItems.map((item, idx) => {
             return <td key={`item-${idx}-${id}`}>{item}</td>;
           })}

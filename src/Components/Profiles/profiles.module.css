@@ -66,7 +66,27 @@
   opacity: 100%;
 }
 
-.button,
+.addBtn,
+.container input[type='submit'] {
+  box-sizing: border-box;
+  width: 20%;
+  min-width: 100px;
+  max-width: 400px;
+  padding: 15px;
+  background: #27ae60;
+  border-bottom: 2px solid #30c29e;
+  border-top-style: none;
+  border-right-style: none;
+  border-left-style: none;
+  color: #fff;
+}
+
+.addBtn:hover,
+.container input[type='submit']:hover {
+  background: #2ebc99;
+}
+
+.addBtn,
 .container input[type='submit'] {
   max-width: 100%;
   cursor: pointer;
