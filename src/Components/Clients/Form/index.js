@@ -114,7 +114,7 @@ function Form() {
           onChange={onChangeDescriptionInput}
           required
         />
-        <button className="saveButton" value="Send" type="submit">
+        <button className={styles.button} value="Send" type="submit">
           SAVE
         </button>
       </form>
