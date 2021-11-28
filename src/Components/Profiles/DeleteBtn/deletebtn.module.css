@@ -1,5 +1,4 @@
 .deleteBtn {
-  padding: 0;
-  height: fit-content;
-  /* background: linear-gradient(90deg, #72bc8e00 0%, #72bc8eaa 100%); */
+  width: 0;
+  transition: width 250ms linear;
 }

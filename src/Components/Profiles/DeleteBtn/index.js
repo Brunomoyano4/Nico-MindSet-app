@@ -1,8 +1,14 @@
 import styles from './deletebtn.module.css';
-import deleteImg from './images/deleteIcon.png';
 
 const DeleteBtn = ({ onClick }) => {
-  return <img className={styles.deleteBtn} onClick={onClick} src={deleteImg} alt="delete button" />;
+  return (
+    <img
+      className={styles.deleteBtn}
+      onClick={onClick}
+      src={`${process.env.PUBLIC_URL}/assets/images/deleteIcon.png`}
+      alt="delete button"
+    />
+  );
 };
 
 export default DeleteBtn;
