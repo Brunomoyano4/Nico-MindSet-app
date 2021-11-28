@@ -1,0 +1,9 @@
+.deleteBtn {
+  height: 30px;
+  width: 30px;
+  background-color: darkred;
+}
+
+.icon {
+  color: white;
+}

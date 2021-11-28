@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Input from '../Input';
 import styles from './form.module.css';
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
@@ -24,11 +25,11 @@ function Form() {
   };
   const onSubmit = (event) => {
     event.preventDefault();
+    let url;
     const params = new URLSearchParams(window.location.search);
     const adminId = params.get('id');
 
     const options = {
-      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -40,14 +41,21 @@ function Form() {
         password: passwordValue
       })
     };
-    const url = `${process.env.REACT_APP_API}/admins/${adminId}`;
 
+    if (adminId) {
+      options.method = 'PUT';
+      url = `${process.env.REACT_APP_API}/admins/${adminId}`;
+    } else {
+      options.method = 'POST';
+      url = `${process.env.REACT_APP_API}/admins`;
+    }
     fetch(url, options).then((response) => {
       if (response.status !== 200 && response.status !== 201) {
         return response.json().then(({ ErrMessage }) => {
           throw new Error(ErrMessage);
         });
       }
+      window.location.href = '/admins';
       return response.json();
     });
   };
@@ -55,57 +63,57 @@ function Form() {
     <div className={styles.container}>
       <form onSubmit={onSubmit}>
         <h2>Form</h2>
-        <input
-          id="firstName"
-          name="name"
-          placeholder="Your first name"
-          type="text"
-          required
-          className={styles.input}
-          value={firstNameValue}
-          onChange={onChangeFirstNameInput}
-        />
-        <input
-          id="lastName"
-          name="last name"
-          placeholder="Your last name"
-          type="text"
-          //required
-          className={styles.input}
-          value={lastNameValue}
-          onChange={onChangeLastNameInput}
-        />
-        <input
-          id="username"
-          name="username"
-          placeholder="Your username"
-          type="text"
-          //required
-          className={styles.input}
-          value={userNameValue}
-          onChange={onChangeUserNameInput}
-        />
-        <input
-          id="email"
-          name="email"
-          placeholder="Your email"
-          type="text"
-          //required
-          className={styles.input}
-          value={emailValue}
-          onChange={onChangeEmailInput}
-        />
-        <input
-          id="password"
-          name="password"
-          placeholder="Your password"
-          type="text"
-          //required
-          className={styles.input}
-          value={passwordValue}
-          onChange={onChangePasswordInput}
-        />
-        <button type="submit">Save</button>
+        <div>
+          <Input
+            name="First Name"
+            placeholder="First name"
+            type="text"
+            required
+            value={firstNameValue}
+            onChange={onChangeFirstNameInput}
+            pattern="[a-zA-Z\s]+"
+          />
+          <Input
+            name="Last Name"
+            placeholder="Last name"
+            type="text"
+            required
+            value={lastNameValue}
+            onChange={onChangeLastNameInput}
+            pattern="[a-zA-Z\s]+"
+          />
+          <Input
+            name="Username"
+            placeholder="Username"
+            type="text"
+            required
+            value={userNameValue}
+            onChange={onChangeUserNameInput}
+            pattern="[a-zA-Z0-9\s]+"
+          />
+        </div>
+        <div>
+          <Input
+            name="Email"
+            placeholder="Email"
+            type="email"
+            required
+            value={emailValue}
+            onChange={onChangeEmailInput}
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+          />
+          <Input
+            name="password"
+            placeholder="Password"
+            type="password"
+            required
+            value={passwordValue}
+            onChange={onChangePasswordInput}
+          />
+        </div>
+        <div>
+          <button type="submit">Save</button>
+        </div>
       </form>
     </div>
   );

@@ -1,6 +1,17 @@
 .container {
-  flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr {
+  margin: 3px 0px;
+}
+
+.createBtnSection {
+  display: flex;
+  justify-content: center;
 }
