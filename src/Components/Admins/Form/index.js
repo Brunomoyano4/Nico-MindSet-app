@@ -2,52 +2,54 @@ import { useState } from 'react';
 import styles from './form.module.css';
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
-  const changeFirstNameInput = (event) => {
+  const [lastNameValue, setLastNameValue] = useState('');
+  const [userNameValue, setUserNameValue] = useState('');
+  const [emailValue, setEmailValue] = useState('');
+  const [passwordValue, setPasswordValue] = useState('');
+
+  const onChangeFirstNameInput = (event) => {
     setFirstNameValue(event.target.value);
+  };
+  const onChangeLastNameInput = (event) => {
+    setLastNameValue(event.target.value);
+  };
+  const onChangeUserNameInput = (event) => {
+    setUserNameValue(event.target.value);
+  };
+  const onChangeEmailInput = (event) => {
+    setEmailValue(event.target.value);
+  };
+  const onChangePasswordInput = (event) => {
+    setPasswordValue(event.target.value);
   };
   const onSubmit = (event) => {
     event.preventDefault();
-    saveButton.disabled = true;
+    const params = new URLSearchParams(window.location.search);
+    const adminId = params.get('id');
 
     const options = {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        firstName: nameInput.value,
-        lastName: lastNameInput.value,
-        email: emailInput.value,
-        username: usernameInput.value,
-        password: passwordInput.value  
+        firstName: firstNameValue,
+        lastName: lastNameValue,
+        email: emailValue,
+        username: userNameValue,
+        password: passwordValue
       })
     };
-    const url = `${window.location.origin}/api/admins/${params.get('adminId')}`;
-    if (params.get('adminId')) {
-      options.method = 'PUT';
-    } else {
-      options.method = 'POST';
-      url = `${window.location.origin}/api/admins`;
-    }
+    const url = `${process.env.REACT_APP_API}/admins/${adminId}`;
 
-    fetch(`${window.location.origin}/api/admins/${params.get('adminId')}`, options)
-      .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
-          return response.json().then(({ ErrMessage }) => {
-            throw new Error(ErrMessage);
-          });
-        }
-        return response.json();
-      })
-      .then(() => {
-        window.location.href = `${window.location.origin}/views/adminsList.html`;
-      })
-      .catch((error) => {
-        errorMessage.innerText = error;
-      })
-      .finally(() => {
-        saveButton.disabled = false;
-      });
+    fetch(url, options).then((response) => {
+      if (response.status !== 200 && response.status !== 201) {
+        return response.json().then(({ ErrMessage }) => {
+          throw new Error(ErrMessage);
+        });
+      }
+      return response.json();
+    });
   };
   return (
     <div className={styles.container}>
@@ -61,7 +63,7 @@ function Form() {
           required
           className={styles.input}
           value={firstNameValue}
-          onChange={changeFirstNameInput}
+          onChange={onChangeFirstNameInput}
         />
         <input
           id="lastName"
@@ -70,6 +72,8 @@ function Form() {
           type="text"
           //required
           className={styles.input}
+          value={lastNameValue}
+          onChange={onChangeLastNameInput}
         />
         <input
           id="username"
@@ -78,6 +82,8 @@ function Form() {
           type="text"
           //required
           className={styles.input}
+          value={userNameValue}
+          onChange={onChangeUserNameInput}
         />
         <input
           id="email"
@@ -86,6 +92,8 @@ function Form() {
           type="text"
           //required
           className={styles.input}
+          value={emailValue}
+          onChange={onChangeEmailInput}
         />
         <input
           id="password"
@@ -94,6 +102,8 @@ function Form() {
           type="text"
           //required
           className={styles.input}
+          value={passwordValue}
+          onChange={onChangePasswordInput}
         />
         <button type="submit">Save</button>
       </form>

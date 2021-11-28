@@ -18,7 +18,7 @@ function Admins() {
         {admins.map((admin) => {
           return (
             <div key={admin._id}>
-              <a href="/admins/form">
+              <a href={`/admins/form?id=${admin._id}`}>
                 {admin.firstName + ' '} {admin.email}
               </a>
             </div>
