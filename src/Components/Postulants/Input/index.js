@@ -8,6 +8,8 @@ function Input(props) {
       name={props.name}
       value={props.value}
       onChange={props.onChange}
+      onFocus={props.onFocus}
+      onBlur={props.onBlur}
       placeholder={props.placeholder}
       required={props.required}
       pattern={props.pattern}

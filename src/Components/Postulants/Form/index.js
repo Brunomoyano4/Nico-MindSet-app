@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from './form.module.css';
 import Input from '../Input';
+import ExperienceForm from '../ExperienceForm';
 
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
@@ -16,9 +17,54 @@ function Form() {
   const [provinceValue, setProvinceValue] = useState('');
   const [countryValue, setCountryValue] = useState('');
   const [telephoneValue, setTelephoneValue] = useState('');
+  const [experienceList, setExperienceList] = useState([]);
 
   const params = new URLSearchParams(window.location.search);
   const postulantId = params.get('id');
+
+  let url = `${process.env.REACT_APP_API}/postulants`;
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      firstName: firstNameValue,
+      lastName: lastNameValue,
+      userName: userValue,
+      email: emailValue,
+      password: passwordValue,
+      birthDate: birthdayValue,
+      street: streetValue,
+      streetNumber: streetNumberValue,
+      city: cityValue,
+      postalCode: zipCodeValue,
+      province: provinceValue,
+      country: countryValue,
+      telephone: telephoneValue,
+      experience: [
+        {
+          jobPosition: 'test',
+          employer: 'test',
+          startDate: '1-2-2021',
+          endDate: '3-4-2021',
+          description: 'test'
+        }
+      ]
+    })
+  };
+
+  if (postulantId) {
+    options.method = 'PUT';
+    url = `${process.env.REACT_APP_API}/postulants/${postulantId}`;
+  } else {
+    options.method = 'POST';
+    url = `${process.env.REACT_APP_API}/postulants`;
+  }
+
+  const onAddBtnClick = (event) => {
+    setExperienceList(experienceList.concat(<ExperienceForm key={experienceList.length} />));
+  };
 
   const onChangeFirstNameValue = (event) => {
     setFirstNameValue(event.target.value);
@@ -60,48 +106,9 @@ function Form() {
   const onChangeTelephoneValue = (event) => {
     setTelephoneValue(event.target.value);
   };
+
   const onSubmit = (event) => {
     event.preventDefault();
-
-    let url = `${process.env.REACT_APP_API}/postulants`;
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        firstName: firstNameValue,
-        lastName: lastNameValue,
-        userName: userValue,
-        email: emailValue,
-        password: passwordValue,
-        birthDate: birthdayValue,
-        street: streetValue,
-        streetNumber: streetNumberValue,
-        city: cityValue,
-        postalCode: zipCodeValue,
-        province: provinceValue,
-        country: countryValue,
-        telephone: telephoneValue,
-        experience: [
-          {
-            jobPosition: 'test',
-            employer: 'test',
-            startDate: '1-2-2021',
-            endDate: '3-4-2021',
-            description: 'test'
-          }
-        ]
-      })
-    };
-
-    if (postulantId) {
-      options.method = 'PUT';
-      url = `${process.env.REACT_APP_API}/postulants/${postulantId}`;
-    } else {
-      options.method = 'POST';
-      url = `${process.env.REACT_APP_API}/postulants`;
-    }
 
     fetch(url, options)
       .then((response) => {
@@ -219,6 +226,11 @@ function Form() {
           placeholder="Telephone"
           required
         />
+        <h2>Postulant Experience</h2>
+        <button className="addExperienceForm" onClick={onAddBtnClick} type="button">
+          +
+        </button>
+        {experienceList}
         <button className={styles.button} type="submit">
           Save
         </button>
