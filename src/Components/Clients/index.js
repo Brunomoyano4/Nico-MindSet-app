@@ -19,9 +19,22 @@ function Clients() {
       <div>
         {clients.map((client) => {
           return (
-            <a href={`/clients/form?id=${client._id}`} key={client._id}>
-              {client.customerName}
-            </a>
+            // eslint-disable-next-line react/jsx-key
+            <table className={styles.list}>
+              <tr>
+                <th>
+                  <a href={`/clients/form?id=${client._id}`} key={client._id}>
+                    Name: {client.customerName}
+                  </a>
+                  <a href={`/clients/form?id=${client._id}`} key={client._id}>
+                    Phone: {client.phone}
+                  </a>
+                  <a href={`/clients/form?id=${client._id}`} key={client._id}>
+                    Phone: {client.branch}
+                  </a>
+                </th>
+              </tr>
+            </table>
           );
         })}
       </div>
