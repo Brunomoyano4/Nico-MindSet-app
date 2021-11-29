@@ -20,6 +20,7 @@ input[type='submit'] {
   border-left-style: none;
   color: #fff;
   border-radius: 6px;
+  cursor: pointer;
 }
 
 input[type='submit']:hover {

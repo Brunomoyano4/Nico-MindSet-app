@@ -10,7 +10,7 @@ function Profiles() {
   const [showModal, setShowModal] = useState(false);
   const [modalSubtitle, setModalSubtitle] = useState(['modalSubtitle']);
   const [modalBtnOnClick, setModalBtnOnClick] = useState([]);
-  const [modalError, setModalError] = useState({});
+  const [modalError, setModalError] = useState('');
 
   const deleteProfile = (e, id, branch, name) => {
     e.stopPropagation();
@@ -22,17 +22,17 @@ function Profiles() {
           method: 'DELETE'
         })
           .then((response) => {
-            if (response.status !== 204) {
+            if (response.status !== 200) {
               return response.json().then(({ message }) => {
                 throw new Error(message);
               });
             }
-            return getProfiles();
+            getProfiles();
+            setShowModal(false);
           })
           .catch((error) => {
-            setModalError(error);
+            setModalError(JSON.stringify(error));
           });
-        setShowModal(false);
       }
     ]);
     setShowModal(true);

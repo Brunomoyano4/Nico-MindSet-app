@@ -78,6 +78,7 @@ function ProfilesForm() {
         onChange={(e) => setProfileName(e.target.value)}
         label="Profile Name:"
         id="profile-name"
+        required
       ></Input>
       <Input
         placeholder="Branch"
@@ -85,6 +86,7 @@ function ProfilesForm() {
         onChange={(e) => setBranch(e.target.value)}
         label="Branch:"
         id="profile-branch"
+        required
       ></Input>
       <Input
         placeholder="Description"
@@ -92,6 +94,7 @@ function ProfilesForm() {
         onChange={(e) => setDescription(e.target.value)}
         label="Description:"
         id="profile-description"
+        required
       ></Input>
       <input type="submit" onSubmit={() => {}}></input>
     </form>
