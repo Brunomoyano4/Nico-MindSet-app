@@ -1,46 +1,52 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Input from '../Input';
 import styles from './form.module.css';
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
-  const [userNameValue, setUserNameValue] = useState('');
+  const [usernameValue, setUsernameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
 
-  const onChangeFirstNameInput = (event) => {
-    setFirstNameValue(event.target.value);
+  const setInputValues = (data) => {
+    setFirstNameValue(data.firstName || '-');
+    setLastNameValue(data.lastName || '-');
+    setUsernameValue(data.username || '-');
+    setEmailValue(data.email || '-');
+    setPasswordValue(data.password || '-');
   };
-  const onChangeLastNameInput = (event) => {
-    setLastNameValue(event.target.value);
+
+  let url;
+  const params = new URLSearchParams(window.location.search);
+  const adminId = params.get('id');
+
+  const options = {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      firstName: firstNameValue,
+      lastName: lastNameValue,
+      email: emailValue,
+      username: usernameValue,
+      password: passwordValue
+    })
   };
-  const onChangeUserNameInput = (event) => {
-    setUserNameValue(event.target.value);
-  };
-  const onChangeEmailInput = (event) => {
-    setEmailValue(event.target.value);
-  };
-  const onChangePasswordInput = (event) => {
-    setPasswordValue(event.target.value);
-  };
+
+  if (adminId) {
+    useEffect(() => {
+      fetch(`${process.env.REACT_APP_API}/admins/${adminId}`)
+        .then((response) => response.json())
+        .then((response) => {
+          setInputValues(response);
+        });
+    }, []);
+    options.method = 'PUT';
+    url = `${process.env.REACT_APP_API}/admins/${adminId}`;
+  }
+
   const onSubmit = (event) => {
     event.preventDefault();
-    let url;
-    const params = new URLSearchParams(window.location.search);
-    const adminId = params.get('id');
-
-    const options = {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        firstName: firstNameValue,
-        lastName: lastNameValue,
-        email: emailValue,
-        username: userNameValue,
-        password: passwordValue
-      })
-    };
 
     if (adminId) {
       options.method = 'PUT';
@@ -60,6 +66,9 @@ function Form() {
       })
       .then(() => {
         window.location.href = '/admins';
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
   return (
@@ -76,7 +85,7 @@ function Form() {
               type="text"
               required
               value={firstNameValue}
-              onChange={onChangeFirstNameInput}
+              onChange={(e) => setFirstNameValue(e.target.value)}
               pattern="[a-zA-Z\s]+"
             />
             <Input
@@ -85,7 +94,7 @@ function Form() {
               type="text"
               required
               value={lastNameValue}
-              onChange={onChangeLastNameInput}
+              onChange={(e) => setLastNameValue(e.target.value)}
               pattern="[a-zA-Z\s]+"
             />
             <Input
@@ -93,8 +102,8 @@ function Form() {
               placeholder="Username"
               type="text"
               required
-              value={userNameValue}
-              onChange={onChangeUserNameInput}
+              value={usernameValue}
+              onChange={(e) => setUsernameValue(e.target.value)}
               pattern="[a-zA-Z0-9\s]+"
             />
             <Input
@@ -103,7 +112,7 @@ function Form() {
               type="email"
               required
               value={emailValue}
-              onChange={onChangeEmailInput}
+              onChange={(e) => setEmailValue(e.target.value)}
               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
             />
             <Input
@@ -112,7 +121,7 @@ function Form() {
               type="password"
               required
               value={passwordValue}
-              onChange={onChangePasswordInput}
+              onChange={(e) => setPasswordValue(e.target.value)}
             />
           </div>
           <div className={styles.saveBtnSection}>
