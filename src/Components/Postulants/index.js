@@ -3,12 +3,12 @@ import styles from './postulants.module.css';
 import List from './List';
 
 function Postulants() {
-  const [postulants, savePostulants] = useState([]);
+  const [postulants, setPostulants] = useState([]);
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API}/postulants`)
       .then((response) => response.json())
       .then((response) => {
-        savePostulants(response);
+        setPostulants(response);
       });
   }, []);
 
@@ -16,7 +16,11 @@ function Postulants() {
     <section className={styles.container}>
       <h2>Postulants</h2>
       <div>
-        <List thName={['Name', 'Mail', 'Phone', 'Location', 'Actions']} dataList={postulants} />
+        <List
+          thName={['Name', 'Mail', 'Phone', 'Location', 'Actions']}
+          dataList={postulants}
+          setPostulants={setPostulants}
+        />
       </div>
     </section>
   );

@@ -36,10 +36,7 @@
   max-width: 100%;
   padding: 15px;
   background: #27ae60;
-  border-bottom: none;
-  border-top-style: none;
-  border-right-style: none;
-  border-left-style: none;
+  border: none;
   color: #fff;
 }
 
@@ -53,4 +50,17 @@
   background: #555;
   border-bottom: 2px solid #555;
   cursor: not-allowed;
+}
+
+.addExperienceForm {
+  background: #27ae60;
+  padding: 5px;
+  margin: 5px 20px 20px;
+  align-self: flex-end;
+  width: 30px;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
 }

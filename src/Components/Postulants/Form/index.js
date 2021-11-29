@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './form.module.css';
 import Input from '../Input';
-import ExperienceForm from '../ExperienceForm';
+// import ExperienceForm from '../ExperienceForm';
 
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
@@ -17,7 +17,24 @@ function Form() {
   const [provinceValue, setProvinceValue] = useState('');
   const [countryValue, setCountryValue] = useState('');
   const [telephoneValue, setTelephoneValue] = useState('');
-  const [experienceList, setExperienceList] = useState([]);
+  // const [experienceValue, setExperienceValue] = useState([{}]);
+
+  const setInputValues = (data) => {
+    setFirstNameValue(data.firstName || '-');
+    setLastNameValue(data.lastName || '-');
+    setUserNameValue(data.userName || '-');
+    setEmailValue(data.email || '-');
+    setPasswordValue(data.password || '-');
+    setBirthdayValue(data.birthDate || '-');
+    setStreetValue(data.street || '-');
+    setStreetNumberValue(data.streetNumber || '-');
+    setZipCodeValue(data.postalCode || '-');
+    setCityValue(data.city || '-');
+    setProvinceValue(data.province || '-');
+    setCountryValue(data.country || '-');
+    setTelephoneValue(data.telephone || '-');
+    console.log(`lastNameValue ${lastNameValue} dataValue: ${data.lastName}`);
+  };
 
   const params = new URLSearchParams(window.location.search);
   const postulantId = params.get('id');
@@ -54,7 +71,18 @@ function Form() {
     })
   };
 
+  // const pushWorkExperience = (object) => {
+  //   setExperienceValue(object);
+  // };
+
   if (postulantId) {
+    useEffect(() => {
+      fetch(`${process.env.REACT_APP_API}/postulants/${postulantId}`)
+        .then((response) => response.json())
+        .then((response) => {
+          setInputValues(response);
+        });
+    }, []);
     options.method = 'PUT';
     url = `${process.env.REACT_APP_API}/postulants/${postulantId}`;
   } else {
@@ -62,51 +90,9 @@ function Form() {
     url = `${process.env.REACT_APP_API}/postulants`;
   }
 
-  const onAddBtnClick = (event) => {
-    setExperienceList(experienceList.concat(<ExperienceForm key={experienceList.length} />));
-  };
-
-  const onChangeFirstNameValue = (event) => {
-    setFirstNameValue(event.target.value);
-  };
-  const onChangeLastNameValue = (event) => {
-    setLastNameValue(event.target.value);
-  };
-  const onChangeUserValue = (event) => {
-    setUserNameValue(event.target.value);
-  };
-  const onChangeEmailValue = (event) => {
-    setEmailValue(event.target.value);
-  };
-  const onChangePasswordValue = (event) => {
-    setPasswordValue(event.target.value);
-  };
-  const onChangeBirthdayValue = (event) => {
-    const birthday = `${event.target.value}`;
-    setBirthdayValue(birthday);
-  };
-  const onChangeStreetValue = (event) => {
-    setStreetValue(event.target.value);
-  };
-  const onChangeStreetNumberValue = (event) => {
-    setStreetNumberValue(event.target.value);
-  };
-  const onChangeZipCodeValue = (event) => {
-    setZipCodeValue(event.target.value);
-  };
-  const onChangeCityValue = (event) => {
-    setCityValue(event.target.value);
-  };
-  const onChangeProvinceValue = (event) => {
-    setProvinceValue(event.target.value);
-  };
-  const onChangeCountryValue = (event) => {
-    setCountryValue(event.target.value);
-  };
-  const onChangeTelephoneValue = (event) => {
-    setTelephoneValue(event.target.value);
-  };
-
+  // const onAddBtnClick = () => {
+  //   setExperienceList(experienceList.concat(<ExperienceForm key={experienceList.length} />));
+  // };
   const onSubmit = (event) => {
     event.preventDefault();
 
@@ -120,7 +106,7 @@ function Form() {
         return response.json();
       })
       .then(() => {
-        console.log('ta bom');
+        window.location.href = `/postulants`;
       })
       .catch((error) => {
         console.log(error);
@@ -131,9 +117,9 @@ function Form() {
       <form className={styles.form} onSubmit={onSubmit}>
         <h2>Form</h2>
         <Input
-          name="name"
+          name="firstName"
           value={firstNameValue}
-          onChange={onChangeFirstNameValue}
+          onChange={(e) => setFirstNameValue(e.target.value)}
           placeholder="First name"
           pattern="[a-zA-Z]+"
           required
@@ -141,7 +127,7 @@ function Form() {
         <Input
           name="lastName"
           value={lastNameValue}
-          onChange={onChangeLastNameValue}
+          onChange={(e) => setLastNameValue(e.target.value)}
           placeholder="Last name"
           pattern="[a-zA-Z]+"
           required
@@ -149,42 +135,42 @@ function Form() {
         <Input
           name="userValue"
           value={userValue}
-          onChange={onChangeUserValue}
+          onChange={(e) => setUserNameValue(e.target.value)}
           placeholder="Username"
           required
         />
         <Input
           name="mailValue"
           value={emailValue}
-          onChange={onChangeEmailValue}
+          onChange={(e) => setEmailValue(e.target.value)}
           placeholder="Email"
           required
         />
         <Input
           name="passwordValue"
           value={passwordValue}
-          onChange={onChangePasswordValue}
+          onChange={(e) => setPasswordValue(e.target.value)}
           placeholder="Password"
           required
         />
         <Input
           name="birthdayValue"
           value={birthdayValue}
-          onChange={onChangeBirthdayValue}
+          onChange={(e) => setBirthdayValue(e.target.value)}
           type="date"
           required
         />
         <Input
           name="streetValue"
           value={streetValue}
-          onChange={onChangeStreetValue}
+          onChange={(e) => setStreetValue(e.target.value)}
           placeholder="Street"
           required
         />
         <Input
           name="streetNumberValue"
           value={streetNumberValue}
-          onChange={onChangeStreetNumberValue}
+          onChange={(e) => setStreetNumberValue(e.target.value)}
           placeholder="Street number"
           type="number"
           min="0"
@@ -193,7 +179,7 @@ function Form() {
         <Input
           name="zipCodeValue"
           value={zipCodeValue}
-          onChange={onChangeZipCodeValue}
+          onChange={(e) => setZipCodeValue(e.target.value)}
           placeholder="Zip Code"
           title="Zip code should only contain numbers"
           required
@@ -201,36 +187,38 @@ function Form() {
         <Input
           name="cityValue"
           value={cityValue}
-          onChange={onChangeCityValue}
+          onChange={(e) => setCityValue(e.target.value)}
           placeholder="City"
           required
         />
         <Input
           name="provinceValue"
           value={provinceValue}
-          onChange={onChangeProvinceValue}
+          onChange={(e) => setProvinceValue(e.target.value)}
           placeholder="Province"
           required
         />
         <Input
           name="countryValue"
           value={countryValue}
-          onChange={onChangeCountryValue}
+          onChange={(e) => setCountryValue(e.target.value)}
           placeholder="Country"
           required
         />
         <Input
           name="telephoneValue"
           value={telephoneValue}
-          onChange={onChangeTelephoneValue}
+          onChange={(e) => setTelephoneValue(e.target.value)}
           placeholder="Telephone"
           required
         />
         <h2>Postulant Experience</h2>
-        <button className="addExperienceForm" onClick={onAddBtnClick} type="button">
+        {/* <button className={styles.addExperienceForm} onClick={onAddBtnClick} type="button">
           +
-        </button>
-        {experienceList}
+        </button> */}
+
+        {/* <ExperienceForm jobExperience={pushWorkExperience} /> */}
+
         <button className={styles.button} type="submit">
           Save
         </button>

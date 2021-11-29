@@ -1,12 +1,33 @@
+// import { useState } from 'react';
 import styles from './experienceForm.module.css';
 import Input from '../Input';
 
-function ExperienceForm() {
+function ExperienceForm(/*{ jobExperience }*/) {
+  // const [jobPositionValue, setJobPositionValue] = useState('');
+  // const [employerValue, setEmployerValue] = useState('');
+  // const [startDateValue, setStartDateValue] = useState('');
+  // const [endDateValue, setEndDateValue] = useState('');
+  // const [descriptionValue, setDescriptionValue] = useState('');
+  // const jobPosition = '';
+  // const employer = '';
+  // const startDate = new Date();
+  // const endDate = new Date();
+  // const description = '';
+
+  // const onBlurJobPos = (e) => {
+  //   setJobPositionValue(e.target.value);
+  // };
   return (
     <div className={styles.container}>
-      <form className={styles.form}>
+      <div className={styles.form}>
         <h3>Job info</h3>
-        <Input name="jobPositionValue" placeholder="Job Position" required />
+        <Input
+          name="jobPositionValue"
+          placeholder="Job Position"
+          // onChange={(e) => setJobPositionValue(e.target.value)}
+          // onBlur={onBlurJobPos}
+          required
+        />
         <Input name="employerValue" placeholder="Employer" required />
         <Input
           name="startDateValue"
@@ -36,7 +57,7 @@ function ExperienceForm() {
           placeholder="End date"
         />
         <Input name="descriptionValue" placeholder="Description" required />
-      </form>
+      </div>
     </div>
   );
 }

@@ -7,6 +7,7 @@ function Input(props) {
       type={props.type}
       name={props.name}
       value={props.value}
+      defaultValue={props.defaultValue}
       onChange={props.onChange}
       onFocus={props.onFocus}
       onBlur={props.onBlur}
