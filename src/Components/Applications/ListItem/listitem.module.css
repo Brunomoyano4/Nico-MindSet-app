@@ -53,5 +53,5 @@ td:last-child {
 }
 
 .tr:hover td:last-child {
-  opacity: 100%;
+  opacity: unset;
 }
