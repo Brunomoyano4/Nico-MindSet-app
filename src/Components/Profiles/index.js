@@ -8,14 +8,13 @@ function Profiles() {
   const tableHeaderItems = ['Branch', 'Name', 'Description', ''];
   const [profiles, setProfiles] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [modalSubtitle, setModalSubtitle] = useState('modalSubtitle');
+  const [modalSubtitle, setModalSubtitle] = useState(['modalSubtitle']);
   const [modalBtnOnClick, setModalBtnOnClick] = useState([]);
   const [modalError, setModalError] = useState({});
-  // setModalBtnOnClick([() => setShowModal(false)]);
+
   const deleteProfile = (e, id, branch, name) => {
     e.stopPropagation();
-    setModalSubtitle(`Branch: ${branch}
-    Name: ${name}`);
+    setModalSubtitle([`Branch: ${branch}`, `Name: ${name}`]);
     setModalBtnOnClick([
       () => setShowModal(false),
       () => {
@@ -28,13 +27,12 @@ function Profiles() {
                 throw new Error(message);
               });
             }
-            getProfiles();
-            // eslint-disable-next-line no-undef
-            return closeModal();
+            return getProfiles();
           })
           .catch((error) => {
             setModalError(error);
           });
+        setShowModal(false);
       }
     ]);
     setShowModal(true);
@@ -43,10 +41,14 @@ function Profiles() {
   const toForm = (id) => {
     window.location.href = id ? `/profiles/form?id=${id}` : '/profiles/form';
   };
-  const getProfiles = async () => {
-    const unparsedProfiles = await fetch(`${process.env.REACT_APP_API}/profiles`);
-    const fetchedProfiles = await unparsedProfiles.json();
-    setProfiles(fetchedProfiles);
+  const getProfiles = () => {
+    fetch(`${process.env.REACT_APP_API}/profiles`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        setProfiles(res);
+      });
   };
   useEffect(getProfiles, []);
 
@@ -82,7 +84,7 @@ function Profiles() {
           })}
         </tbody>
       </table>
-      <button className={styles.addBtn} type="button" onClick={toForm}>
+      <button className={styles.addBtn} type="button" onClick={() => toForm()}>
         Add Profile
       </button>
     </section>
