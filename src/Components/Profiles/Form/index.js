@@ -96,7 +96,7 @@ function ProfilesForm() {
         id="profile-description"
         required
       ></Input>
-      <input type="submit" onSubmit={() => {}}></input>
+      <input type="submit"></input>
     </form>
   );
 }

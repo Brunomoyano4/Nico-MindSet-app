@@ -16,53 +16,11 @@
   text-align: center;
 }
 
-.list thead tr {
-  background-color: #72bc8e;
-  color: #ffffff;
-  text-align: left;
-}
-
-.list th,
-.list td {
-  padding: 12px 15px;
-  cursor: pointer;
-  text-align: center;
-}
-
-.list tbody tr {
-  border-bottom: 1px solid #dddddd;
-}
-
-.list tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
-}
-
-.list tbody tr:last-of-type {
-  border-bottom: 2px solid #72bc8e88;
-}
-
-.list tbody tr.active-row {
-  font-weight: bold;
-  color: #72bc8e;
-}
-
-.container td {
-  vertical-align: middle;
-}
-
-.list th {
-  cursor: auto;
-}
-
-.list tbody tr:hover {
-  background-color: #72bc8e22;
-}
-
-.list tbody tr:hover .deleteBtn img {
+.list tbody tr:hover td:last-child img {
   width: 100%;
 }
 
-.list tbody tr:hover .deleteBtn {
+.list tbody tr:hover td:last-child {
   opacity: 100%;
 }
 
@@ -84,24 +42,7 @@
   background: #4bce7d;
 }
 
-.addBtn,
-.container input[type='submit'] {
+.addBtn {
   max-width: 100%;
   cursor: pointer;
-}
-
-td:last-child {
-  background: linear-gradient(90deg, #72bc8e00 0%, #72bc8eaa 100%);
-  padding: 0;
-  height: fit-content;
-  opacity: 0;
-  transition: opacity 250ms linear;
-}
-
-.list tbody tr:hover td:last-child img {
-  width: 100%;
-}
-
-.list tbody tr:hover td:last-child {
-  opacity: 100%;
 }
