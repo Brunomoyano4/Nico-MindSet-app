@@ -48,10 +48,10 @@ td:last-child {
   transition: opacity 250ms linear;
 }
 
-tbody tr:hover td:last-child img {
+.tr:hover td:last-child img {
   width: 100%;
 }
 
-tbody tr:hover td:last-child {
+.tr:hover td:last-child {
   opacity: 100%;
 }

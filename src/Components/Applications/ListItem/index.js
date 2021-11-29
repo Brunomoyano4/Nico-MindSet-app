@@ -14,7 +14,7 @@ const ListItem = ({ headerItems, listItems, id, onRowClick }) => {
         </thead>
       )}
       {listItems && (
-        <tr onClick={onRowClick}>
+        <tr className={styles.tr} onClick={onRowClick}>
           {listItems.map((item, idx) => {
             return <td key={`item-${idx}-${id}`}>{item}</td>;
           })}
