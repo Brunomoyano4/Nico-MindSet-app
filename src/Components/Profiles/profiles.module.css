@@ -21,7 +21,7 @@
 }
 
 .list tbody tr:hover td:last-child {
-  opacity: 100%;
+  opacity: unset;
 }
 
 .addBtn {
