@@ -18,10 +18,10 @@ const DeleteBtn = ({ client }) => {
           });
         }
       })
+      .catch((error) => error)
       .finally(() => {
         refreshPage();
-      })
-      .catch((error) => error);
+      });
   };
 
   return (
