@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 //import EditBtn from './EditBtn';
-import DeleteBtn from './DeleteBtn';
+import Admin from './Admin';
 import CreateBtn from './CreateBtn';
 import styles from './admins.module.css';
 
@@ -16,10 +16,10 @@ function Admins() {
   return (
     <>
       <section className={styles.container}>
-        <div>
+        <div className={styles.header}>
           <h2>Admins</h2>
         </div>
-        <div>
+        <div className={styles.tableContainer}>
           <table className={styles.table}>
             <thead>
               <tr>
@@ -32,28 +32,14 @@ function Admins() {
             </thead>
             <tbody>
               {admins.map((admin) => {
-                return (
-                  <tr key={admin._id}>
-                    <td>
-                      <a href={`/admins/form?id=${admin._id}`}>{admin.username}</a>
-                    </td>
-                    <td>{admin.firstName}</td>
-                    <td>{admin.lastName}</td>
-                    <td>{admin.email}</td>
-                    <td>{admin.password}</td>
-                    <td>{/*<EditBtn className="editBtn" name="EditBtn" value={admin._id} />*/}</td>
-                    <td>
-                      <DeleteBtn className="deleteBtn" name="DeleteBtn" admin={admin} />
-                    </td>
-                  </tr>
-                );
+                return <Admin key={admin._id} admin={admin} />;
               })}
             </tbody>
           </table>
         </div>
       </section>
       <section className={styles.createBtnSection}>
-        <CreateBtn className="createBtn" name="CreateBtn" />
+        <CreateBtn name="CreateBtn" />
       </section>
     </>
   );

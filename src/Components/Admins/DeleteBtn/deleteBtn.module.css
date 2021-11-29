@@ -1,9 +1,14 @@
 .deleteBtn {
-  height: 30px;
+  padding: 5px 0;
+  margin: 0;
+  text-align: center;
   width: 30px;
-  background-color: darkred;
+  background-color: #8b0000;
+  float: right;
+  color: #fff;
+  border: 0;
 }
 
-.icon {
-  color: white;
+.deleteBtn:hover {
+  background-color: #c50404
 }

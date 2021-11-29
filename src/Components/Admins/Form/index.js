@@ -49,72 +49,79 @@ function Form() {
       options.method = 'POST';
       url = `${process.env.REACT_APP_API}/admins`;
     }
-    fetch(url, options).then((response) => {
-      if (response.status !== 200 && response.status !== 201) {
-        return response.json().then(({ ErrMessage }) => {
-          throw new Error(ErrMessage);
-        });
-      }
-      window.location.href = '/admins';
-      return response.json();
-    });
+    fetch(url, options)
+      .then((response) => {
+        if (response.status !== 200 && response.status !== 201) {
+          return response.json().then(({ ErrMessage }) => {
+            throw new Error(ErrMessage);
+          });
+        }
+        return response.json();
+      })
+      .then(() => {
+        window.location.href = '/admins';
+      });
   };
   return (
     <div className={styles.container}>
-      <form onSubmit={onSubmit}>
-        <h2>Form</h2>
-        <div>
-          <Input
-            name="First Name"
-            placeholder="First name"
-            type="text"
-            required
-            value={firstNameValue}
-            onChange={onChangeFirstNameInput}
-            pattern="[a-zA-Z\s]+"
-          />
-          <Input
-            name="Last Name"
-            placeholder="Last name"
-            type="text"
-            required
-            value={lastNameValue}
-            onChange={onChangeLastNameInput}
-            pattern="[a-zA-Z\s]+"
-          />
-          <Input
-            name="Username"
-            placeholder="Username"
-            type="text"
-            required
-            value={userNameValue}
-            onChange={onChangeUserNameInput}
-            pattern="[a-zA-Z0-9\s]+"
-          />
-        </div>
-        <div>
-          <Input
-            name="Email"
-            placeholder="Email"
-            type="email"
-            required
-            value={emailValue}
-            onChange={onChangeEmailInput}
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-          />
-          <Input
-            name="password"
-            placeholder="Password"
-            type="password"
-            required
-            value={passwordValue}
-            onChange={onChangePasswordInput}
-          />
-        </div>
-        <div>
-          <button type="submit">Save</button>
-        </div>
-      </form>
+      <div className={styles.headerContainer}>
+        <h2>Admin Form</h2>
+      </div>
+      <div className={styles.formContainer}>
+        <form onSubmit={onSubmit}>
+          <div className={styles.inputContainer}>
+            <Input
+              name="First Name"
+              placeholder="First name"
+              type="text"
+              required
+              value={firstNameValue}
+              onChange={onChangeFirstNameInput}
+              pattern="[a-zA-Z\s]+"
+            />
+            <Input
+              name="Last Name"
+              placeholder="Last name"
+              type="text"
+              required
+              value={lastNameValue}
+              onChange={onChangeLastNameInput}
+              pattern="[a-zA-Z\s]+"
+            />
+            <Input
+              name="Username"
+              placeholder="Username"
+              type="text"
+              required
+              value={userNameValue}
+              onChange={onChangeUserNameInput}
+              pattern="[a-zA-Z0-9\s]+"
+            />
+            <Input
+              name="Email"
+              placeholder="example@foo.com"
+              type="email"
+              required
+              value={emailValue}
+              onChange={onChangeEmailInput}
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            />
+            <Input
+              name="password"
+              placeholder="Password"
+              type="password"
+              required
+              value={passwordValue}
+              onChange={onChangePasswordInput}
+            />
+          </div>
+          <div className={styles.saveBtnSection}>
+            <button className={styles.saveBtn} type="submit">
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
