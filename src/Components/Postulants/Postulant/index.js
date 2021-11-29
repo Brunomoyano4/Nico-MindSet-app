@@ -1,23 +1,6 @@
-import { useState } from 'react';
-import Modal from '../Modal';
 import DeleteBtn from '../DeleteBtn';
 
 const Postulant = ({ object }) => {
-  const [showModal, setShowModal] = useState(false);
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
-  const openModal = (e) => {
-    e.stopPropagation();
-    setShowModal(true);
-  };
-  const onConfirmModal = () => {
-    handleDelete;
-    closeModal;
-  };
-
   const handleDelete = (e) => {
     e.stopPropagation();
     const url = `${process.env.REACT_APP_API}/postulants/${object._id}`;
@@ -41,8 +24,6 @@ const Postulant = ({ object }) => {
 
   return (
     <>
-      <Modal show={showModal} closeModal={closeModal} onConfimationModal={onConfirmModal} />
-
       <tr key={object._id} onClick={openEditForm}>
         <td>
           {object.firstName} {object.lastName}
