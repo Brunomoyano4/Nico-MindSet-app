@@ -8,16 +8,3 @@ input {
 	padding: 15px;
 	color: #555;
 }
-
-button {
-    box-sizing: border-box;
-	width: 100%;
-	max-width: 400px;
-	padding: 15px;
-	background: #27AE60;
-	border-bottom: 2px solid #30C29E;
-	border-top-style: none;
-	border-right-style: none;
-	border-left-style: none;
-	color: #fff;
-}

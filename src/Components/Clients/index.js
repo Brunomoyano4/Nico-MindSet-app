@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import styles from './clients.module.css';
+import Client from './Client';
+import AddBtn from './AddBtn';
 
 function Clients() {
   const [clients, saveClients] = useState([]);
-  console.log('inicio', clients);
-  const addNewClient = () => {
-    window.location.href = `/clients/form`;
-  };
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API}/clients`)
@@ -18,33 +16,22 @@ function Clients() {
 
   return (
     <section className={styles.container}>
-      <h2>Clientes</h2>
+      <h2>Clients</h2>
       <div>
-        {clients.map((client) => {
-          return (
-            <>
-              <table className={styles.list}>
-                <tr>
-                  <th>
-                    <a href={`/clients/form?id=${client._id}`} key={client._id}>
-                      Name: {client.customerName}
-                    </a>
-                    <a href={`/clients/form?id=${client._id}`} key={client._id.phone}>
-                      Phone: {client.phone}
-                    </a>
-                    <a href={`/clients/form?id=${client._id}`} key={client._id.branch}>
-                      Branch: {client.branch}
-                    </a>
-                  </th>
-                </tr>
-              </table>
-            </>
-          );
-        })}
+        <table className={styles.list}>
+          <thead>
+            <th>Name:</th>
+            <th>Phone:</th>
+            <th>Branch:</th>
+          </thead>
+          <tbody>
+            {clients.map((client) => {
+              return <Client key={client._id} client={client} />;
+            })}
+          </tbody>
+        </table>
+        <AddBtn className={styles.button} />
       </div>
-      <button className={styles.button} onClick={addNewClient} type="button">
-        ADD CLIENT
-      </button>
     </section>
   );
 }

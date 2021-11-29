@@ -24,35 +24,3 @@
 .list tbody tr {
   border-bottom: 1px solid #dddddd;
 }
-
-
-a {
-  display: flex;
-  justify-content: flex-start;
-  text-decoration: none;
-  outline: none;
-  color:black;
-}
-
-.button{
-	box-sizing: border-box;
-	width: 100%;
-	max-width: 400px;
-	padding: 15px;
-	background: #27AE60;
-	border-bottom: 2px solid #30C29E;
-	border-top-style: none;
-	border-right-style: none;
-	border-left-style: none;
-	color: #fff;
-}
-
-.button:hover {
-	background: #2EBC99;
-}
-
-.button:disabled {
-	background: #555;
-	border-bottom: 2px solid #555;
-	cursor: not-allowed;
-}
