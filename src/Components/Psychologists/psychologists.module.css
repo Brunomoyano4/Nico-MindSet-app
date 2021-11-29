@@ -1,6 +1,42 @@
 .container {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header{
   display: flex;
   justify-content: center;
-  align-items: center;
 }
+
+.tableContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.table{
+  width: 65%;
+  padding: 0;
+  margin: 0;
+}
+
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr {
+  width: 100%;
+}
+
+.createBtnSection {
+  display: flex;
+  justify-content: center;
+}
+
+.table tbody tr:hover, button {
+  cursor: pointer;
+}
+
