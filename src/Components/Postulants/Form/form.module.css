@@ -38,6 +38,7 @@
   background: #27ae60;
   border: none;
   color: #fff;
+  cursor: pointer;
 }
 
 .button:hover,

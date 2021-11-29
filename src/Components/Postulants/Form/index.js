@@ -17,9 +17,15 @@ function Form() {
   const [provinceValue, setProvinceValue] = useState('');
   const [countryValue, setCountryValue] = useState('');
   const [telephoneValue, setTelephoneValue] = useState('');
+  const [jobPositionValue, setJobPositionValue] = useState('');
+  const [employerValue, setEmployerValue] = useState('');
+  const [startDateValue, setStartDateValue] = useState('');
+  const [endDateValue, setEndDateValue] = useState('');
+  const [descriptionValue, setDescriptionValue] = useState('');
   // const [experienceValue, setExperienceValue] = useState([{}]);
 
   const setInputValues = (data) => {
+    console.log(data);
     setFirstNameValue(data.firstName || '-');
     setLastNameValue(data.lastName || '-');
     setUserNameValue(data.userName || '-');
@@ -33,7 +39,11 @@ function Form() {
     setProvinceValue(data.province || '-');
     setCountryValue(data.country || '-');
     setTelephoneValue(data.telephone || '-');
-    console.log(`lastNameValue ${lastNameValue} dataValue: ${data.lastName}`);
+    setJobPositionValue(data.experience[0].jobPosition || '-');
+    setEmployerValue(data.experience[0].employer || '-');
+    setStartDateValue(data.experience[0].startDate || '-');
+    setEndDateValue(data.experience[0].endDate || '-');
+    setDescriptionValue(data.experience[0].description || '-');
   };
 
   const params = new URLSearchParams(window.location.search);
@@ -61,11 +71,11 @@ function Form() {
       telephone: telephoneValue,
       experience: [
         {
-          jobPosition: 'test',
-          employer: 'test',
-          startDate: '1-2-2021',
-          endDate: '3-4-2021',
-          description: 'test'
+          jobPosition: jobPositionValue,
+          employer: employerValue,
+          startDate: startDateValue,
+          endDate: endDateValue,
+          description: descriptionValue
         }
       ]
     })
@@ -219,6 +229,63 @@ function Form() {
 
         {/* <ExperienceForm jobExperience={pushWorkExperience} /> */}
 
+        <div className={styles.form}>
+          <h3>Job info</h3>
+          <Input
+            name="jobPositionValue"
+            placeholder="Job Position"
+            value={jobPositionValue}
+            onChange={(e) => setJobPositionValue(e.target.value)}
+            // onBlur={onBlurJobPos}
+            required
+          />
+          <Input
+            name="employerValue"
+            placeholder="Employer"
+            value={employerValue}
+            onChange={(e) => setEmployerValue(e.target.value)}
+            required
+          />
+          <Input
+            name="startDateValue"
+            type="text"
+            value={startDateValue}
+            onFocus={(e) => {
+              e.currentTarget.type = 'date';
+              e.currentTarget.focus();
+            }}
+            onBlur={(e) => {
+              e.currentTarget.type = 'text';
+              e.currentTarget.focus();
+            }}
+            onChange={(e) => setStartDateValue(e.target.value)}
+            placeholder="Start date"
+            required
+          />
+          <Input
+            name="endDateValue"
+            type="text"
+            value={endDateValue}
+            onFocus={(e) => {
+              e.currentTarget.type = 'date';
+              e.currentTarget.focus();
+            }}
+            onBlur={(e) => {
+              e.currentTarget.type = 'text';
+              e.currentTarget.focus();
+            }}
+            onChange={(e) => setEndDateValue(e.target.value)}
+            placeholder="End date"
+            required
+          />
+          <Input
+            name="descriptionValue"
+            placeholder="Description"
+            value={descriptionValue}
+            onChange={(e) => setDescriptionValue(e.target.value)}
+            required
+          />
+        </div>
         <button className={styles.button} type="submit">
           Save
         </button>
