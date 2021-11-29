@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './form.module.css';
 import Input from '../Input';
-// import ExperienceForm from '../ExperienceForm';
 
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
@@ -22,7 +21,6 @@ function Form() {
   const [startDateValue, setStartDateValue] = useState('');
   const [endDateValue, setEndDateValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
-  // const [experienceValue, setExperienceValue] = useState([{}]);
 
   const setInputValues = (data) => {
     console.log(data);
@@ -81,10 +79,6 @@ function Form() {
     })
   };
 
-  // const pushWorkExperience = (object) => {
-  //   setExperienceValue(object);
-  // };
-
   if (postulantId) {
     useEffect(() => {
       fetch(`${process.env.REACT_APP_API}/postulants/${postulantId}`)
@@ -100,9 +94,6 @@ function Form() {
     url = `${process.env.REACT_APP_API}/postulants`;
   }
 
-  // const onAddBtnClick = () => {
-  //   setExperienceList(experienceList.concat(<ExperienceForm key={experienceList.length} />));
-  // };
   const onSubmit = (event) => {
     event.preventDefault();
 
@@ -223,11 +214,6 @@ function Form() {
           required
         />
         <h2>Postulant Experience</h2>
-        {/* <button className={styles.addExperienceForm} onClick={onAddBtnClick} type="button">
-          +
-        </button> */}
-
-        {/* <ExperienceForm jobExperience={pushWorkExperience} /> */}
 
         <div className={styles.form}>
           <h3>Job info</h3>
@@ -236,7 +222,6 @@ function Form() {
             placeholder="Job Position"
             value={jobPositionValue}
             onChange={(e) => setJobPositionValue(e.target.value)}
-            // onBlur={onBlurJobPos}
             required
           />
           <Input

@@ -1,4 +1,5 @@
 import DeleteBtn from '../DeleteBtn';
+import styles from './postulant.module.css';
 
 const Postulant = ({ object, onClick }) => {
   const openEditForm = () => {
@@ -8,7 +9,7 @@ const Postulant = ({ object, onClick }) => {
 
   return (
     <>
-      <tr key={object._id} onClick={openEditForm}>
+      <tr className={styles.tr} key={object._id} onClick={openEditForm}>
         <td>
           {object.firstName} {object.lastName}
         </td>
@@ -18,7 +19,7 @@ const Postulant = ({ object, onClick }) => {
           {object.city}, {object.country}
         </td>
         <td>
-          <DeleteBtn object={object} onClick={onClick} /*onClick={(e) => handleDelete(e)}*/ />
+          <DeleteBtn object={object} onClick={onClick} />
         </td>
       </tr>
     </>
