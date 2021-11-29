@@ -16,7 +16,7 @@ function Psychologists() {
     <>
       <section className={styles.container}>
         <div className={styles.header}>
-          <h2>Psychologist</h2>
+          <h2>Psychologists</h2>
         </div>
         <div className={styles.tableContainer}>
           <table className={styles.table}>
