@@ -31,7 +31,7 @@ function ProfilesForm() {
         positions: positionsValue,
         postulants: postulantsValue,
         client: clientValue,
-        result: result.toLowerCase()
+        result: result
       }),
       method: 'POST'
     };
@@ -108,7 +108,7 @@ function ProfilesForm() {
             label: client.customerName
           }))
         );
-        setClientValue(clientOption[0]);
+        setClientValue(res[0]._id);
         setLoading((prev) => {
           return { ...prev, clientLoading: false };
         });
@@ -133,7 +133,7 @@ function ProfilesForm() {
             label: `${postulant.firstName} ${postulant.lastName}`
           }))
         );
-        setPostulantsValue(postulantsOption[0]);
+        setPostulantsValue(res[0]._id);
         setLoading((prev) => {
           return { ...prev, postulantLoading: false };
         });
@@ -153,12 +153,12 @@ function ProfilesForm() {
       })
       .then((res) => {
         setPositionsOption(
-          res.da.map((position) => ({
+          res.map((position) => ({
             value: position._id,
             label: position.job
           }))
         );
-        setPositionsValue(positionsOption[0]);
+        setPositionsValue(res[0]._id);
         setLoading((prev) => {
           return { ...prev, positionLoading: false };
         });
@@ -202,6 +202,7 @@ function ProfilesForm() {
         onChange={(e) => setResult(e.target.value)}
         label="Result:"
         id="result-input"
+        required
       />
 
       <input
