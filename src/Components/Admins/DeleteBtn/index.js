@@ -16,7 +16,7 @@ function DeleteBtn({ admin }) {
       method: 'DELETE'
     })
       .then((res) => {
-        if (res.status !== 204) {
+        if (res.status !== 200) {
           return res.json().then((message) => {
             throw new Error(message);
           });
