@@ -20,9 +20,11 @@ function Clients() {
       <div>
         <table className={styles.list}>
           <thead>
-            <th>Name:</th>
-            <th>Phone:</th>
-            <th>Branch:</th>
+            <tr>
+              <th>Name:</th>
+              <th>Phone:</th>
+              <th>Branch:</th>
+            </tr>
           </thead>
           <tbody>
             {clients.map((client) => {

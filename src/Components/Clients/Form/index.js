@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './form.module.css';
 import Input from '../Input/index';
 
@@ -8,6 +8,25 @@ function Form() {
   const [phoneValue, setPhoneValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
+  const [paramId, setParamId] = useState('');
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const clientId = params.get('id');
+
+    if (clientId) {
+      setParamId(clientId);
+      fetch(`${process.env.REACT_APP_API}/clients/${clientId}`)
+        .then((response) => response.json())
+        .then((response) => {
+          setNameValue(response.customerName);
+          setBranchValue(response.branch);
+          setPhoneValue(response.phone);
+          setEmailValue(response.email);
+          setDescriptionValue(response.description);
+        });
+    }
+  }, []);
 
   const onChangeNameInput = (event) => {
     setNameValue(event.target.value);
@@ -28,12 +47,9 @@ function Form() {
   const onSubmit = (event) => {
     event.preventDefault();
 
-    const params = new URLSearchParams(window.location.search);
-    const clientId = params.get('id');
-    let url = `${process.env.REACT_APP_API}/clients/${clientId}`;
+    let url = '';
 
     const options = {
-      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -46,16 +62,13 @@ function Form() {
       })
     };
 
-    if (clientId) {
+    if (paramId) {
       options.method = 'PUT';
-      url = `${process.env.REACT_APP_API}/clients/${clientId}`;
+      url = `${process.env.REACT_APP_API}/clients/${paramId}`;
     } else {
       options.method = 'POST';
-      // eslint-disable-next-line no-const-assign
       url = `${process.env.REACT_APP_API}/clients`;
     }
-
-    console.log(params.get('clientId'));
 
     fetch(url, options)
       .then((response) => {
@@ -67,7 +80,6 @@ function Form() {
         return response.json();
       })
       .then(() => {
-        // eslint-disable-next-line no-underscore-dangle
         window.location.href = `${window.location.origin}/clients`;
       })
       .catch((error) => {
