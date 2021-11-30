@@ -23,6 +23,32 @@ input[type='submit'] {
   cursor: pointer;
 }
 
-input[type='submit']:hover {
+input[type='submit']:disabled {
+  cursor: default;
+}
+
+input[type='submit']:hover:not(:disabled) {
   background: #4bce7d;
+}
+
+form h3 {
+  display: none;
+}
+
+.error {
+  display: block;
+  color: #f00;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  margin-inline: 15px;
+  padding: 10px;
+  border: 2px solid rgb(150, 70, 70);
+  border-radius: 5px;
+}
+
+input,
+select {
+  width: 193px;
+  box-sizing: border-box;
 }

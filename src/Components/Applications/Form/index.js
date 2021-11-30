@@ -13,6 +13,12 @@ function ProfilesForm() {
   const [postulantsValue, setPostulantsValue] = useState('');
   const [result, setResult] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState({
+    positionLoading: false,
+    clientLoading: false,
+    postulantLoading: false,
+    applicationIdLoading: false
+  });
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -29,6 +35,7 @@ function ProfilesForm() {
       }),
       method: 'POST'
     };
+
     if (applicationId) {
       options.method = 'PUT';
       url = `${process.env.REACT_APP_API}/applications/${applicationId}`;
@@ -43,15 +50,23 @@ function ProfilesForm() {
         return res.json();
       })
       .then(() => {
-        window.location.href = '/profiles';
+        window.location.href = '/applications';
       })
       .catch((error) => {
-        setError(error);
+        setError(JSON.stringify(error));
       });
   };
 
   useEffect(() => {
+    setLoading({
+      applicationIdLoading: false,
+      positionLoading: true,
+      clientLoading: true,
+      postulantLoading: true
+    });
+
     if (applicationId) {
+      setLoading({ ...loading, applicationIdLoading: true });
       fetch(`${process.env.REACT_APP_API}/profiles/${applicationId}`)
         .then((res) => {
           if (res.status !== 200) {
@@ -69,9 +84,12 @@ function ProfilesForm() {
         })
         .catch((error) => {
           setError(JSON.stringify(error));
-          console.log(error);
-          setError('error en use');
-        });
+        })
+        .finally(() =>
+          setLoading((prev) => {
+            return { ...prev, applicationIdLoading: false };
+          })
+        );
     }
 
     fetch(`${process.env.REACT_APP_API}/clients`)
@@ -85,11 +103,15 @@ function ProfilesForm() {
       })
       .then((res) => {
         setClientOption(
-          res.data.map((client) => ({
+          res.map((client) => ({
             value: client._id,
             label: client.customerName
           }))
         );
+        setClientValue(clientOption[0]);
+        setLoading((prev) => {
+          return { ...prev, clientLoading: false };
+        });
       })
       .catch((error) => {
         setError(error.toString());
@@ -106,11 +128,15 @@ function ProfilesForm() {
       })
       .then((res) => {
         setPostulantsOption(
-          res.data.map((postulant) => ({
+          res.map((postulant) => ({
             value: postulant._id,
             label: `${postulant.firstName} ${postulant.lastName}`
           }))
         );
+        setPostulantsValue(postulantsOption[0]);
+        setLoading((prev) => {
+          return { ...prev, postulantLoading: false };
+        });
       })
       .catch((error) => {
         setError(error.toString());
@@ -127,11 +153,15 @@ function ProfilesForm() {
       })
       .then((res) => {
         setPositionsOption(
-          res.data.map((position) => ({
+          res.da.map((position) => ({
             value: position._id,
             label: position.job
           }))
         );
+        setPositionsValue(positionsOption[0]);
+        setLoading((prev) => {
+          return { ...prev, positionLoading: false };
+        });
       })
       .catch((error) => {
         setError(error.toString());
@@ -141,13 +171,14 @@ function ProfilesForm() {
   return (
     <form className={styles.container} onSubmit={onSubmit}>
       <h2>Profile Form</h2>
-      <h3>{error}</h3>
+      <h3 className={error ? styles.error : ''}>{error}</h3>
       <Select
         value={positionsValue}
         onChange={(e) => setPositionsValue(e.target.value)}
         label="Position:"
         id="positions-select"
         options={positionsOption}
+        required
       />
       <Select
         value={clientValue}
@@ -155,6 +186,7 @@ function ProfilesForm() {
         label="Client:"
         id="client-select"
         options={clientOption}
+        required
       />
       <Select
         value={postulantsValue}
@@ -162,6 +194,7 @@ function ProfilesForm() {
         label="Postulant:"
         id="postulants-select"
         options={postulantsOption}
+        required
       />
       <Input
         placeholder="Result"
@@ -169,10 +202,13 @@ function ProfilesForm() {
         onChange={(e) => setResult(e.target.value)}
         label="Result:"
         id="result-input"
-        required
       />
 
-      <input type="submit"></input>
+      <input
+        type="submit"
+        disabled={Object.values(loading).some(Boolean) ? 'disabled' : ''}
+        value={applicationId ? 'Update Application' : 'Add Application'}
+      />
     </form>
   );
 }
