@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './form.module.css';
 import Input from '../Input/index';
 import Select from '../Select';
@@ -8,6 +8,24 @@ function Form() {
   const [postulantIdValue, setPostulantIdValue] = useState('');
   const [dateTimeValue, setDateTimeValue] = useState('');
   const [statusValue, setStatusValue] = useState([]);
+  const [paramId, setParamId] = useState('');
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const interviewsId = params.get('id');
+
+    if (interviewsId) {
+      setParamId(interviewsId);
+      fetch(`${process.env.REACT_APP_API}/interviews/${interviewsId}`)
+        .then((response) => response.json())
+        .then((response) => {
+          setPositionIdValue(response[0].positionId);
+          setPostulantIdValue(response[0].postulantId);
+          setDateTimeValue(response[0].dateTime);
+          setStatusValue(response[0].status);
+        });
+    }
+  }, []);
 
   const onChangePositionIdInput = (event) => {
     setPositionIdValue(event.target.value);
@@ -25,12 +43,9 @@ function Form() {
   const onSubmit = (event) => {
     event.preventDefault();
 
-    const params = new URLSearchParams(window.location.search);
-    const interviewsId = params.get('id');
-    let url = `${process.env.REACT_APP_API}/interviews/${interviewsId}`;
+    let url = '';
 
     const options = {
-      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -42,12 +57,11 @@ function Form() {
       })
     };
 
-    if (interviewsId) {
+    if (paramId) {
       options.method = 'PUT';
-      url = `${process.env.REACT_APP_API}/interviews/${interviewsId}`;
+      url = `${process.env.REACT_APP_API}/interviews/${paramId}`;
     } else {
       options.method = 'POST';
-      // eslint-disable-next-line no-const-assign
       url = `${process.env.REACT_APP_API}/interviews`;
     }
 
