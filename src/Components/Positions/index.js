@@ -13,7 +13,7 @@ function GetPositions() {
   const [positions, setPositions] = useState([]);
   const [state, setState] = useState(1);
   const [positionToUpdate, setPosition] = useState();
-  const actualizar = (pos) => setPositions(pos);
+  const actualizar = () => setPositions([]);
 
   function changeState(n, e) {
     e.preventDefault();
@@ -32,7 +32,7 @@ function GetPositions() {
       .then((response) => {
         if (response !== positions) setPositions(response);
       });
-  }, []);
+  }, [positions.length]);
 
   return (
     <section className={styles.container}>

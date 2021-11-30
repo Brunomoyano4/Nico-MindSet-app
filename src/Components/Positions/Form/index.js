@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 function Form(params) {
-  const initialState = params.position
+  const initialState = params.position._id
     ? params.position
     : {
         clientId: '',
@@ -42,9 +42,8 @@ function Form(params) {
     })
       .then((response) => response.json())
       .then((response) => {
-        console.log('response', response);
         if (response.clientId === position.clientId) {
-          // setCreated(true);
+          console.log('Position Updated!');
         }
       });
   }
@@ -87,8 +86,13 @@ function Form(params) {
             onChange={handleInputChange}
             required
           />
-          <button onClick={(e) => (params.position ? updatePosition(e) : savePositions(e))}>
-            {params.position ? 'Update Position' : 'Create position'}
+          <button
+            onClick={(e) => {
+              console.log(params);
+              params.position._id ? updatePosition(e) : savePositions(e);
+            }}
+          >
+            {params.position._id ? 'Update Position' : 'Create position'}
           </button>
         </form>
       )}
