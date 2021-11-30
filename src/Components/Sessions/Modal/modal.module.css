@@ -1,0 +1,34 @@
+.container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  width: 100%;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  width: 300px;
+  height: 200px;
+  border: 1px solid black;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 5px 3px 3px rgba(0, 0, 0, 0.5);
+}
+
+.buttons button {
+  text-transform: uppercase;
+  font-weight: 500;
+  background: #27ae60;
+  border: none;
+  cursor: pointer;
+  color: white;
+  border-radius: 2px;
+  margin: 0 25px;
+  padding: 15px;
+}
