@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import styles from './form.module.css';
 
 function Form(params) {
   const initialState = params.position._id
@@ -58,7 +59,7 @@ function Form(params) {
       {created ? (
         <div>position created</div>
       ) : (
-        <form>
+        <form className={styles.positionsForm}>
           <label>Id</label>
           <input
             type="text"

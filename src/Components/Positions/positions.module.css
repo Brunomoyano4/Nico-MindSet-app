@@ -3,4 +3,37 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+}
+
+.content {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.content button {
+  background-color: #72bc8e;
+  /* height: 35px; */
+  padding: 10px 15px;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+}
+
+.content button:hover {
+  background-color: #86d6a5;
+  cursor: pointer;
+}
+
+.content .createButton {
+  margin-bottom: 25px;
+}
+
+.content table td {
+  cursor: pointer;
+}
+
+.content table tr:hover {
+  background-color: #eaeaea;
 }
