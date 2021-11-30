@@ -67,7 +67,7 @@ function ProfilesForm() {
 
     if (applicationId) {
       setLoading({ ...loading, applicationIdLoading: true });
-      fetch(`${process.env.REACT_APP_API}/profiles/${applicationId}`)
+      fetch(`${process.env.REACT_APP_API}/applications/${applicationId}`)
         .then((res) => {
           if (res.status !== 200) {
             return res.json().then(({ message }) => {
@@ -77,10 +77,10 @@ function ProfilesForm() {
           return res.json();
         })
         .then((data) => {
-          setPositionsValue(data[0]?.positions?._id);
-          setClientValue(data[0]?.client?._id);
-          setPostulantsValue(data[0]?.postulants?._id);
-          setResult(data[0].result);
+          setPositionsValue(data?.positions?._id);
+          setClientValue(data?.client?._id);
+          setPostulantsValue(data?.postulants?._id);
+          setResult(data.result);
         })
         .catch((error) => {
           setError(JSON.stringify(error));
