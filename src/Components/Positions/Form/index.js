@@ -32,7 +32,7 @@ function Form(params) {
 
   function updatePosition(e) {
     e.stopPropagation();
-    fetch(`${process.env.REACT_APP_API}/positions${position._id}`, {
+    fetch(`${process.env.REACT_APP_API}/positions/${position._id}`, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
