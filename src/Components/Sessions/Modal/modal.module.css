@@ -3,32 +3,34 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50vh;
+  min-height: 100vh;
   width: 100%;
+  background-color: rgba(0,0,0,0.4);
 }
 
 .modal {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  text-align: center;
-  width: 300px;
+  width: 500px;
   height: 200px;
-  border: 1px solid black;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 5px 3px 3px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  background-color: #FFF;
 }
 
-.buttons button {
-  text-transform: uppercase;
-  font-weight: 500;
-  background: #27ae60;
+.button {
+  margin: 20px;
+  height: 56px;
   border: none;
+  padding: 0 20px;
+  background: #FDC800;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 4px;
   cursor: pointer;
-  color: white;
-  border-radius: 2px;
-  margin: 0 25px;
-  padding: 15px;
+}
+
+.cancel {
+  background-color: gray;
 }

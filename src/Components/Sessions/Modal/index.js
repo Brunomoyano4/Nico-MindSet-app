@@ -1,26 +1,28 @@
 import styles from './modal.module.css';
 
-const Modal = (props) => {
-  if (!props.showModal) {
+function Modal(props) {
+  if (!props.show) {
     return null;
   }
-
-  const onClick = (id) => {
-    props.function(id);
-    props.closeModal();
-  };
-
   return (
-    <div className={styles.container}>
+    <section className={styles.container}>
       <div className={styles.modal}>
-        <h3>{props.text}</h3>
-        <div className={styles.buttons}>
-          <button onClick={() => onClick(props.idToDelete)}>delete</button>
-          <button onClick={() => props.closeModal()}>cancel</button>
+        <h4>{props.title}</h4>
+        <div>
+          <button
+            disabled={props.isLoading}
+            onClick={props.onCancel}
+            className={`${styles.button} ${styles.cancel}`}
+          >
+            Cancel
+          </button>
+          <button disabled={props.isLoading} onClick={props.onConfirm} className={styles.button}>
+            Confirm
+          </button>
         </div>
       </div>
-    </div>
+    </section>
   );
-};
+}
 
 export default Modal;
