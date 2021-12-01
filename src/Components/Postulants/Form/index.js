@@ -21,9 +21,9 @@ function Form() {
   const [startDateValue, setStartDateValue] = useState('');
   const [endDateValue, setEndDateValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
+  const [error, setError] = useState('');
 
   const setInputValues = (data) => {
-    console.log(data);
     setFirstNameValue(data.firstName || '-');
     setLastNameValue(data.lastName || '-');
     setUserNameValue(data.userName || '-');
@@ -85,7 +85,8 @@ function Form() {
         .then((response) => response.json())
         .then((response) => {
           setInputValues(response);
-        });
+        })
+        .catch((error) => setError(error));
     }, []);
     options.method = 'PUT';
     url = `${process.env.REACT_APP_API}/postulants/${postulantId}`;
@@ -109,12 +110,11 @@ function Form() {
       .then(() => {
         window.location.href = `/postulants`;
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => setError(error));
   };
   return (
     <div className={styles.container}>
+      <p className={styles.error}>{error}</p>
       <form className={styles.form} onSubmit={onSubmit}>
         <h2>Form</h2>
         <Input
@@ -214,7 +214,6 @@ function Form() {
           required
         />
         <h2>Postulant Experience</h2>
-
         <div className={styles.form}>
           <h3>Job info</h3>
           <Input

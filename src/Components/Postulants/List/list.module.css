@@ -71,3 +71,8 @@
   border-bottom: 2px solid #555;
   cursor: not-allowed;
 }
+
+.error {
+  color: red;
+  font-weight: 600;
+}

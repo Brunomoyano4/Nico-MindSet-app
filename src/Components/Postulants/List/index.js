@@ -6,6 +6,8 @@ import styles from './list.module.css';
 const List = ({ thName, dataList, setPostulants }) => {
   const [showModal, setShowModal] = useState(false);
   const [idToDelete, setIdToDelete] = useState('');
+  const [error, setError] = useState('');
+
   const openNewForm = () => {
     window.location.href = `/postulants/form`;
   };
@@ -15,15 +17,14 @@ const List = ({ thName, dataList, setPostulants }) => {
       method: 'DELETE'
     })
       .then((res) => {
-        if (res.status !== 204) {
+        if (res.status !== 200) {
           return res.json().then((message) => {
             throw new Error(message);
           });
         }
+        setPostulants(dataList.filter((postulants) => postulants._id !== id));
       })
-      .catch((error) => error);
-    setPostulants(dataList.filter((postulants) => postulants._id !== id));
-    // };
+      .catch((error) => setError(error));
   };
 
   const closeModal = () => {
@@ -37,6 +38,7 @@ const List = ({ thName, dataList, setPostulants }) => {
   };
   return (
     <div className={styles.container}>
+      <p className={styles.error}>{error}</p>
       <Modal
         showModal={showModal}
         closeModal={closeModal}

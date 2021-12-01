@@ -3,7 +3,6 @@ import styles from './postulant.module.css';
 
 const Postulant = ({ object, onClick }) => {
   const openEditForm = () => {
-    console.log(object._id);
     window.location.href = `/postulants/form?id=${object._id}`;
   };
 
