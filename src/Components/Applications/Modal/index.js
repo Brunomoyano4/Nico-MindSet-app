@@ -1,6 +1,35 @@
 import styles from './modal.module.css';
+import { useState } from 'react';
 
-const Modal = ({ showModal, title, subtitle, btnText, btnOnClick, error }) => {
+const Modal = ({
+  showHook,
+  showModal,
+  title,
+  subtitle,
+  closeBtnText,
+  proceedBtnText,
+  id,
+  getApplications
+}) => {
+  const [error, setError] = useState('');
+  const onClickDeleteBtn = () => {
+    fetch(`${process.env.REACT_APP_API}/applications/${id}`, {
+      method: 'DELETE'
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ message }) => {
+            throw new Error(message);
+          });
+        }
+        getApplications();
+        showHook(false);
+      })
+      .catch((error) => {
+        setError(JSON.stringify(error));
+      });
+  };
+
   return (
     <section className={showModal ? styles.modalContainer : ''}>
       <dialog open={showModal} className={styles.modal}>
@@ -12,11 +41,11 @@ const Modal = ({ showModal, title, subtitle, btnText, btnOnClick, error }) => {
           </h3>
         ))}
         <div className={styles.flex}>
-          <button onClick={btnOnClick[0]} className={styles.modalBtn}>
-            {btnText[0]}
+          <button onClick={() => showHook(false)} className={styles.modalBtn}>
+            {closeBtnText}
           </button>
-          <button onClick={btnOnClick[1]} className={styles.modalBtn}>
-            {btnText[1]}
+          <button onClick={onClickDeleteBtn} className={styles.modalBtn}>
+            {proceedBtnText}
           </button>
         </div>
       </dialog>

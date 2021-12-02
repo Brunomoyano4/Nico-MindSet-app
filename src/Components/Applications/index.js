@@ -9,38 +9,19 @@ function Applications() {
   const [applications, setApplications] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modalSubtitle, setModalSubtitle] = useState(['modalSubtitle']);
-  const [modalBtnOnClick, setModalBtnOnClick] = useState([]);
-  const [modalError, setModalError] = useState('');
+  const [deleteId, setDeleteId] = useState('');
 
   const deleteApplication = (e, id, position, client, postulant) => {
     e.stopPropagation();
     setModalSubtitle([`Position: ${position}`, `Client: ${client}`, `Postulant: ${postulant}`]);
-    setModalBtnOnClick([
-      () => setShowModal(false),
-      () => {
-        fetch(`${process.env.REACT_APP_API}/applications/${id}`, {
-          method: 'DELETE'
-        })
-          .then((response) => {
-            if (response.status !== 200) {
-              return response.json().then(({ message }) => {
-                throw new Error(message);
-              });
-            }
-            getApplications();
-            setShowModal(false);
-          })
-          .catch((error) => {
-            setModalError(JSON.stringify(error));
-          });
-      }
-    ]);
+    setDeleteId(id);
     setShowModal(true);
   };
 
   const toForm = (id) => {
     window.location.href = id ? `/applications/form?id=${id}` : '/applications/form';
   };
+
   const getApplications = () => {
     fetch(`${process.env.REACT_APP_API}/applications`)
       .then((res) => {
@@ -50,6 +31,7 @@ function Applications() {
         setApplications(res);
       });
   };
+
   useEffect(getApplications, []);
 
   return (
@@ -59,14 +41,15 @@ function Applications() {
         showModal={showModal}
         title="You are about to delete an application"
         subtitle={modalSubtitle}
-        btnText={['Close', 'Proceed']}
-        btnOnClick={modalBtnOnClick}
-        error={modalError}
-      ></Modal>
+        closeBtnText="Close"
+        proceedBtnText="Proceed"
+        id={deleteId}
+        getApplications={getApplications}
+      />
 
       <h2>Applications</h2>
       <table className={styles.list}>
-        <ListItem headerItems={tableHeaderItems}></ListItem>
+        <ListItem headerItems={tableHeaderItems} />
         <tbody className={styles.tableBody}>
           {applications.map(({ _id, positions, client, postulants, result }) => {
             const deleteBtn = (
@@ -80,7 +63,7 @@ function Applications() {
                     `${postulants?.firstName} ${postulants?.lastName}`
                   )
                 }
-              ></DeleteBtn>
+              />
             );
             const tableListItems = [
               positions?.job,
@@ -95,7 +78,7 @@ function Applications() {
                 listItems={tableListItems}
                 id={_id}
                 onRowClick={() => toForm(_id)}
-              ></ListItem>
+              />
             );
           })}
         </tbody>

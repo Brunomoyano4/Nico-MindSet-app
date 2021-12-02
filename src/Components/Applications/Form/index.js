@@ -2,6 +2,7 @@ import styles from './form.module.css';
 import Input from '../Input';
 import Select from '../Select';
 import { useState, useEffect } from 'react';
+
 function ProfilesForm() {
   const params = new URLSearchParams(window.location.search);
   const applicationId = params.get('id');
@@ -35,7 +36,6 @@ function ProfilesForm() {
       }),
       method: 'POST'
     };
-
     if (applicationId) {
       options.method = 'PUT';
       url = `${process.env.REACT_APP_API}/applications/${applicationId}`;
@@ -64,7 +64,6 @@ function ProfilesForm() {
       clientLoading: true,
       postulantLoading: true
     });
-
     if (applicationId) {
       setLoading({ ...loading, applicationIdLoading: true });
       fetch(`${process.env.REACT_APP_API}/applications/${applicationId}`)
@@ -170,7 +169,7 @@ function ProfilesForm() {
 
   return (
     <form className={styles.container} onSubmit={onSubmit}>
-      <h2>Profile Form</h2>
+      <h2>Application Form</h2>
       <h3 className={error ? styles.error : ''}>{error}</h3>
       <Select
         value={positionsValue}
@@ -204,7 +203,6 @@ function ProfilesForm() {
         id="result-input"
         required
       />
-
       <input
         type="submit"
         disabled={Object.values(loading).some(Boolean) ? 'disabled' : ''}
