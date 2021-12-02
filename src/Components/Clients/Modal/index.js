@@ -5,7 +5,6 @@ function Modal(props) {
     return null;
   }
   const onCloseModal = () => {
-    props.onCloseModal();
     props.closeModal();
   };
 
