@@ -60,6 +60,7 @@ function Form() {
       })
       .catch((error) => setError(JSON.stringify(error)));
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>

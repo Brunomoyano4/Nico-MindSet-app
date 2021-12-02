@@ -4,6 +4,7 @@ function Psychologist({ psychologist }) {
   const openEditForm = () => {
     window.location.href = `/psychologists/form?id=${psychologist._id}`;
   };
+
   return (
     <tr key={psychologist._id} onClick={openEditForm}>
       <td>{psychologist.userName}</td>
