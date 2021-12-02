@@ -49,3 +49,7 @@
   background-color: #86d6a5;
   cursor: pointer;
 }
+
+.error {
+  color: red;
+}

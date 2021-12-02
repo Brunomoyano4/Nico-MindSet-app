@@ -14,6 +14,7 @@ function Modal(props) {
     <div className={styles.container} onClick={(e) => onCloseModal(e)}>
       <div className={styles.modal}>
         <h2>{props.title}</h2>
+        {props.error && <div className={styles.error}>{props.error}</div>}
         <button className={styles.confirmBtnModal} onClick={props.onConfirm}>
           Confirm
         </button>

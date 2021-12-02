@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
 import Input from '../Input';
 import styles from './form.module.css';
+
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [userNameValue, setUserNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
+  const [error, setError] = useState('');
 
-  const setInputValues = (data) => {
-    setFirstNameValue(data.firstName || '-');
-    setLastNameValue(data.lastName || '-');
-    setUserNameValue(data.userName || '-');
-    setEmailValue(data.email || '-');
-    setPasswordValue(data.password || '-');
+  const setInputValues = ({ firstName, lastName, userName, email, password }) => {
+    setFirstNameValue(firstName || 'N/A');
+    setLastNameValue(lastName || 'N/A');
+    setUserNameValue(userName || 'N/A');
+    setEmailValue(email || 'N/A');
+    setPasswordValue(password || 'N/A');
   };
 
   let url;
@@ -37,12 +39,9 @@ function Form() {
     useEffect(() => {
       fetch(`${process.env.REACT_APP_API}/psychologists/${psychologistId}`)
         .then((response) => response.json())
-        .then((response) => {
-          setInputValues(response);
-        });
+        .then((data) => setInputValues(data))
+        .catch((error) => setError(JSON.stringify(error)));
     }, []);
-    options.method = 'PUT';
-    url = `${process.env.REACT_APP_API}/psychologists/${psychologistId}`;
   }
 
   const onSubmit = (event) => {
@@ -56,20 +55,10 @@ function Form() {
       url = `${process.env.REACT_APP_API}/psychologists`;
     }
     fetch(url, options)
-      .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
-          return response.json().then(({ ErrMessage }) => {
-            throw new Error(ErrMessage);
-          });
-        }
-        return response.json();
-      })
       .then(() => {
         window.location.href = '/psychologists';
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => setError(JSON.stringify(error)));
   };
   return (
     <div className={styles.container}>
@@ -129,6 +118,7 @@ function Form() {
               Save
             </button>
           </div>
+          {error && <span className={styles.error}>{error}</span>}
         </form>
       </div>
     </div>

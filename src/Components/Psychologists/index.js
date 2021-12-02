@@ -5,13 +5,15 @@ import styles from './psychologists.module.css';
 
 function Psychologists() {
   const [psychologists, setPsychologists] = useState([]);
+  const [error, setError] = useState('');
+
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API}/psychologists`)
       .then((response) => response.json())
-      .then((response) => {
-        setPsychologists(response);
-      });
+      .then((response) => setPsychologists(response))
+      .catch((error) => setError(error));
   }, []);
+
   return (
     <>
       <section className={styles.container}>
@@ -38,7 +40,10 @@ function Psychologists() {
         </div>
       </section>
       <section className={styles.createBtnSection}>
-        <CreateBtn name="CreateBtn" />
+        {error && <div className={styles.error}>{error}</div>}
+        <div>
+          <CreateBtn name="CreateBtn" />
+        </div>
       </section>
     </>
   );

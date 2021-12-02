@@ -4,6 +4,7 @@ import styles from './deleteBtn.module.css';
 
 function DeleteBtn({ psychologist }) {
   const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState('');
 
   const closeModal = () => {
     setShowModal(false);
@@ -15,15 +16,10 @@ function DeleteBtn({ psychologist }) {
     fetch(url, {
       method: 'DELETE'
     })
-      .then((res) => {
-        if (res.status !== 200) {
-          return res.json().then((message) => {
-            throw new Error(message);
-          });
-        }
+      .then(() => {
+        window.location.href = '/psychologists';
       })
-      .catch((error) => error)
-      .finally(window.location.reload());
+      .catch((error) => setError(error));
   };
   return (
     <>
@@ -50,7 +46,8 @@ function DeleteBtn({ psychologist }) {
         onConfirm={(e) => deletePsychologist(e)}
         show={showModal}
         closeModal={closeModal}
-      ></Modal>
+        error={error}
+      />
     </>
   );
 }
