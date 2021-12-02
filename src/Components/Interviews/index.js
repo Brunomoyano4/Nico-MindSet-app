@@ -20,9 +20,11 @@ function Interviews() {
       <div>
         <table className={styles.list}>
           <thead>
-            <th>Position:</th>
-            <th>Postulant:</th>
-            <th>Date time:</th>
+            <tr>
+              <th>Position:</th>
+              <th>Postulant:</th>
+              <th>Date time:</th>
+            </tr>
           </thead>
           <tbody>
             {interviews.map((interview) => {
