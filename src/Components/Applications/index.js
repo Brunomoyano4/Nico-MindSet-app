@@ -46,7 +46,6 @@ function Applications() {
         id={deleteId}
         getApplications={getApplications}
       />
-
       <h2>Applications</h2>
       <table className={styles.list}>
         <ListItem headerItems={tableHeaderItems} />
