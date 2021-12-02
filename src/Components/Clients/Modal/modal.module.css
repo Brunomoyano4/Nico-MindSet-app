@@ -10,14 +10,14 @@
   width: 100%;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.5);
-  }
+}
 
 .modal {
-    width: 600px;
-    height: 300px;
-    background-color: white;
-    border-radius: 5px;
-  }
+  width: 600px;
+  height: 300px;
+  background-color: white;
+  border-radius: 5px;
+}
 
 .button:hover {
 	background: #2EBC99;

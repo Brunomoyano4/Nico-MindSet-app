@@ -1,5 +1,5 @@
 .button{
-	box-sizing: border-box;
+  	box-sizing: border-box;
 	width: 100%;
 	max-width: 580px;
 	padding: 15px;
@@ -9,7 +9,7 @@
 	border-right-style: none;
 	border-left-style: none;
 	color: #fff;
-  text-align: center;
+    text-align: center;
 }
 
 .button:hover {

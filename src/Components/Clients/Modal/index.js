@@ -12,7 +12,7 @@ function Modal(props) {
   return (
     <div className={styles.container}>
       <div className={styles.modal}>
-        <h2>YOU ARE ABOUT TO DELETE A CLIENT</h2>
+        <h2>{props.title}</h2>
         <button className={styles.btnModal} onClick={onCloseModal}>
           Cancel
         </button>

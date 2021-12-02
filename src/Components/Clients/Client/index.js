@@ -12,10 +12,6 @@ const Client = ({ client }) => {
     setShowModal(false);
   };
 
-  const onCloseModal = () => {
-    console.log('se borro');
-  };
-
   const refreshPage = () => {
     window.location.reload();
   };
@@ -34,7 +30,6 @@ const Client = ({ client }) => {
         }
       })
       .catch((error) => error)
-
       .finally(() => {
         refreshPage();
       });
@@ -43,11 +38,10 @@ const Client = ({ client }) => {
   return (
     <>
       <Modal
-        title="Estas seguro que quiere borrar un cliente?"
+        title="YOU'RE ABOUT TO DELETE A CLIENT"
         onConfirm={onDelete}
         show={showModal}
         closeModal={closeModal}
-        onCloseModal={onCloseModal}
       />
       <tr key={client._id} onClick={openEditForm}>
         <td>{client.customerName}</td>

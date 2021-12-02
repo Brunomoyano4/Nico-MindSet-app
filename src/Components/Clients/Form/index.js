@@ -9,6 +9,7 @@ function Form() {
   const [emailValue, setEmailValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
   const [paramId, setParamId] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -17,13 +18,21 @@ function Form() {
     if (clientId) {
       setParamId(clientId);
       fetch(`${process.env.REACT_APP_API}/clients/${clientId}`)
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Could not fetch data properly');
+          }
+          return response.json();
+        })
         .then((response) => {
           setNameValue(response.customerName);
           setBranchValue(response.branch);
           setPhoneValue(response.phone);
           setEmailValue(response.email);
           setDescriptionValue(response.description);
+        })
+        .catch((error) => {
+          setError(error.message);
         });
     }
   }, []);
@@ -72,10 +81,8 @@ function Form() {
 
     fetch(url, options)
       .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
-          return response.json().then(({ message }) => {
-            throw new Error(message);
-          });
+        if (!response.ok) {
+          throw new Error('BAD REQUEST');
         }
         return response.json();
       })
@@ -83,7 +90,7 @@ function Form() {
         window.location.href = `${window.location.origin}/clients`;
       })
       .catch((error) => {
-        error.innerText = error;
+        setError(error.message);
       });
   };
 
@@ -91,6 +98,7 @@ function Form() {
     <div className={styles.container}>
       <form onSubmit={onSubmit}>
         <h1>CLIENTS FORM</h1>
+        <h4>{error}</h4>
         <Input
           name="name"
           placeholder="Customer's Name"
