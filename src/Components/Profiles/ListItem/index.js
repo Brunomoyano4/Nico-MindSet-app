@@ -1,7 +1,6 @@
 import styles from './listitem.module.css';
 
 const ListItem = ({ headerItems, listItems, id, onRowClick }) => {
-  // console.log(headerItems);
   return (
     <>
       {headerItems && (

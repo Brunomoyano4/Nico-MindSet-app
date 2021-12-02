@@ -1,6 +1,7 @@
 import styles from './form.module.css';
 import Input from '../Input';
 import { useState, useEffect } from 'react';
+
 function ProfilesForm() {
   const params = new URLSearchParams(window.location.search);
   const profileId = params.get('id');
@@ -49,8 +50,8 @@ function ProfilesForm() {
       fetch(`${process.env.REACT_APP_API}/profiles/${profileId}`)
         .then((res) => {
           if (res.status !== 200) {
-            return res.json().then(({ message }) => {
-              throw new Error(message);
+            return res.json().then(({ msg }) => {
+              throw new Error(msg);
             });
           }
           return res.json();
@@ -61,9 +62,7 @@ function ProfilesForm() {
           setDescription(data[0].description);
         })
         .catch((error) => {
-          setError(JSON.stringify(error));
-          console.log(error);
-          setError('error en use');
+          setError(error.toString());
         });
     }
   }, []);
@@ -79,7 +78,7 @@ function ProfilesForm() {
         label="Profile Name:"
         id="profile-name"
         required
-      ></Input>
+      />
       <Input
         placeholder="Branch"
         value={branch}
@@ -87,7 +86,7 @@ function ProfilesForm() {
         label="Branch:"
         id="profile-branch"
         required
-      ></Input>
+      />
       <Input
         placeholder="Description"
         value={description}
@@ -95,7 +94,7 @@ function ProfilesForm() {
         label="Description:"
         id="profile-description"
         required
-      ></Input>
+      />
       <input type="submit"></input>
     </form>
   );
