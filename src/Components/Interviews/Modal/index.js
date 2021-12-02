@@ -5,14 +5,13 @@ function Modal(props) {
     return null;
   }
   const onCloseModal = () => {
-    props.onCloseModal();
     props.closeModal();
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.modal}>
-        <h2>YOU ARE ABOUT TO DELETE AN INTERVIEW</h2>
+        <h2>{props.title}</h2>
         <button className={styles.btnModal} onClick={onCloseModal}>
           Cancel
         </button>

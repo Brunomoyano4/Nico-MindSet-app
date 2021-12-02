@@ -9,6 +9,7 @@ function Form() {
   const [dateTimeValue, setDateTimeValue] = useState('');
   const [statusValue, setStatusValue] = useState([]);
   const [paramId, setParamId] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -17,12 +18,20 @@ function Form() {
     if (interviewsId) {
       setParamId(interviewsId);
       fetch(`${process.env.REACT_APP_API}/interviews/${interviewsId}`)
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Could not fetch data properly');
+          }
+          return response.json();
+        })
         .then((response) => {
           setPositionIdValue(response[0].positionId);
           setPostulantIdValue(response[0].postulantId);
           setDateTimeValue(response[0].dateTime);
           setStatusValue(response[0].status);
+        })
+        .catch((error) => {
+          setError(error.message);
         });
     }
   }, []);
@@ -67,10 +76,8 @@ function Form() {
 
     fetch(url, options)
       .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
-          return response.json().then(({ message }) => {
-            throw new Error(message);
-          });
+        if (!response.ok) {
+          throw new Error('BAD REQUEST');
         }
         return response.json();
       })
@@ -78,7 +85,7 @@ function Form() {
         window.location.href = `${window.location.origin}/interviews`;
       })
       .catch((error) => {
-        error.innerText = error;
+        setError(error.message);
       });
   };
 
@@ -86,6 +93,7 @@ function Form() {
     <div className={styles.container}>
       <form onSubmit={onSubmit}>
         <h1>INTERVIEWS FORM</h1>
+        <h4>{error}</h4>
         <Input
           name="Position Id"
           placeholder="Position's Id"

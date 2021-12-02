@@ -4,16 +4,13 @@ import Modal from '../Modal';
 
 const Interviews = ({ interview }) => {
   const [showModal, setShowModal] = useState(false);
+
   const openEditForm = () => {
     window.location.href = `/interviews/form?id=${interview._id}`;
   };
 
   const closeModal = () => {
     setShowModal(false);
-  };
-
-  const onCloseModal = () => {
-    console.log('se borro');
   };
 
   const refreshPage = () => {
@@ -34,7 +31,6 @@ const Interviews = ({ interview }) => {
         }
       })
       .catch((error) => error)
-
       .finally(() => {
         refreshPage();
       });
@@ -43,11 +39,10 @@ const Interviews = ({ interview }) => {
   return (
     <>
       <Modal
-        title="Are you sure you want to delete this interview?"
+        title="YOU'RE ABOUT TO DELETE AN INTERVIEW"
         onConfirm={onDelete}
         show={showModal}
         closeModal={closeModal}
-        onCloseModal={onCloseModal}
       />
       <tr key={interview._id} onClick={openEditForm}>
         <td>{interview.positionId}</td>
