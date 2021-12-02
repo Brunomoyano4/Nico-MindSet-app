@@ -16,11 +16,10 @@ function DeleteBtn({ admin }) {
     fetch(url, {
       method: 'DELETE'
     })
-      .then(() => {
-        window.location.reload();
-      })
+      .then(() => window.location.reload())
       .catch((error) => setError(error));
   };
+
   return (
     <>
       <button
