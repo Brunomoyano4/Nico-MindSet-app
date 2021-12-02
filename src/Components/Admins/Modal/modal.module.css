@@ -10,7 +10,7 @@
   width: 100%;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.5);
-  }
+}
 
 .modal {
   width: 600px;
@@ -33,7 +33,6 @@
 	max-width: 580px;
 	padding: 15px;
   margin: 30px;
-	
 	border-top-style: none;
   border-right-style: none;
   border-left-style: none;
@@ -60,4 +59,8 @@
 h2 {
   text-align: center;
   padding-bottom: 25px;
+}
+
+.error {
+  color: red;
 }

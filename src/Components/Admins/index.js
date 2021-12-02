@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-//import EditBtn from './EditBtn';
 import Admin from './Admin';
 import CreateBtn from './CreateBtn';
 import styles from './admins.module.css';
 
 function Admins() {
   const [admins, setAdmins] = useState([]);
+  const [error, setError] = useState('');
+
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API}/admins`)
       .then((response) => response.json())
-      .then((response) => {
-        setAdmins(response);
-      });
+      .then((response) => setAdmins(response))
+      .catch((error) => setError(error));
   }, []);
   return (
     <>
@@ -39,6 +39,7 @@ function Admins() {
         </div>
       </section>
       <section className={styles.createBtnSection}>
+        {error && <div className={styles.error}>{error}</div>}
         <CreateBtn name="CreateBtn" />
       </section>
     </>

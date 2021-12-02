@@ -4,6 +4,7 @@ import styles from './deleteBtn.module.css';
 
 function DeleteBtn({ admin }) {
   const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState('');
 
   const closeModal = () => {
     setShowModal(false);
@@ -15,15 +16,10 @@ function DeleteBtn({ admin }) {
     fetch(url, {
       method: 'DELETE'
     })
-      .then((res) => {
-        if (res.status !== 204) {
-          return res.json().then((message) => {
-            throw new Error(message);
-          });
-        }
+      .then(() => {
+        window.location.reload();
       })
-      .catch((error) => error)
-      .finally(window.location.reload());
+      .catch((error) => setError(error));
   };
   return (
     <>
@@ -50,7 +46,8 @@ function DeleteBtn({ admin }) {
         onConfirm={(e) => deleteAdmin(e)}
         show={showModal}
         closeModal={closeModal}
-      ></Modal>
+        error={error}
+      />
     </>
   );
 }

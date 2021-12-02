@@ -22,7 +22,6 @@
   margin: 0;
 }
 
-
 tr:nth-child(even) {
   background-color: #f2f2f2;
 }
@@ -40,5 +39,6 @@ tr {
   cursor: pointer;
 }
 
-
-
+.error {
+  color: red;
+}

@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
 import Input from '../Input';
 import styles from './form.module.css';
+
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [usernameValue, setUsernameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
+  const [error, setError] = useState('');
 
-  const setInputValues = (data) => {
-    setFirstNameValue(data.firstName || '-');
-    setLastNameValue(data.lastName || '-');
-    setUsernameValue(data.username || '-');
-    setEmailValue(data.email || '-');
-    setPasswordValue(data.password || '-');
+  const setInputValues = ({ firstName, lastName, username, email, password }) => {
+    setFirstNameValue(firstName || 'N/A');
+    setLastNameValue(lastName || 'N/A');
+    setUsernameValue(username || 'N/A');
+    setEmailValue(email || 'N/A');
+    setPasswordValue(password || 'N/A');
   };
 
   let url;
@@ -37,12 +39,9 @@ function Form() {
     useEffect(() => {
       fetch(`${process.env.REACT_APP_API}/admins/${adminId}`)
         .then((response) => response.json())
-        .then((response) => {
-          setInputValues(response);
-        });
+        .then((response) => setInputValues(response))
+        .catch((error) => setError(error));
     }, []);
-    options.method = 'PUT';
-    url = `${process.env.REACT_APP_API}/admins/${adminId}`;
   }
 
   const onSubmit = (event) => {
@@ -56,21 +55,10 @@ function Form() {
       url = `${process.env.REACT_APP_API}/admins`;
     }
     fetch(url, options)
-      .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
-          return response.json().then(({ ErrMessage }) => {
-            throw new Error(ErrMessage);
-          });
-        }
-        return response.json();
-      })
-      .then(() => {
-        window.location.href = '/admins';
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      .then(() => (window.location.href = '/admins'))
+      .catch((error) => setError(error));
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>
@@ -129,6 +117,7 @@ function Form() {
               Save
             </button>
           </div>
+          {error && <div className={styles.error}>{error}</div>}
         </form>
       </div>
     </div>
