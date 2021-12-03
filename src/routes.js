@@ -21,14 +21,14 @@ const Routes = () => {
         <Route exact path="/admins" component={Admins} />
         <Route path="/admins/form" component={AdminsForm} />
         <Route path="/admins/form/:id" component={AdminsForm} />
-        <Route path="/applications" component={Applications} />
-        <Route path="/clients" component={Clients} />
-        <Route path="/interviews" component={Interviews} />
-        <Route path="/positions" component={Positions} />
-        <Route path="/postulants" component={Postulants} />
-        <Route path="/profiles" component={Profiles} />
-        <Route path="/psychologists" component={Psychologists} />
-        <Route path="/sessions" component={Sessions} />
+        <Route exact path="/applications" component={Applications} />
+        <Route exact path="/clients" component={Clients} />
+        <Route exact path="/interviews" component={Interviews} />
+        <Route exact path="/positions" component={Positions} />
+        <Route exact path="/postulants" component={Postulants} />
+        <Route exact path="/profiles" component={Profiles} />
+        <Route exact path="/psychologists" component={Psychologists} />
+        <Route exact path="/sessions" component={Sessions} />
       </Switch>
     </Layout>
   );
