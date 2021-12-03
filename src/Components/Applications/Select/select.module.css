@@ -1,0 +1,14 @@
+.select {
+  padding: 10px;
+  border-color: #72bc8eaa;
+  border-radius: 6px;
+}
+
+.label {
+  padding-block: 0.5rem;
+}
+
+.select:focus {
+  outline-color: #72bc8e;
+  box-shadow: 0 0 20px rgba(0, 255, 76, 0.25);
+}
