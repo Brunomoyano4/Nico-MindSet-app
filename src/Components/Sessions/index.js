@@ -77,7 +77,7 @@ function GetSessions() {
                   <th>TIME</th>
                   <th>DATE</th>
                   <th>STAT</th>
-                  <th>ACCTIONS</th>
+                  <th>ACCTION</th>
                 </tr>
               </thead>
               <tbody>
