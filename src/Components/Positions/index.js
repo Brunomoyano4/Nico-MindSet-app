@@ -14,6 +14,7 @@ function GetPositions() {
   const [state, setState] = useState(1);
   const [positionToUpdate, setPosition] = useState();
   const updatePositions = () => setPositions([]);
+  const [error, setError] = useState('');
 
   function changeState(n, e) {
     e.preventDefault();
@@ -28,17 +29,26 @@ function GetPositions() {
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API}/positions`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Could not fetch data properly');
+        }
+        return response.json();
+      })
       .then((response) => {
         if (response !== positions) setPositions(response);
+      })
+      .catch((error) => {
+        setError(error.message);
       });
   }, [positions.length]);
 
   return (
     <section className={styles.container}>
       <h2 className={styles.title}>Positions</h2>
+      <h4>{error}</h4>
       <div className={styles.content}>
-        {state != STATES.LIST ? (
+        {state !== STATES.LIST ? (
           <button onClick={(e) => changeState(STATES.LIST, e)}>List</button>
         ) : (
           <></>
@@ -61,7 +71,6 @@ function GetPositions() {
                 <th>DATE</th>
                 <th>ACTIONS</th>
               </tr>
-
               {positions.map((position) => {
                 return (
                   <tr key={position._id} onClick={(e) => updatePosition(e, position)}>
@@ -75,14 +84,14 @@ function GetPositions() {
                         positionId={position._id}
                         positions={positions}
                         filterPosition={updatePositions}
-                      ></DeleteBtn>
+                      />
                     </td>
                   </tr>
                 );
               })}
             </table>
           ) : (
-            <tr>No positions found</tr>
+            <span>No positions found</span>
           )
         ) : (
           <Form position={state === STATES.UPDATE ? positionToUpdate : {}} />

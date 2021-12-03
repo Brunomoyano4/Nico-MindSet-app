@@ -12,9 +12,10 @@ function Form(params) {
 
   const [position, setPosition] = useState(initialState);
   const [created, setCreated] = useState(false);
+  const [error, setError] = useState();
 
   function savePositions(e) {
-    e.stopPropagation();
+    e.preventDefault();
     fetch(`${process.env.REACT_APP_API}/positions`, {
       headers: {
         Accept: 'application/json',
@@ -23,14 +24,15 @@ function Form(params) {
       method: 'POST',
       body: JSON.stringify(position)
     })
-      .then((response) => response.json())
       .then((response) => {
-        if (response.clientId === position.clientId) {
-          setCreated(true);
-        }
-      });
+        if (response.status === 201) setCreated(true);
+        else
+          return response.json().then((error) => {
+            throw new Error(error);
+          });
+      })
+      .catch((error) => error);
   }
-
   function updatePosition(e) {
     e.stopPropagation();
     fetch(`${process.env.REACT_APP_API}/positions/${position._id}`, {
@@ -42,10 +44,8 @@ function Form(params) {
       body: JSON.stringify(position)
     })
       .then((response) => response.json())
-      .then((response) => {
-        if (response.clientId === position.clientId) {
-          console.log('Position Updated!');
-        }
+      .catch((error) => {
+        setError(error.message);
       });
   }
 
@@ -56,6 +56,7 @@ function Form(params) {
 
   return (
     <div>
+      {error}
       {created ? (
         <div>position created</div>
       ) : (
@@ -89,7 +90,6 @@ function Form(params) {
           />
           <button
             onClick={(e) => {
-              console.log(params);
               params.position._id ? updatePosition(e) : savePositions(e);
             }}
           >
