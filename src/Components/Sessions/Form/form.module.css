@@ -1,0 +1,18 @@
+.sessionsForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.sessionsForm label {
+  font-weight: bold;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.sessionsForm input {
+  margin-bottom: 1px;
+  padding: 7px 10px 7px 3px;
+}
+
+.sessionsForm button{
+  margin-top: 20px;
+} 
