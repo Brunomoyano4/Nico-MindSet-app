@@ -1,210 +1,169 @@
 import { useEffect, useState } from 'react';
-import Input from '../Input';
-import TextArea from '../TextArea';
-import Select from '../Select';
 import styles from './form.module.css';
 
-function Form() {
-  const [dateValue, setDateValue] = useState('');
-  const [postulantValue, setPostulantValue] = useState('');
-  const [psychologistValue, setPsychologistValue] = useState('');
-  const [statusValue, setStatusValue] = useState('');
-  const [notesValue, setNotesValue] = useState('');
-  const [postulants, setPostulants] = useState([]);
-  const [psychologists, setPsychologists] = useState([]);
-  const [error, setError] = useState('');
-  const [isLoading, setLoading] = useState(false);
+function Form(params) {
+  const [create, setCreate] = useState(true);
+  const [created, setCreated] = useState(false);
+  const [selectedPsychology, setPsychology] = useState(
+    params.psychologys ? params.psychologys[0]._id : session.psychology
+  );
+  const [selectedPostulant, setPostulant] = useState(
+    params.postulants ? params.postulants[0]._id : session.postulant
+  );
+  const initialState = params.session._id
+    ? params.session
+    : {
+        psychology: selectedPsychology,
+        postulant: selectedPostulant,
+        date: '',
+        time: '',
+        stat: ''
+      };
+  const [session, setSession] = useState(initialState);
+  let PsychologyList = params.psychologys.map((s) => {
+    return (
+      <option key={s._id} value={s._id}>
+        {s.firstName} {s.lastName}
+      </option>
+    );
+  });
 
-  useEffect(() => {
-    setLoading(true);
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get('id');
-    if (sessionId) {
-      fetch(`${process.env.REACT_APP_API}/sessions?_id=${sessionId}`)
-        .then((response) => {
-          if (response.status !== 200) {
-            return response.json().then(({ message }) => {
-              throw new Error(message);
-            });
-          }
-          return response.json();
-        })
-        .then((response) => {
-          setDateValue(response.data[0].date);
-          setPostulantValue(response.data[0].postulant?._id);
-          setPsychologistValue(response.data[0].psychologist?._id);
-          setStatusValue(response.data[0].status);
-          setNotesValue(response.data[0].notes);
-        })
-        .catch((error) => {
-          setError(error.toString());
-        })
-        .finally(() => setLoading(false));
-    }
+  let PostulantList = params.postulants.map((s) => {
+    return (
+      <option key={s._id} value={s._id}>
+        {s.firstName} {s.lastName}
+      </option>
+    );
+  });
 
-    fetch(`${process.env.REACT_APP_API}/postulants`)
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ message }) => {
-            throw new Error(message);
-          });
-        }
-        return response.json();
-      })
-      .then((response) => {
-        setPostulants(
-          response.data.map((postulant) => ({
-            value: postulant._id,
-            label: `${postulant.firstName} ${postulant.lastName}`
-          }))
-        );
-      })
-      .catch((error) => {
-        setError(error.toString());
-      })
-      .finally(() => setLoading(false));
-
-    fetch(`${process.env.REACT_APP_API}/psychologists`)
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ message }) => {
-            throw new Error(message);
-          });
-        }
-        return response.json();
-      })
-      .then((response) => {
-        setPsychologists(
-          response.data.map((psychologist) => ({
-            value: psychologist._id,
-            label: `${psychologist.firstName} ${psychologist.lastName}`
-          }))
-        );
-      })
-      .catch((error) => {
-        setError(error.toString());
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  const onChangeDateValue = (event) => {
-    setDateValue(event.target.value);
-  };
-
-  const onChangePostulantValue = (event) => {
-    setPostulantValue(event.target.value);
-  };
-
-  const onChangePsychologistValue = (event) => {
-    setPsychologistValue(event.target.value);
-  };
-
-  const onChangeStatusValue = (event) => {
-    setStatusValue(event.target.value);
-  };
-
-  const onChangeNotesValue = (event) => {
-    setNotesValue(event.target.value);
-  };
-
-  const onSubmit = (event) => {
-    event.preventDefault();
-    setLoading(true);
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get('id');
-
-    let url;
-    const options = {
+  function saveSessions(e) {
+    e.stopPropagation();
+    fetch(`${process.env.REACT_APP_API}/sessions`, {
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        date: dateValue,
-        postulant: postulantValue,
-        psychologist: psychologistValue,
-        status: statusValue,
-        notes: notesValue
-      })
-    };
-
-    if (sessionId) {
-      options.method = 'PUT';
-      url = `${process.env.REACT_APP_API}/sessions/${sessionId}`;
-    } else {
-      options.method = 'POST';
-      url = `${process.env.REACT_APP_API}/sessions`;
-    }
-
-    fetch(url, options)
+      method: 'POST',
+      body: JSON.stringify(session)
+    })
+      .then((response) => response.json())
       .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
-          return response.json().then(({ message }) => {
-            throw new Error(message);
-          });
+        if (response.psychologyId === session.psychologyId) {
+          setCreated(true);
         }
-        return response.json();
-      })
-      .then(() => {
-        window.location.href = '/sessions';
-      })
-      .catch((error) => {
-        setError(error.toString());
-      })
-      .finally(() => setLoading(false));
-  };
+      });
+  }
+
+  function updateSession(e) {
+    e.stopPropagation();
+    fetch(`${process.env.REACT_APP_API}/sessions/${session._id}`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'PUT',
+      body: JSON.stringify(session)
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.psychologyId === session.psychologyId) {
+          console.log('Session Updated!');
+        }
+      });
+  }
+
+  function handleInputChange(e) {
+    const { name, value } = e.target;
+    setSession({ ...session, [name]: value });
+  }
+
+  function handleSelectChange(person, id, name) {
+    let obj;
+    params.allSessions.map((s) => {
+      person === 'psychology'
+        ? s.psychology._id === id
+          ? (obj = s.psychology)
+          : ''
+        : s.postulant._id === id
+        ? (obj = s.postulant)
+        : '';
+    });
+    create ? setSession({ ...session, [name]: id }) : setSession({ ...session, [person]: obj });
+    console.log(session);
+  }
+
+  useEffect(() => {
+    params.session.id ? setCreate(false) : setCreate(true);
+  });
 
   return (
-    <section className={styles.container}>
-      <form className={styles.form} onSubmit={onSubmit}>
-        <h2>Sessions</h2>
-        <Select
-          name="postulant"
-          value={postulantValue}
-          onChange={onChangePostulantValue}
-          options={postulants}
-          required
-          disabled={isLoading}
-        />
-        <Select
-          name="psychologist"
-          value={psychologistValue}
-          onChange={onChangePsychologistValue}
-          options={psychologists}
-          required
-          disabled={isLoading}
-        />
-        <Select
-          name="status"
-          value={statusValue}
-          onChange={onChangeStatusValue}
-          options={[
-            { value: 'assigned', label: 'Assigned' },
-            { value: 'succesful', label: 'Succesful' },
-            { value: 'cancelled', label: 'Cancelled' }
-          ]}
-          required
-          disabled={isLoading}
-        />
-        <Input
-          name="date"
-          value={dateValue}
-          onChange={onChangeDateValue}
-          type="datetime-local"
-          required
-          disabled={isLoading}
-        />
-        <TextArea
-          name="notes"
-          value={notesValue}
-          onChange={onChangeNotesValue}
-          disabled={isLoading}
-        />
-        <button disabled={isLoading} type="submit" className={styles.button}>
-          Save
-        </button>
-        <div className={styles.error}>{error}</div>
-      </form>
-    </section>
+    <div>
+      {created ? (
+        <div>session created</div>
+      ) : (
+        <form className={styles.sessionsForm}>
+          <label>Psychology Id</label>
+          <select
+            value={selectedPsychology}
+            id="psychology"
+            onChange={(e) => {
+              setPsychology(e.target.value);
+              handleSelectChange(e.target.id, e.target.value, e.target.name);
+            }}
+            name="psychology"
+          >
+            {PsychologyList}
+          </select>
+          <label>Postulant Id</label>
+          <select
+            value={selectedPostulant}
+            id="postulant"
+            onChange={(e) => {
+              setPostulant(e.target.value);
+              handleSelectChange(e.target.id, e.target.value, e.target.name);
+            }}
+            name="postulant"
+          >
+            {PostulantList}
+          </select>
+          <label>date</label>
+          <input
+            type="datetime"
+            id="date"
+            name="date"
+            value={session.date}
+            onChange={handleInputChange}
+            required
+          />
+          <label>time</label>
+          <input
+            type="text"
+            id="time"
+            name="time"
+            value={session.time}
+            onChange={handleInputChange}
+            required
+          />
+          <label>stat</label>
+          <input
+            type="text"
+            id="stat"
+            name="stat"
+            value={session.stat}
+            onChange={handleInputChange}
+            required
+          />
+          <button
+            onClick={(e) => {
+              console.log(session);
+              params.session._id ? updateSession(e) : saveSessions(e);
+            }}
+          >
+            {params.session._id ? 'Update Session' : 'Create session'}
+          </button>
+        </form>
+      )}
+    </div>
   );
 }
 
