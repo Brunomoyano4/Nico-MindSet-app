@@ -10,6 +10,7 @@ const STATES = {
 };
 
 function GetSessions() {
+  const [error, setError] = useState('');
   const [sessions, setSessions] = useState([]);
   const [state, setState] = useState(1);
   const [sessionToUpdate, setSession] = useState();
@@ -33,22 +34,26 @@ function GetSessions() {
       .then((response) => response.json())
       .then((response) => {
         if (response !== sessions) setSessions(response);
-      });
+      })
+      .catch((error) => setError(error.message));
     fetch(`${process.env.REACT_APP_API}/psychologists`)
       .then((response) => response.json())
       .then((response) => {
         if (response !== psychologys) setPsychologys(response);
-      });
+      })
+      .catch((error) => setError(error.message));
     fetch(`${process.env.REACT_APP_API}/postulants`)
       .then((response) => response.json())
       .then((response) => {
         if (response !== postulants) setPostulants(response);
-      });
+      })
+      .catch((error) => setError(error.message));
   }, [sessions.lenght]);
 
   return (
     <section className={styles.container}>
       <h2 className={styles.title}>Sessions</h2>
+      <span>{error}</span>
       <div className={styles.content}>
         {state != STATES.LIST ? (
           <button onClick={(e) => changeState(STATES.LIST, e)}>List</button>

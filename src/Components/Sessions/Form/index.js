@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from './form.module.css';
 
 function Form(params) {
+  const [error, setError] = useState('');
   const [create, setCreate] = useState(true);
   const [created, setCreated] = useState(false);
   const [selectedPsychology, setPsychology] = useState(
@@ -51,7 +52,8 @@ function Form(params) {
         if (response.psychologyId === session.psychologyId) {
           setCreated(true);
         }
-      });
+      })
+      .catch((error) => setError(error.message));
   }
 
   function updateSession(e) {
@@ -65,11 +67,7 @@ function Form(params) {
       body: JSON.stringify(session)
     })
       .then((response) => response.json())
-      .then((response) => {
-        if (response.psychologyId === session.psychologyId) {
-          console.log('Session Updated!');
-        }
-      });
+      .catch((error) => setError(error.message));
   }
 
   function handleInputChange(e) {
@@ -89,7 +87,6 @@ function Form(params) {
         : '';
     });
     create ? setSession({ ...session, [name]: id }) : setSession({ ...session, [person]: obj });
-    console.log(session);
   }
 
   useEffect(() => {
@@ -98,6 +95,8 @@ function Form(params) {
 
   return (
     <div>
+      {error}
+      {error}
       {created ? (
         <div>session created</div>
       ) : (
@@ -155,7 +154,6 @@ function Form(params) {
           />
           <button
             onClick={(e) => {
-              console.log(session);
               params.session._id ? updateSession(e) : saveSessions(e);
             }}
           >
