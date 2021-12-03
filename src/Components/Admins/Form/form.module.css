@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.headerContainer{
+  display: flex;
+  justify-content: center;
+}
+
+.formContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.saveBtnSection {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.saveBtn {
+  font-family: 'Open Sans', BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  background-color: #72bc8e;
+  height: 40px;
+  width: 20%;
+  min-width: 100px;
+  max-width: 200px;
+  padding: 10px 0px;
+  border-top-style: none;
+  border-right-style: none;
+  border-left-style: none;
+  color: #fff;
+}
+
+.saveBtn:hover {
+  background-color: #86d6a5;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
+}
