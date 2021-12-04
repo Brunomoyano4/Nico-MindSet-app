@@ -1,3 +1,5 @@
+import React from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Input from '../Input';
 import styles from './form.module.css';
@@ -19,7 +21,8 @@ function Form() {
   };
 
   let url;
-  const params = new URLSearchParams(window.location.search);
+  const history = useHistory();
+  const params = useQuery();
   const adminId = params.get('id');
 
   const options = {
@@ -44,6 +47,12 @@ function Form() {
     }, []);
   }
 
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
+
   const onSubmit = (event) => {
     event.preventDefault();
 
@@ -55,7 +64,7 @@ function Form() {
       url = `${process.env.REACT_APP_API}/admins`;
     }
     fetch(url, options)
-      .then(() => (window.location.href = '/admins'))
+      .then(() => history.replace('/admins'))
       .catch((error) => setError(error));
   };
 

@@ -1,9 +1,12 @@
 import DeleteBtn from '../DeleteBtn';
+import { useHistory } from 'react-router-dom';
 
 function Admin({ admin }) {
+  const history = useHistory();
   const openEditForm = () => {
-    window.location.href = `/admins/form?id=${admin._id}`;
+    history.push(`/admins/form?id=${admin._id}`);
   };
+
   return (
     <tr key={admin._id} onClick={openEditForm}>
       <td>{admin.username}</td>
