@@ -1,19 +1,17 @@
 import styles from './select.module.css';
 
-const Select = ({ value, onChange, label, id, required, options }) => {
+const Select = (props) => {
   return (
     <>
-      <label className={styles.label} htmlFor={id}>
-        {label}
-      </label>
+      {!!props.label} {<label className={styles.label}>{props.label}</label>}
       <select
         className={styles.select}
-        id={id}
-        value={value}
-        onChange={onChange}
-        required={required}
+        id={props.id}
+        value={props.value}
+        onChange={props.onChange}
+        required={props.required}
       >
-        {options.map((option) => (
+        {props.options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>

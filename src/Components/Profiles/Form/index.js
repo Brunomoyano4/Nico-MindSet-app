@@ -1,5 +1,5 @@
 import styles from './form.module.css';
-import Input from '../Input';
+import Input from '../../Shared/Input';
 import { useState, useEffect } from 'react';
 
 function ProfilesForm() {

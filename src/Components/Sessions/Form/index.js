@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './form.module.css';
+import Input from '../../Shared/Input';
+import Select from '../../Shared/Select';
 
 function Form(params) {
   const [error, setError] = useState('');
@@ -22,19 +24,17 @@ function Form(params) {
       };
   const [session, setSession] = useState(initialState);
   let PsychologyList = params.psychologys.map((s) => {
-    return (
-      <option key={s._id} value={s._id}>
-        {s.firstName} {s.lastName}
-      </option>
-    );
+    return {
+      value: s._id,
+      label: `${s.firstName} ${s.lastName}`
+    };
   });
 
   let PostulantList = params.postulants.map((s) => {
-    return (
-      <option key={s._id} value={s._id}>
-        {s.firstName} {s.lastName}
-      </option>
-    );
+    return {
+      value: s._id,
+      label: `${s.firstName} ${s.lastName}`
+    };
   });
 
   function saveSessions(e) {
@@ -101,53 +101,51 @@ function Form(params) {
         <div>session created</div>
       ) : (
         <form className={styles.sessionsForm}>
-          <label>Psychology Id</label>
-          <select
+          <Select
             value={selectedPsychology}
-            id="psychology"
             onChange={(e) => {
               setPsychology(e.target.value);
               handleSelectChange(e.target.id, e.target.value, e.target.name);
             }}
+            label="Psychology Id"
+            id="psychology"
             name="psychology"
-          >
-            {PsychologyList}
-          </select>
-          <label>Postulant Id</label>
-          <select
+            options={PsychologyList}
+          />
+          <Select
             value={selectedPostulant}
-            id="postulant"
             onChange={(e) => {
               setPostulant(e.target.value);
               handleSelectChange(e.target.id, e.target.value, e.target.name);
             }}
+            label="Postulant Id"
+            id="postulant"
             name="postulant"
-          >
-            {PostulantList}
-          </select>
-          <label>date</label>
-          <input
-            type="datetime"
-            id="date"
+            options={PostulantList}
+          />
+          <Input
+            label="date"
             name="date"
+            id="date"
+            type="datetime"
             value={session.date}
             onChange={handleInputChange}
             required
           />
-          <label>time</label>
-          <input
-            type="text"
-            id="time"
+          <Input
+            label="time"
             name="time"
+            id="time"
+            type="text"
             value={session.time}
             onChange={handleInputChange}
             required
           />
-          <label>stat</label>
-          <input
-            type="text"
-            id="stat"
+          <Input
+            label="stat"
             name="stat"
+            id="stat"
+            type="text"
             value={session.stat}
             onChange={handleInputChange}
             required

@@ -1,6 +1,6 @@
 import styles from './form.module.css';
-import Input from '../Input';
-import Select from '../Select';
+import Input from '../../Shared/Input';
+import Select from '../../Shared/Select';
 import { useState, useEffect } from 'react';
 
 function ProfilesForm() {

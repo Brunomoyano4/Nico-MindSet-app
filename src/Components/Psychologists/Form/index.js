@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Input from '../Input';
+import Input from '../../Shared/Input';
 import styles from './form.module.css';
 
 function Form() {

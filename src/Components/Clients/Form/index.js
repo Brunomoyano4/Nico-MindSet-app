@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from './form.module.css';
-import Input from '../Input/index';
+import Input from '../../Shared/Input';
 
 function Form() {
   const [nameValue, setNameValue] = useState('');
