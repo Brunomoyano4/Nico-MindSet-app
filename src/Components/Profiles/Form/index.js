@@ -1,9 +1,12 @@
 import styles from './form.module.css';
 import Input from '../Input';
+import React from 'react';
 import { useState, useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 
 function ProfilesForm() {
-  const params = new URLSearchParams(window.location.search);
+  const history = useHistory();
+  const params = useQuery();
   const profileId = params.get('id');
   const [profileName, setProfileName] = useState('');
   const [branch, setBranch] = useState('');
@@ -37,13 +40,17 @@ function ProfilesForm() {
         }
         return res.json();
       })
-      .then(() => {
-        window.location.href = '/profiles';
-      })
+      .then(() => history.replace('/profiles'))
       .catch((error) => {
         setError(error);
       });
   };
+
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
 
   useEffect(() => {
     if (profileId) {

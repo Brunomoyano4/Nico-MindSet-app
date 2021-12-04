@@ -1,5 +1,6 @@
 import styles from './profiles.module.css';
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import ListItem from './ListItem';
 import DeleteBtn from './DeleteBtn';
 import Modal from './Modal';
@@ -11,6 +12,8 @@ function Profiles() {
   const [modalSubtitle, setModalSubtitle] = useState(['modalSubtitle']);
   const [deleteId, setDeleteId] = useState('');
 
+  const history = useHistory();
+
   const deleteProfile = (e, id, branch, name) => {
     e.stopPropagation();
     setModalSubtitle([`Branch: ${branch}`, `Name: ${name}`]);
@@ -19,7 +22,7 @@ function Profiles() {
   };
 
   const toForm = (id) => {
-    window.location.href = id ? `/profiles/form?id=${id}` : '/profiles/form';
+    history.push(id ? `/profiles/form?id=${id}` : '/profiles/form');
   };
   const getProfiles = () => {
     fetch(`${process.env.REACT_APP_API}/profiles`)
