@@ -64,31 +64,35 @@ function GetPositions() {
         {state === STATES.LIST ? (
           positions.length ? (
             <table className={styles.tablePositions}>
-              <tr>
-                <th>ID</th>
-                <th>JOB</th>
-                <th>DESCRIPTION</th>
-                <th>DATE</th>
-                <th>ACTIONS</th>
-              </tr>
-              {positions.map((position) => {
-                return (
-                  <tr key={position._id} onClick={(e) => updatePosition(e, position)}>
-                    <td>{position.clientId}</td>
-                    <td>{position.job}</td>
-                    <td>{position.description}</td>
-                    <td>{position.createdAt}</td>
-                    <td>
-                      <DeleteBtn
-                        className={styles.deleteButton}
-                        positionId={position._id}
-                        positions={positions}
-                        filterPosition={updatePositions}
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>JOB</th>
+                  <th>DESCRIPTION</th>
+                  <th>DATE</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {positions.map((position) => {
+                  return (
+                    <tr key={position._id} onClick={(e) => updatePosition(e, position)}>
+                      <td>{position.clientId}</td>
+                      <td>{position.job}</td>
+                      <td>{position.description}</td>
+                      <td>{position.createdAt}</td>
+                      <td>
+                        <DeleteBtn
+                          className={styles.deleteButton}
+                          positionId={position._id}
+                          positions={positions}
+                          filterPosition={updatePositions}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             </table>
           ) : (
             <span>No positions found</span>
