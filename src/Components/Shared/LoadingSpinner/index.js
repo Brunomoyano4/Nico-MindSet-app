@@ -19,7 +19,7 @@ const LoadingSpinner = ({ circle = true }) => {
     </div>
   );
 
-  return circle ? circleSpinner : horizontalSpinner;
+  return <div className={styles.container}>{circle ? circleSpinner : horizontalSpinner}</div>;
 };
 
 export default LoadingSpinner;
