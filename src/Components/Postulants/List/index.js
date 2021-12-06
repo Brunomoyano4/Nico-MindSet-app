@@ -2,8 +2,9 @@ import { useState } from 'react';
 import Postulant from '../Postulant';
 import Modal from '../Modal';
 import styles from './list.module.css';
+import LoadingSpinner from '../../Shared/LoadingSpinner';
 
-const List = ({ thName, dataList, setPostulants }) => {
+const List = ({ thName, dataList, setPostulants, loading }) => {
   const [showModal, setShowModal] = useState(false);
   const [idToDelete, setIdToDelete] = useState('');
   const [error, setError] = useState('');
@@ -55,18 +56,22 @@ const List = ({ thName, dataList, setPostulants }) => {
             })}
           </tr>
         </thead>
-        <tbody className={styles.tableList}>
-          {dataList.map((object) => {
-            return (
-              <Postulant
-                key={object._id}
-                object={object}
-                onClick={(event) => onShowModal(event, object._id)}
-              />
-            );
-          })}
-        </tbody>
+        {!loading && (
+          <tbody className={styles.tableList}>
+            {dataList.map((object) => {
+              return (
+                <Postulant
+                  key={object._id}
+                  object={object}
+                  onClick={(event) => onShowModal(event, object._id)}
+                />
+              );
+            })}
+          </tbody>
+        )}
       </table>
+      {loading && <LoadingSpinner circle={false} />}
+      {!loading && !dataList.length && <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>}
       <button className={styles.button} onClick={openNewForm}>
         ADD NEW POSTULANT
       </button>
