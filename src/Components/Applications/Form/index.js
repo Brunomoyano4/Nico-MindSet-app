@@ -49,12 +49,8 @@ function ProfilesForm() {
         }
         return res.json();
       })
-      .then(() => {
-        window.location.href = '/applications';
-      })
-      .catch((error) => {
-        setError(JSON.stringify(error));
-      });
+      .then(() => (window.location.href = '/applications'))
+      .catch((error) => setError(error.toString()));
   };
 
   useEffect(() => {

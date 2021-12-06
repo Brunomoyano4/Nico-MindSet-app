@@ -40,6 +40,10 @@
   text-align: center;
 }
 
+.subtitle {
+  color: darkred;
+}
+
 .confirmBtnModal{
   background: #72bc8e;
 }
@@ -54,6 +58,14 @@
 
 .cancelBtnModal:hover {
 	background: #797878;
+}
+
+.backBtnModal{
+  background: red;
+}
+
+.backBtnModal:hover{
+  background: darkred;
 }
 
 h2 {

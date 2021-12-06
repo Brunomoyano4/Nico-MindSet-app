@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import Modal from '../../Shared/Modal';
 import Input from '../Input';
 import styles from './form.module.css';
 
@@ -41,9 +42,16 @@ function Form() {
   if (adminId) {
     useEffect(() => {
       fetch(`${process.env.REACT_APP_API}/admins/${adminId}`)
-        .then((response) => response.json())
-        .then((response) => setInputValues(response))
-        .catch((error) => setError(error));
+        .then((response) => {
+          if (response.status !== 200) {
+            return response.json().then(({ msg }) => {
+              throw new Error(msg);
+            });
+          }
+          return response.json();
+        })
+        .then((data) => setInputValues(data))
+        .catch((error) => setError(error.toString()));
     }, []);
   }
 
@@ -64,8 +72,16 @@ function Form() {
       url = `${process.env.REACT_APP_API}/admins`;
     }
     fetch(url, options)
+      .then((response) => {
+        if (response.status !== 200 && response.status !== 201) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return (window.location.href = '/admins');
+      })
       .then(() => history.replace('/admins'))
-      .catch((error) => setError(error));
+      .catch((error) => setError(error.toString()));
   };
 
   return (
@@ -126,7 +142,13 @@ function Form() {
               Save
             </button>
           </div>
-          {error && <div className={styles.error}>{error}</div>}
+          <Modal
+            title="Something went wrong!"
+            subtitle={error}
+            show={error}
+            closeModal={() => setError('')}
+            type={'Error'}
+          />
         </form>
       </div>
     </div>

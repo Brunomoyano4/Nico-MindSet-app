@@ -38,9 +38,16 @@ function Form() {
   if (psychologistId) {
     useEffect(() => {
       fetch(`${process.env.REACT_APP_API}/psychologists/${psychologistId}`)
-        .then((response) => response.json())
+        .then((response) => {
+          if (response.status !== 200) {
+            return response.json().then(({ msg }) => {
+              throw new Error(msg);
+            });
+          }
+          return response.json();
+        })
         .then((data) => setInputValues(data))
-        .catch((error) => setError(JSON.stringify(error)));
+        .catch((error) => setError(error.toString()));
     }, []);
   }
 
@@ -55,10 +62,15 @@ function Form() {
       url = `${process.env.REACT_APP_API}/psychologists`;
     }
     fetch(url, options)
-      .then(() => {
-        window.location.href = '/psychologists';
+      .then((response) => {
+        if (response.status !== 200 && response.status !== 201) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return (window.location.href = '/psychologists');
       })
-      .catch((error) => setError(JSON.stringify(error)));
+      .catch((error) => setError(error.toString()));
   };
 
   return (

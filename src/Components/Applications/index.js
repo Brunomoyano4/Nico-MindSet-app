@@ -2,7 +2,7 @@ import styles from './applications.module.css';
 import { useState, useEffect } from 'react';
 import ListItem from './ListItem';
 import DeleteBtn from './DeleteBtn';
-import Modal from './Modal';
+import Modal from '../Shared/Modal';
 
 function Applications() {
   const tableHeaderItems = ['Position', 'Client', 'Postulant', 'Result', ''];

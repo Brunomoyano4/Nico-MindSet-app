@@ -9,9 +9,16 @@ function Psychologists() {
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API}/psychologists`)
-      .then((response) => response.json())
-      .then((response) => setPsychologists(response))
-      .catch((error) => setError(error));
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .then((data) => setPsychologists(data))
+      .catch((error) => setError(error.toString()));
   }, []);
 
   return (
