@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './form.module.css';
 import Input from '../Input';
+import LoadingSpinner from '../../Shared/LoadingSpinner';
 
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
@@ -22,6 +23,7 @@ function Form() {
   const [endDateValue, setEndDateValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const setInputValues = (data) => {
     setFirstNameValue(data.firstName || '-');
@@ -79,15 +81,19 @@ function Form() {
     })
   };
 
-  if (postulantId) {
-    useEffect(() => {
+  useEffect(() => {
+    if (postulantId) {
+      setLoading(true);
       fetch(`${process.env.REACT_APP_API}/postulants/${postulantId}`)
         .then((response) => response.json())
         .then((response) => {
           setInputValues(response);
         })
-        .catch((error) => setError(error));
-    }, []);
+        .catch((error) => setError(error))
+        .finally(() => setLoading(false));
+    }
+  }, []);
+  if (postulantId) {
     options.method = 'PUT';
     url = `${process.env.REACT_APP_API}/postulants/${postulantId}`;
   } else {
@@ -116,6 +122,11 @@ function Form() {
     <div className={styles.container}>
       <p className={styles.error}>{error}</p>
       <form className={styles.form} onSubmit={onSubmit}>
+        {loading && (
+          <div className={styles.spinnerContainer}>
+            <LoadingSpinner />
+          </div>
+        )}
         <h2>Form</h2>
         <Input
           name="firstName"
