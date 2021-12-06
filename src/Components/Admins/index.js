@@ -14,8 +14,8 @@ function Admins() {
     fetch(`${process.env.REACT_APP_API}/admins`)
       .then((response) => response.json())
       .then((response) => {
-        setLoading(false);
         setAdmins(response);
+        setLoading(false);
       })
       .catch((error) => setError(error));
   }, []);
@@ -45,7 +45,9 @@ function Admins() {
             )}
           </table>
           {loading && <LoadingSpinner circle={false} />}
-          {!loading && !admins && <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>}
+          {!loading && !admins.length && (
+            <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+          )}
         </div>
       </section>
       <section className={styles.createBtnSection}>
