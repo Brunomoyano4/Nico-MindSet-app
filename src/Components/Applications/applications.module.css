@@ -8,7 +8,7 @@
 
 .list {
   border-collapse: collapse;
-  margin: 25px 0;
+  margin: 10px 0;
   font-size: 16px;
   min-width: 400px;
   max-width: 800px;
@@ -21,6 +21,7 @@
   width: 20%;
   min-width: 100px;
   max-width: 400px;
+  margin-top: 10px;
   padding: 15px;
   background: #72bc8e;
   border-bottom: 2px solid #30c29e;
@@ -37,4 +38,8 @@
 .addBtn {
   max-width: 100%;
   cursor: pointer;
+}
+
+.nothingHere {
+  padding-block: 20px;
 }

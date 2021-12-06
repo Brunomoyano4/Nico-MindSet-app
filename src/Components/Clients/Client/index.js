@@ -1,13 +1,15 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styles from '../Client/client.module.css';
 import Modal from '../../Shared/Modal';
 
 const Client = ({ client }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [error, setError] = useState('');
+  const history = useHistory();
 
   const openEditForm = () => {
-    window.location.href = `/clients/form?id=${client._id}`;
+    history.push(`/clients/form?id=${client._id}`);
   };
 
   const onDelete = (event) => {

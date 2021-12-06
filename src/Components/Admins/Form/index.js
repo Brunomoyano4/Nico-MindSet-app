@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Modal from '../../Shared/Modal';
 import Input from '../Input';
 import styles from './form.module.css';
+import LoadingSpinner from '../../Shared/LoadingSpinner';
 
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
@@ -12,6 +13,7 @@ function Form() {
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const setInputValues = ({ firstName, lastName, username, email, password }) => {
     setFirstNameValue(firstName || 'N/A');
@@ -41,6 +43,7 @@ function Form() {
 
   if (adminId) {
     useEffect(() => {
+      setLoading(true);
       fetch(`${process.env.REACT_APP_API}/admins/${adminId}`)
         .then((response) => {
           if (response.status !== 200) {
@@ -51,7 +54,8 @@ function Form() {
           return response.json();
         })
         .then((data) => setInputValues(data))
-        .catch((error) => setError(error.toString()));
+        .catch((error) => setError(error.toString()))
+        .finally(() => setLoading(false));
     }, []);
   }
 
@@ -92,6 +96,11 @@ function Form() {
       <div className={styles.formContainer}>
         <form onSubmit={onSubmit}>
           <div className={styles.inputContainer}>
+            {loading && (
+              <div className={styles.spinnerContainer}>
+                <LoadingSpinner />
+              </div>
+            )}
             <Input
               name="First Name"
               placeholder="First name"

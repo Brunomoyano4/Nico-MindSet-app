@@ -1,14 +1,19 @@
 import styles from './form.module.css';
 import Input from '../Input';
+import React from 'react';
 import { useState, useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
+import LoadingSpinner from '../../Shared/LoadingSpinner';
 
 function ProfilesForm() {
-  const params = new URLSearchParams(window.location.search);
+  const history = useHistory();
+  const params = useQuery();
   const profileId = params.get('id');
   const [profileName, setProfileName] = useState('');
   const [branch, setBranch] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -37,15 +42,20 @@ function ProfilesForm() {
         }
         return res.json();
       })
-      .then(() => {
-        window.location.href = '/profiles';
-      })
+      .then(() => history.replace('/profiles'))
       .catch((error) => {
         setError(error);
       });
   };
 
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
+
   useEffect(() => {
+    setLoading(true);
     if (profileId) {
       fetch(`${process.env.REACT_APP_API}/profiles/${profileId}`)
         .then((res) => {
@@ -63,7 +73,8 @@ function ProfilesForm() {
         })
         .catch((error) => {
           setError(error.toString());
-        });
+        })
+        .finally(() => setLoading(false));
     }
   }, []);
 
@@ -71,6 +82,11 @@ function ProfilesForm() {
     <form className={styles.container} onSubmit={onSubmit}>
       <h2>Profile Form</h2>
       <h3>{error}</h3>
+      {loading && (
+        <div className={styles.spinnerContainer}>
+          <LoadingSpinner />
+        </div>
+      )}
       <Input
         placeholder="Profile Name"
         value={profileName}

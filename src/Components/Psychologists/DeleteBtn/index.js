@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import Modal from '../../Shared/Modal';
+import { useHistory } from 'react-router-dom';
 import styles from './deleteBtn.module.css';
 
 function DeleteBtn({ psychologist }) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [error, setError] = useState('');
+  const history = useHistory();
 
   const deletePsychologist = (event) => {
     event.stopPropagation();
@@ -20,7 +22,7 @@ function DeleteBtn({ psychologist }) {
         }
         setShowConfirmModal(false);
         //nuevo fetch a /psychologists
-        return (window.location.href = '/psychologists');
+        return history.go(0);
       })
       .catch((error) => setError(error.toString()));
   };

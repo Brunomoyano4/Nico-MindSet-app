@@ -1,7 +1,10 @@
+import React from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Input from '../Input';
 import Modal from '../../Shared/Modal';
 import styles from './form.module.css';
+import LoadingSpinner from '../../Shared/LoadingSpinner';
 
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
@@ -10,6 +13,7 @@ function Form() {
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const setInputValues = ({ firstName, lastName, userName, email, password }) => {
     setFirstNameValue(firstName || 'N/A');
@@ -20,7 +24,8 @@ function Form() {
   };
 
   let url;
-  const params = new URLSearchParams(window.location.search);
+  const history = useHistory();
+  const params = useQuery();
   const psychologistId = params.get('id');
 
   const options = {
@@ -38,6 +43,7 @@ function Form() {
 
   if (psychologistId) {
     useEffect(() => {
+      setLoading(true);
       fetch(`${process.env.REACT_APP_API}/psychologists/${psychologistId}`)
         .then((response) => {
           if (response.status !== 200) {
@@ -48,8 +54,15 @@ function Form() {
           return response.json();
         })
         .then((data) => setInputValues(data))
-        .catch((error) => setError(error.toString()));
+        .catch((error) => setError(error.toString()))
+        .finally(() => setLoading(false));
     }, []);
+  }
+
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
   }
 
   const onSubmit = (event) => {
@@ -69,7 +82,7 @@ function Form() {
             throw new Error(msg);
           });
         }
-        return (window.location.href = '/psychologists');
+        return history.replace('/psychologists');
       })
       .catch((error) => setError(error.toString()));
   };
@@ -80,6 +93,11 @@ function Form() {
         <h2>Psychologist Form</h2>
       </div>
       <div className={styles.formContainer}>
+        {loading && (
+          <div className={styles.spinnerContainer}>
+            <LoadingSpinner />
+          </div>
+        )}
         <form onSubmit={onSubmit}>
           <div className={styles.inputContainer}>
             <Input
