@@ -1,8 +1,10 @@
+import { useHistory } from 'react-router-dom';
 import styles from './addBtn.module.css';
 
 const AddBtn = () => {
+  const history = useHistory();
   const addNewClient = () => {
-    window.location.href = `/clients/form`;
+    history.push(`/clients/form`);
   };
 
   return (

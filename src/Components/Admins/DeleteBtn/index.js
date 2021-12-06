@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Modal from '../Modal';
 import styles from './deleteBtn.module.css';
 
@@ -6,6 +7,7 @@ function DeleteBtn({ admin }) {
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState('');
 
+  const history = useHistory();
   const closeModal = () => {
     setShowModal(false);
   };
@@ -16,7 +18,9 @@ function DeleteBtn({ admin }) {
     fetch(url, {
       method: 'DELETE'
     })
-      .then(() => window.location.reload())
+      .then(() => {
+        history.go(0);
+      })
       .catch((error) => setError(error));
   };
 
