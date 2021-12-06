@@ -4,19 +4,19 @@
   justify-content: center;
 }
 
-.header{
+.header {
   display: flex;
   justify-content: center;
 }
 
-.tableContainer{
+.tableContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.table{
+.table {
   width: 65%;
   padding: 0;
   margin: 0;
@@ -37,10 +37,16 @@ tr {
   align-items: center;
 }
 
-.table tbody tr:hover, button {
+.table tbody tr:hover,
+button {
   cursor: pointer;
 }
 
 .error {
   color: red;
+}
+
+.nothingHere {
+  padding-block: 20px;
+  text-align: center;
 }
