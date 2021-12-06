@@ -2,7 +2,7 @@ import styles from './input.module.css';
 
 const Input = (props) => (
   <>
-    {!!props.label} {<label className={styles.label}>{props.label}</label>}
+    {props.label && <label className={styles.label}>{props.label}</label>}
     <input
       className={styles.input}
       type={props.type ?? 'text'}

@@ -3,7 +3,7 @@ import styles from './select.module.css';
 const Select = (props) => {
   return (
     <>
-      {!!props.label} {<label className={styles.label}>{props.label}</label>}
+      {props.label && <label className={styles.label}>{props.label}</label>}
       <select
         className={styles.select}
         id={props.id}
