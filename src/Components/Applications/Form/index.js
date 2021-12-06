@@ -108,12 +108,14 @@ function ProfilesForm() {
           }))
         );
         setClientValue(res[0]._id);
-        setLoading((prev) => {
-          return { ...prev, clientLoading: false };
-        });
       })
       .catch((error) => {
         setError(error.toString());
+      })
+      .finally(() => {
+        setLoading((prev) => {
+          return { ...prev, clientLoading: false };
+        });
       });
 
     fetch(`${process.env.REACT_APP_API}/postulants`)
@@ -133,12 +135,14 @@ function ProfilesForm() {
           }))
         );
         setPostulantsValue(res[0]._id);
-        setLoading((prev) => {
-          return { ...prev, postulantLoading: false };
-        });
       })
       .catch((error) => {
         setError(error.toString());
+      })
+      .finally(() => {
+        setLoading((prev) => {
+          return { ...prev, postulantLoading: false };
+        });
       });
 
     fetch(`${process.env.REACT_APP_API}/positions`)
@@ -158,12 +162,14 @@ function ProfilesForm() {
           }))
         );
         setPositionsValue(res[0]._id);
-        setLoading((prev) => {
-          return { ...prev, positionLoading: false };
-        });
       })
       .catch((error) => {
         setError(error.toString());
+      })
+      .finally(() => {
+        setLoading((prev) => {
+          return { ...prev, positionLoading: false };
+        });
       });
   }, []);
 

@@ -36,3 +36,8 @@
 .content table tr:hover {
   background-color: #eaeaea;
 }
+
+.nothingHere {
+  padding-block: 20px;
+  text-align: center;
+}
