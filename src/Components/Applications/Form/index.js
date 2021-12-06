@@ -2,10 +2,13 @@ import styles from './form.module.css';
 import Input from '../Input';
 import Select from '../Select';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import React from 'react';
 import { useState, useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 
 function ProfilesForm() {
-  const params = new URLSearchParams(window.location.search);
+  const history = useHistory();
+  const params = useQuery();
   const applicationId = params.get('id');
   const [positionsOption, setPositionsOption] = useState([]);
   const [positionsValue, setPositionsValue] = useState('');
@@ -21,6 +24,12 @@ function ProfilesForm() {
     postulantLoading: false,
     applicationIdLoading: false
   });
+
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -50,9 +59,7 @@ function ProfilesForm() {
         }
         return res.json();
       })
-      .then(() => {
-        window.location.href = '/applications';
-      })
+      .then(() => history.replace('/applications'))
       .catch((error) => {
         setError(JSON.stringify(error));
       });

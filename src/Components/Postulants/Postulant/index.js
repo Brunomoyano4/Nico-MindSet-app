@@ -1,9 +1,11 @@
+import { useHistory } from 'react-router-dom';
 import DeleteBtn from '../DeleteBtn';
 import styles from './postulant.module.css';
 
 const Postulant = ({ object, onClick }) => {
+  const history = useHistory();
   const openEditForm = () => {
-    window.location.href = `/postulants/form?id=${object._id}`;
+    history.push(`/postulants/form?id=${object._id}`);
   };
 
   return (

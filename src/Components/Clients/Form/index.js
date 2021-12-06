@@ -1,4 +1,6 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import styles from './form.module.css';
 import Input from '../Input/index';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
@@ -13,10 +15,11 @@ function Form() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const clientId = params.get('id');
+  const history = useHistory();
+  const params = useQuery();
+  const clientId = params.get('id');
 
+  useEffect(() => {
     if (clientId) {
       setLoading(true);
       setParamId(clientId);
@@ -41,6 +44,11 @@ function Form() {
     }
   }, []);
 
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
   const onChangeNameInput = (event) => {
     setNameValue(event.target.value);
   };
@@ -90,9 +98,7 @@ function Form() {
         }
         return response.json();
       })
-      .then(() => {
-        window.location.href = `${window.location.origin}/clients`;
-      })
+      .then(() => history.replace('/clients'))
       .catch((error) => {
         setError(error.message);
       });

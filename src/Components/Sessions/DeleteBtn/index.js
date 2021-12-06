@@ -1,8 +1,11 @@
+import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
 function DeleteBtn({ sessionId, sessions, filterSession }) {
   const [error, setError] = useState('');
+  const history = useHistory();
+
   const refreshPage = () => {
-    window.location.reload();
+    history.go(0);
   };
   function DeleteSessions(Id, event) {
     event.stopPropagation();

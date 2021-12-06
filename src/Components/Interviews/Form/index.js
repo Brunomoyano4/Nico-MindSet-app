@@ -1,4 +1,6 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import styles from './form.module.css';
 import Input from '../Input/index';
 import Select from '../Select';
@@ -13,10 +15,10 @@ function Form() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const history = useHistory();
+  const params = useQuery();
+  const interviewsId = params.get('id');
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const interviewsId = params.get('id');
-
     if (interviewsId) {
       setLoading(true);
       setParamId(interviewsId);
@@ -39,6 +41,12 @@ function Form() {
         .finally(() => setLoading(false));
     }
   }, []);
+
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
 
   const onChangePositionIdInput = (event) => {
     setPositionIdValue(event.target.value);
@@ -85,9 +93,7 @@ function Form() {
         }
         return response.json();
       })
-      .then(() => {
-        window.location.href = `${window.location.origin}/interviews`;
-      })
+      .then(() => history.replace('/interviews'))
       .catch((error) => {
         setError(error.message);
       });

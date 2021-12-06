@@ -1,3 +1,5 @@
+import React from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styles from './form.module.css';
 import Input from '../Input';
@@ -46,7 +48,8 @@ function Form() {
     setDescriptionValue(data.experience[0].description || '-');
   };
 
-  const params = new URLSearchParams(window.location.search);
+  const history = useHistory();
+  const params = useQuery();
   const postulantId = params.get('id');
 
   let url = `${process.env.REACT_APP_API}/postulants`;
@@ -80,6 +83,10 @@ function Form() {
       ]
     })
   };
+  function useQuery() {
+    const { search } = useLocation();
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
 
   useEffect(() => {
     if (postulantId) {
@@ -93,6 +100,7 @@ function Form() {
         .finally(() => setLoading(false));
     }
   }, []);
+
   if (postulantId) {
     options.method = 'PUT';
     url = `${process.env.REACT_APP_API}/postulants/${postulantId}`;
@@ -113,9 +121,7 @@ function Form() {
         }
         return response.json();
       })
-      .then(() => {
-        window.location.href = `/postulants`;
-      })
+      .then(() => history.replace('/postulants'))
       .catch((error) => setError(error));
   };
   return (

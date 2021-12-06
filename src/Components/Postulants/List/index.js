@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Postulant from '../Postulant';
 import Modal from '../Modal';
 import styles from './list.module.css';
@@ -9,8 +10,10 @@ const List = ({ thName, dataList, setPostulants, loading }) => {
   const [idToDelete, setIdToDelete] = useState('');
   const [error, setError] = useState('');
 
+  const history = useHistory();
+
   const openNewForm = () => {
-    window.location.href = `/postulants/form`;
+    history.push(`/postulants/form`);
   };
   const handleDelete = (id) => {
     const url = `${process.env.REACT_APP_API}/postulants/${id}`;

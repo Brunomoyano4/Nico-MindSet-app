@@ -1,3 +1,5 @@
+import React from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Input from '../Input';
 import styles from './form.module.css';
@@ -21,7 +23,8 @@ function Form() {
   };
 
   let url;
-  const params = new URLSearchParams(window.location.search);
+  const history = useHistory();
+  const params = useQuery();
   const psychologistId = params.get('id');
 
   const options = {
@@ -48,6 +51,12 @@ function Form() {
     }, []);
   }
 
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
+
   const onSubmit = (event) => {
     event.preventDefault();
 
@@ -59,9 +68,7 @@ function Form() {
       url = `${process.env.REACT_APP_API}/psychologists`;
     }
     fetch(url, options)
-      .then(() => {
-        window.location.href = '/psychologists';
-      })
+      .then(() => history.replace('/psychologists'))
       .catch((error) => setError(JSON.stringify(error)));
   };
 

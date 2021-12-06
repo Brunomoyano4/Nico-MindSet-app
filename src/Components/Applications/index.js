@@ -1,5 +1,6 @@
 import styles from './applications.module.css';
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import ListItem from './ListItem';
 import DeleteBtn from './DeleteBtn';
 import Modal from './Modal';
@@ -13,6 +14,8 @@ function Applications() {
   const [deleteId, setDeleteId] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const history = useHistory();
+
   const deleteApplication = (e, id, position, client, postulant) => {
     e.stopPropagation();
     setModalSubtitle([`Position: ${position}`, `Client: ${client}`, `Postulant: ${postulant}`]);
@@ -21,7 +24,7 @@ function Applications() {
   };
 
   const toForm = (id) => {
-    window.location.href = id ? `/applications/form?id=${id}` : '/applications/form';
+    history.push(id ? `/applications/form?id=${id}` : '/applications/form');
   };
 
   const getApplications = () => {
