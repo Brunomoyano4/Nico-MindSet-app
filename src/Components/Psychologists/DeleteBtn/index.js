@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Modal from '../Modal';
 import styles from './deleteBtn.module.css';
 
 function DeleteBtn({ psychologist }) {
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState('');
+  const history = useHistory();
 
   const closeModal = () => {
     setShowModal(false);
@@ -17,7 +19,7 @@ function DeleteBtn({ psychologist }) {
       method: 'DELETE'
     })
       .then(() => {
-        window.location.href = '/psychologists';
+        history.go(0);
       })
       .catch((error) => setError(error));
   };

@@ -71,6 +71,11 @@
   font-weight: 600;
 }
 
+<<<<<<< HEAD:src/Components/Postulants/Form/postulantsForm.module.css
 .postulantsForm input.inputMaxWidth {
   width: 100%;
+=======
+.spinnerContainer {
+  position: absolute;
+>>>>>>> origin/development:src/Components/Postulants/Form/form.module.css
 }

@@ -76,3 +76,8 @@
   color: red;
   font-weight: 600;
 }
+
+.nothingHere {
+  padding-block: 20px;
+  text-align: center;
+}

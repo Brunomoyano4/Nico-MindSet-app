@@ -2,6 +2,7 @@ import styles from './positions.module.css';
 import { useEffect, useState } from 'react';
 import DeleteBtn from './DeleteBtn';
 import Form from './Form';
+import LoadingSpinner from '../Shared/LoadingSpinner';
 
 const STATES = {
   LIST: 1,
@@ -15,6 +16,7 @@ function GetPositions() {
   const [positionToUpdate, setPosition] = useState();
   const updatePositions = () => setPositions([]);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   function changeState(n, e) {
     e.preventDefault();
@@ -28,6 +30,7 @@ function GetPositions() {
   }
 
   useEffect(() => {
+    setLoading(true);
     fetch(`${process.env.REACT_APP_API}/positions`)
       .then((response) => {
         if (!response.ok) {
@@ -40,7 +43,8 @@ function GetPositions() {
       })
       .catch((error) => {
         setError(error.message);
-      });
+      })
+      .finally(() => setLoading(false));
   }, [positions.length]);
 
   return (
@@ -62,7 +66,7 @@ function GetPositions() {
         )}
         {}
         {state === STATES.LIST ? (
-          positions.length ? (
+          <>
             <table className={styles.tablePositions}>
               <thead>
                 <tr>
@@ -94,9 +98,11 @@ function GetPositions() {
                 })}
               </tbody>
             </table>
-          ) : (
-            <span>No positions found</span>
-          )
+            {loading && <LoadingSpinner circle={false} />}
+            {!loading && !positions.length && (
+              <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+            )}
+          </>
         ) : (
           <Form position={state === STATES.UPDATE ? positionToUpdate : {}} />
         )}

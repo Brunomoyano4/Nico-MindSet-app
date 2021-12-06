@@ -54,3 +54,7 @@ select {
   width: 193px;
   box-sizing: border-box;
 }
+
+.spinnerContainer {
+  position: absolute;
+}

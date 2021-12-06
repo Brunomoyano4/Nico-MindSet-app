@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import styles from './form.module.css';
 import Input from '../../Shared/Input';
+import LoadingSpinner from '../../Shared/LoadingSpinner';
 
 function Form() {
   const [nameValue, setNameValue] = useState('');
@@ -10,12 +12,15 @@ function Form() {
   const [descriptionValue, setDescriptionValue] = useState('');
   const [paramId, setParamId] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const history = useHistory();
+  const params = useQuery();
+  const clientId = params.get('id');
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const clientId = params.get('id');
-
     if (clientId) {
+      setLoading(true);
       setParamId(clientId);
       fetch(`${process.env.REACT_APP_API}/clients/${clientId}`)
         .then((response) => {
@@ -33,10 +38,16 @@ function Form() {
         })
         .catch((error) => {
           setError(error.message);
-        });
+        })
+        .finally(() => setLoading(false));
     }
   }, []);
 
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
   const onChangeNameInput = (event) => {
     setNameValue(event.target.value);
   };
@@ -86,9 +97,7 @@ function Form() {
         }
         return response.json();
       })
-      .then(() => {
-        window.location.href = `${window.location.origin}/clients`;
-      })
+      .then(() => history.replace('/clients'))
       .catch((error) => {
         setError(error.message);
       });
@@ -96,9 +105,14 @@ function Form() {
 
   return (
     <div className={styles.container}>
-      <form onSubmit={onSubmit}>
+      <form className={styles.form} onSubmit={onSubmit}>
         <h1>CLIENTS FORM</h1>
         <h4>{error}</h4>
+        {loading && (
+          <div className={styles.spinnerContainer}>
+            <LoadingSpinner />
+          </div>
+        )}
         <Input
           name="name"
           placeholder="Customer's Name"

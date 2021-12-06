@@ -1,10 +1,13 @@
 import styles from './form.module.css';
 import Input from '../../Shared/Input';
 import Select from '../../Shared/Select';
-import { useState, useEffect } from 'react';
+import LoadingSpinner from '../../Shared/LoadingSpinner';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 
 function ProfilesForm() {
-  const params = new URLSearchParams(window.location.search);
+  const history = useHistory();
+  const params = useQuery();
   const applicationId = params.get('id');
   const [positionsOption, setPositionsOption] = useState([]);
   const [positionsValue, setPositionsValue] = useState('');
@@ -20,6 +23,12 @@ function ProfilesForm() {
     postulantLoading: false,
     applicationIdLoading: false
   });
+
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -49,9 +58,7 @@ function ProfilesForm() {
         }
         return res.json();
       })
-      .then(() => {
-        window.location.href = '/applications';
-      })
+      .then(() => history.replace('/applications'))
       .catch((error) => {
         setError(JSON.stringify(error));
       });
@@ -59,13 +66,12 @@ function ProfilesForm() {
 
   useEffect(() => {
     setLoading({
-      applicationIdLoading: false,
+      applicationIdLoading: applicationId ? true : false,
       positionLoading: true,
       clientLoading: true,
       postulantLoading: true
     });
     if (applicationId) {
-      setLoading({ ...loading, applicationIdLoading: true });
       fetch(`${process.env.REACT_APP_API}/applications/${applicationId}`)
         .then((res) => {
           if (res.status !== 200) {
@@ -108,12 +114,14 @@ function ProfilesForm() {
           }))
         );
         setClientValue(res[0]._id);
-        setLoading((prev) => {
-          return { ...prev, clientLoading: false };
-        });
       })
       .catch((error) => {
         setError(error.toString());
+      })
+      .finally(() => {
+        setLoading((prev) => {
+          return { ...prev, clientLoading: false };
+        });
       });
 
     fetch(`${process.env.REACT_APP_API}/postulants`)
@@ -133,12 +141,14 @@ function ProfilesForm() {
           }))
         );
         setPostulantsValue(res[0]._id);
-        setLoading((prev) => {
-          return { ...prev, postulantLoading: false };
-        });
       })
       .catch((error) => {
         setError(error.toString());
+      })
+      .finally(() => {
+        setLoading((prev) => {
+          return { ...prev, postulantLoading: false };
+        });
       });
 
     fetch(`${process.env.REACT_APP_API}/positions`)
@@ -158,12 +168,14 @@ function ProfilesForm() {
           }))
         );
         setPositionsValue(res[0]._id);
-        setLoading((prev) => {
-          return { ...prev, positionLoading: false };
-        });
       })
       .catch((error) => {
         setError(error.toString());
+      })
+      .finally(() => {
+        setLoading((prev) => {
+          return { ...prev, positionLoading: false };
+        });
       });
   }, []);
 
@@ -171,6 +183,11 @@ function ProfilesForm() {
     <form className={styles.container} onSubmit={onSubmit}>
       <h2>Application Form</h2>
       <h3 className={error ? styles.error : ''}>{error}</h3>
+      {Object.values(loading).some(Boolean) && (
+        <div className={styles.spinnerContainer}>
+          <LoadingSpinner />
+        </div>
+      )}
       <Select
         value={positionsValue}
         onChange={(e) => setPositionsValue(e.target.value)}

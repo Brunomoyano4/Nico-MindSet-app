@@ -1,8 +1,10 @@
+import { useHistory } from 'react-router-dom';
 import DeleteBtn from '../DeleteBtn';
 
 function Psychologist({ psychologist }) {
+  const history = useHistory();
   const openEditForm = () => {
-    window.location.href = `/psychologists/form?id=${psychologist._id}`;
+    history.push(`/psychologists/form?id=${psychologist._id}`);
   };
 
   return (
