@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import ListItem from './ListItem';
 import DeleteBtn from './DeleteBtn';
 import Modal from './Modal';
+import LoadingSpinner from '../Shared/LoadingSpinner';
 
 function Applications() {
   const tableHeaderItems = ['Position', 'Client', 'Postulant', 'Result', ''];
@@ -11,6 +12,7 @@ function Applications() {
   const [showModal, setShowModal] = useState(false);
   const [modalSubtitle, setModalSubtitle] = useState(['modalSubtitle']);
   const [deleteId, setDeleteId] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const history = useHistory();
 
@@ -26,13 +28,15 @@ function Applications() {
   };
 
   const getApplications = () => {
+    setLoading(true);
     fetch(`${process.env.REACT_APP_API}/applications`)
       .then((res) => {
         return res.json();
       })
       .then((res) => {
         setApplications(res);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(getApplications, []);
@@ -52,39 +56,45 @@ function Applications() {
       <h2>Applications</h2>
       <table className={styles.list}>
         <ListItem headerItems={tableHeaderItems} />
-        <tbody className={styles.tableBody}>
-          {applications.map(({ _id, positions, client, postulants, result }) => {
-            const deleteBtn = (
-              <DeleteBtn
-                onClick={(e) =>
-                  deleteApplication(
-                    e,
-                    _id,
-                    positions?.job,
-                    client?.customerName,
-                    `${postulants?.firstName} ${postulants?.lastName}`
-                  )
-                }
-              />
-            );
-            const tableListItems = [
-              positions?.job,
-              client?.customerName,
-              `${postulants?.firstName} ${postulants?.lastName}`,
-              result,
-              deleteBtn
-            ];
-            return (
-              <ListItem
-                key={_id}
-                listItems={tableListItems}
-                id={_id}
-                onRowClick={() => toForm(_id)}
-              />
-            );
-          })}
-        </tbody>
+        {!loading && (
+          <tbody className={styles.tableBody}>
+            {applications.map(({ _id, positions, client, postulants, result }) => {
+              const deleteBtn = (
+                <DeleteBtn
+                  onClick={(e) =>
+                    deleteApplication(
+                      e,
+                      _id,
+                      positions?.job,
+                      client?.customerName,
+                      `${postulants?.firstName} ${postulants?.lastName}`
+                    )
+                  }
+                />
+              );
+              const tableListItems = [
+                positions?.job,
+                client?.customerName,
+                `${postulants?.firstName} ${postulants?.lastName}`,
+                result,
+                deleteBtn
+              ];
+              return (
+                <ListItem
+                  key={_id}
+                  listItems={tableListItems}
+                  id={_id}
+                  onRowClick={() => toForm(_id)}
+                />
+              );
+            })}
+          </tbody>
+        )}
       </table>
+      {loading && <LoadingSpinner circle={false} />}
+      {!loading && !applications.length && (
+        <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+      )}
       <button className={styles.addBtn} type="button" onClick={() => toForm()}>
         Add Application
       </button>

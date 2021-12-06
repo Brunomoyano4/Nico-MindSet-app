@@ -4,6 +4,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import styles from './form.module.css';
 import Input from '../Input/index';
 import Select from '../Select';
+import LoadingSpinner from '../../Shared/LoadingSpinner';
 
 function Form() {
   const [positionIdValue, setPositionIdValue] = useState('');
@@ -12,12 +13,14 @@ function Form() {
   const [statusValue, setStatusValue] = useState([]);
   const [paramId, setParamId] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const history = useHistory();
   const params = useQuery();
   const interviewsId = params.get('id');
   useEffect(() => {
     if (interviewsId) {
+      setLoading(true);
       setParamId(interviewsId);
       fetch(`${process.env.REACT_APP_API}/interviews/${interviewsId}`)
         .then((response) => {
@@ -34,7 +37,8 @@ function Form() {
         })
         .catch((error) => {
           setError(error.message);
-        });
+        })
+        .finally(() => setLoading(false));
     }
   }, []);
 
@@ -97,9 +101,14 @@ function Form() {
 
   return (
     <div className={styles.container}>
-      <form onSubmit={onSubmit}>
+      <form className={styles.form} onSubmit={onSubmit}>
         <h1>INTERVIEWS FORM</h1>
         <h4>{error}</h4>
+        {loading && (
+          <div className={styles.spinnerContainer}>
+            <LoadingSpinner />
+          </div>
+        )}
         <Input
           name="Position Id"
           placeholder="Position's Id"

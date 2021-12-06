@@ -2,16 +2,20 @@ import { useEffect, useState } from 'react';
 import styles from './interviews.module.css';
 import Interview from './Interview';
 import AddBtn from './AddBtn';
+import LoadingSpinner from '../Shared/LoadingSpinner';
 
 function Interviews() {
   const [interviews, saveInterviews] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     fetch(`${process.env.REACT_APP_API}/interviews`)
       .then((response) => response.json())
       .then((response) => {
         saveInterviews(response);
-      });
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -26,12 +30,18 @@ function Interviews() {
               <th>Date time:</th>
             </tr>
           </thead>
-          <tbody>
-            {interviews.map((interview) => {
-              return <Interview key={interview._id} interview={interview} />;
-            })}
-          </tbody>
+          {!loading && (
+            <tbody>
+              {interviews.map((interview) => {
+                return <Interview key={interview._id} interview={interview} />;
+              })}
+            </tbody>
+          )}
         </table>
+        {loading && <LoadingSpinner circle={false} />}
+        {!loading && !interviews.length && (
+          <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+        )}
         <AddBtn className={styles.button} />
       </div>
     </section>

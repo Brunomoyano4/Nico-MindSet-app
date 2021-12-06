@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import styles from './form.module.css';
 import Input from '../Input/index';
+import LoadingSpinner from '../../Shared/LoadingSpinner';
 
 function Form() {
   const [nameValue, setNameValue] = useState('');
@@ -12,6 +13,7 @@ function Form() {
   const [descriptionValue, setDescriptionValue] = useState('');
   const [paramId, setParamId] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const history = useHistory();
   const params = useQuery();
@@ -19,6 +21,7 @@ function Form() {
 
   useEffect(() => {
     if (clientId) {
+      setLoading(true);
       setParamId(clientId);
       fetch(`${process.env.REACT_APP_API}/clients/${clientId}`)
         .then((response) => {
@@ -36,7 +39,8 @@ function Form() {
         })
         .catch((error) => {
           setError(error.message);
-        });
+        })
+        .finally(() => setLoading(false));
     }
   }, []);
 
@@ -102,9 +106,14 @@ function Form() {
 
   return (
     <div className={styles.container}>
-      <form onSubmit={onSubmit}>
+      <form className={styles.form} onSubmit={onSubmit}>
         <h1>CLIENTS FORM</h1>
         <h4>{error}</h4>
+        {loading && (
+          <div className={styles.spinnerContainer}>
+            <LoadingSpinner />
+          </div>
+        )}
         <Input
           name="name"
           placeholder="Customer's Name"

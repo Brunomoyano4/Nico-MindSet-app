@@ -17,11 +17,16 @@
 
 .list th,
 .list td {
-	padding: 12px 15px;
-	cursor: pointer;
-	text-align: center;
+  padding: 12px 15px;
+  cursor: pointer;
+  text-align: center;
 }
 
 .list tbody tr {
   border-bottom: 1px solid #dddddd;
+}
+
+.nothingHere {
+  padding-block: 20px;
+  text-align: center;
 }
