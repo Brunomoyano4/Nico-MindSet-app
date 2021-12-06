@@ -28,6 +28,7 @@ function Admins() {
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Password</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>

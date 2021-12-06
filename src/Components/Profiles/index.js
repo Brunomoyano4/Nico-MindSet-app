@@ -1,7 +1,7 @@
 import styles from './profiles.module.css';
 import { useState, useEffect } from 'react';
 import ListItem from './ListItem';
-import DeleteBtn from './DeleteBtn';
+import DeleteBtn from '../Shared/DeleteBtn/index';
 import Modal from './Modal';
 
 function Profiles() {

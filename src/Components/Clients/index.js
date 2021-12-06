@@ -21,9 +21,10 @@ function Clients() {
         <table className={styles.list}>
           <thead>
             <tr>
-              <th>Name:</th>
-              <th>Phone:</th>
-              <th>Branch:</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Branch</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>

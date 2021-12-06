@@ -85,14 +85,12 @@ function GetSessions() {
                   return (
                     <tr key={session._id} onClick={(e) => updateSession(e, session)}>
                       <td>
-                        {`${session.psychology?.firstName || ''} ${
-                          session.psychology?.lastName || ''
-                        }`}
+                        {`${session.psychology?.firstName || ''}
+                        ${session.psychology?.lastName || ''}`}
                       </td>
                       <td>
-                        {`${session.postulant?.firstName || ''} ${
-                          session.postulant?.lastName || ''
-                        }`}
+                        {`${session.postulant?.firstName || ''}
+                        ${session.postulant?.lastName || ''}`}
                       </td>
                       <td>{session.time}</td>
                       <td>{session.date.slice(0, 10)}</td>

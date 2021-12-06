@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from '../Client/client.module.css';
 import Modal from '../Modal';
+import DeleteBtn from '../../Shared/DeleteBtn/index';
 
 const Client = ({ client }) => {
   const [showModal, setShowModal] = useState(false);
@@ -48,16 +49,14 @@ const Client = ({ client }) => {
         <td>{client.phone}</td>
         <td>{client.branch}</td>
         <td>
-          <button
+          <DeleteBtn
             className={styles.button}
             onClick={(e) => {
               e.stopPropagation();
               setShowModal(true);
             }}
             client={client}
-          >
-            DELETE
-          </button>
+          />
         </td>
       </tr>
     </>

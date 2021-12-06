@@ -1,38 +1,44 @@
 .container {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header{
   display: flex;
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
 }
 
-.content {
-  align-items: center;
+.tableContainer{
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.content button {
-  background-color: #72bc8e;
-  padding: 10px 15px;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
+.table{
+  width: 65%;
+  padding: 0;
+  margin: 0;
 }
 
-.content button:hover {
-  background-color: #86d6a5;
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr {
+  width: 100%;
+}
+
+.createBtnSection {
+  display: flex;
+  justify-content: center;
+}
+
+.table tbody tr:hover, button {
   cursor: pointer;
 }
 
-.content .createButton {
-  margin-bottom: 25px;
-}
-
-.content table td {
-  cursor: pointer;
-}
-
-.content table tr:hover {
-  background-color: #eaeaea;
+.error {
+  color: red;
 }

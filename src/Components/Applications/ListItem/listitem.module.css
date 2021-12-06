@@ -44,14 +44,4 @@ td:last-child {
   background: linear-gradient(90deg, #72bc8e00 0%, #72bc8eaa 100%);
   padding: 0;
   height: fit-content;
-  opacity: 0;
-  transition: opacity 250ms linear;
-}
-
-.tr:hover td:last-child img {
-  width: 100%;
-}
-
-.tr:hover td:last-child {
-  opacity: unset;
 }

@@ -1,4 +1,4 @@
-import DeleteBtn from '../DeleteBtn';
+import DeleteBtn from '../../Shared/DeleteBtn/index';
 import styles from './postulant.module.css';
 
 const Postulant = ({ object, onClick }) => {
@@ -18,7 +18,7 @@ const Postulant = ({ object, onClick }) => {
           {object.city}, {object.country}
         </td>
         <td>
-          <DeleteBtn object={object} onClick={onClick} />
+          <DeleteBtn onClick={onClick} />
         </td>
       </tr>
     </>

@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import styles from '../Interview/interview.module.css';
+import styles from '../Position/position.module.css';
 import Modal from '../Modal';
 import DeleteBtn from '../../Shared/DeleteBtn/index';
 
-const Interviews = ({ interview }) => {
+const Position = ({ position }) => {
   const [showModal, setShowModal] = useState(false);
-
   const openEditForm = () => {
-    window.location.href = `/interviews/form?id=${interview._id}`;
+    window.location.href = `/clients/form?id=${position._id}`;
   };
 
   const closeModal = () => {
@@ -19,7 +18,7 @@ const Interviews = ({ interview }) => {
   };
 
   const onDelete = (event) => {
-    const url = `${process.env.REACT_APP_API}/interviews/${interview._id}`;
+    const url = `${process.env.REACT_APP_API}/positions/${position._id}`;
     event.stopPropagation();
     fetch(url, {
       method: 'DELETE'
@@ -40,15 +39,16 @@ const Interviews = ({ interview }) => {
   return (
     <>
       <Modal
-        title="YOU'RE ABOUT TO DELETE AN INTERVIEW"
+        title="YOU'RE ABOUT TO DELETE A POSITION"
         onConfirm={onDelete}
         show={showModal}
         closeModal={closeModal}
       />
-      <tr key={interview._id} onClick={openEditForm}>
-        <td>{interview.positionId}</td>
-        <td>{interview.postulantId}</td>
-        <td>{interview.dateTime}</td>
+      <tr key={position._id} onClick={openEditForm}>
+        <td>{position.clientId}</td>
+        <td>{position.job}</td>
+        <td>{position.description}</td>
+        <td>{position.createdAt}</td>
         <td>
           <DeleteBtn
             className={styles.button}
@@ -56,7 +56,7 @@ const Interviews = ({ interview }) => {
               e.stopPropagation();
               setShowModal(true);
             }}
-            interview={interview}
+            position={position}
           />
         </td>
       </tr>
@@ -64,4 +64,4 @@ const Interviews = ({ interview }) => {
   );
 };
 
-export default Interviews;
+export default Position;
