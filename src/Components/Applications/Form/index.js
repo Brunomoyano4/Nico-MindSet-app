@@ -1,5 +1,6 @@
 import styles from './form.module.css';
 import Input from '../Input';
+import Modal from '../../Shared/Modal';
 import Select from '../Select';
 import { useState, useEffect } from 'react';
 
@@ -77,9 +78,7 @@ function ProfilesForm() {
           setPostulantsValue(data?.postulants?._id);
           setResult(data.result);
         })
-        .catch((error) => {
-          setError(JSON.stringify(error));
-        })
+        .catch((error) => setError(error.toString()))
         .finally(() =>
           setLoading((prev) => {
             return { ...prev, applicationIdLoading: false };
@@ -108,9 +107,7 @@ function ProfilesForm() {
           return { ...prev, clientLoading: false };
         });
       })
-      .catch((error) => {
-        setError(error.toString());
-      });
+      .catch((error) => setError(error.toString()));
 
     fetch(`${process.env.REACT_APP_API}/postulants`)
       .then((res) => {
@@ -133,9 +130,7 @@ function ProfilesForm() {
           return { ...prev, postulantLoading: false };
         });
       })
-      .catch((error) => {
-        setError(error.toString());
-      });
+      .catch((error) => setError(error.toString()));
 
     fetch(`${process.env.REACT_APP_API}/positions`)
       .then((res) => {
@@ -158,15 +153,19 @@ function ProfilesForm() {
           return { ...prev, positionLoading: false };
         });
       })
-      .catch((error) => {
-        setError(error.toString());
-      });
+      .catch((error) => setError(error.toString()));
   }, []);
 
   return (
     <form className={styles.container} onSubmit={onSubmit}>
       <h2>Application Form</h2>
-      <h3 className={error ? styles.error : ''}>{error}</h3>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
       <Select
         value={positionsValue}
         onChange={(e) => setPositionsValue(e.target.value)}

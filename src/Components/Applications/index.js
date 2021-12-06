@@ -7,15 +7,33 @@ import Modal from '../Shared/Modal';
 function Applications() {
   const tableHeaderItems = ['Position', 'Client', 'Postulant', 'Result', ''];
   const [applications, setApplications] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [modalSubtitle, setModalSubtitle] = useState(['modalSubtitle']);
-  const [deleteId, setDeleteId] = useState('');
+  const [error, setError] = useState('');
 
   const deleteApplication = (e, id, position, client, postulant) => {
     e.stopPropagation();
-    setModalSubtitle([`Position: ${position}`, `Client: ${client}`, `Postulant: ${postulant}`]);
-    setDeleteId(id);
-    setShowModal(true);
+    setModalSubtitle([
+      `ID: ${id}`,
+      `Position: ${position}`,
+      `Client: ${client}`,
+      `Postulant: ${postulant}`
+    ]);
+    fetch(`${process.env.REACT_APP_API}/applications/${id}`, {
+      method: 'DELETE'
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        setShowConfirmModal(false);
+        getApplications();
+      })
+      .catch((error) => {
+        setError(JSON.stringify(error));
+      });
   };
 
   const toForm = (id) => {
@@ -36,16 +54,6 @@ function Applications() {
 
   return (
     <section className={styles.container}>
-      <Modal
-        showHook={setShowModal}
-        showModal={showModal}
-        title="You are about to delete an application"
-        subtitle={modalSubtitle}
-        closeBtnText="Close"
-        proceedBtnText="Proceed"
-        id={deleteId}
-        getApplications={getApplications}
-      />
       <h2>Applications</h2>
       <table className={styles.list}>
         <ListItem headerItems={tableHeaderItems} />
@@ -71,6 +79,20 @@ function Applications() {
               result,
               deleteBtn
             ];
+            <Modal
+              title="You are about to delete an application"
+              onConfirm={(e) =>
+                deleteApplication(
+                  e,
+                  _id,
+                  positions?.job,
+                  client?.customerName,
+                  `${postulants?.firstName} ${postulants?.lastName}`
+                )
+              }
+              show={showConfirmModal}
+              subtitle={modalSubtitle}
+            />;
             return (
               <ListItem
                 key={_id}
@@ -82,6 +104,13 @@ function Applications() {
           })}
         </tbody>
       </table>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
       <button className={styles.addBtn} type="button" onClick={() => toForm()}>
         Add Application
       </button>

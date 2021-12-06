@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Input from '../Input';
+import Modal from '../../Shared/Modal';
 import styles from './form.module.css';
 
 function Form() {
@@ -131,9 +132,15 @@ function Form() {
               Save
             </button>
           </div>
-          {error && <span className={styles.error}>{error}</span>}
         </form>
       </div>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </div>
   );
 }

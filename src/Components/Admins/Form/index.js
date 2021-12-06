@@ -142,15 +142,15 @@ function Form() {
               Save
             </button>
           </div>
-          <Modal
-            title="Something went wrong!"
-            subtitle={error}
-            show={error}
-            closeModal={() => setError('')}
-            type={'Error'}
-          />
         </form>
       </div>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </div>
   );
 }
