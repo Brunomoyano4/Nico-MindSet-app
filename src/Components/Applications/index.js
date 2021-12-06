@@ -32,8 +32,8 @@ function Applications() {
       })
       .then((res) => {
         setApplications(res);
-        setLoading(false);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(getApplications, []);

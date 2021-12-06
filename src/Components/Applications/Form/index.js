@@ -1,6 +1,7 @@
 import styles from './form.module.css';
 import Input from '../Input';
 import Select from '../Select';
+import LoadingSpinner from '../../Shared/LoadingSpinner';
 import { useState, useEffect } from 'react';
 
 function ProfilesForm() {
@@ -59,13 +60,12 @@ function ProfilesForm() {
 
   useEffect(() => {
     setLoading({
-      applicationIdLoading: false,
+      applicationIdLoading: applicationId ? true : false,
       positionLoading: true,
       clientLoading: true,
       postulantLoading: true
     });
     if (applicationId) {
-      setLoading({ ...loading, applicationIdLoading: true });
       fetch(`${process.env.REACT_APP_API}/applications/${applicationId}`)
         .then((res) => {
           if (res.status !== 200) {
@@ -171,6 +171,11 @@ function ProfilesForm() {
     <form className={styles.container} onSubmit={onSubmit}>
       <h2>Application Form</h2>
       <h3 className={error ? styles.error : ''}>{error}</h3>
+      {Object.values(loading).some(Boolean) && (
+        <div className={styles.spinnerContainer}>
+          <LoadingSpinner />
+        </div>
+      )}
       <Select
         value={positionsValue}
         onChange={(e) => setPositionsValue(e.target.value)}

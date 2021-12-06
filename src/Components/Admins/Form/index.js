@@ -47,9 +47,9 @@ function Form() {
         .then((response) => response.json())
         .then((response) => {
           setInputValues(response);
-          setLoading(false);
         })
-        .catch((error) => setError(error));
+        .catch((error) => setError(error))
+        .finally(() => setLoading(false));
     }, []);
   }
 
