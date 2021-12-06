@@ -36,9 +36,7 @@ function Applications() {
         setShowConfirmModal(false);
         getApplications();
       })
-      .catch((error) => {
-        setError(JSON.stringify(error));
-      });
+      .catch((error) => setError(error.toString()));
   };
 
   const toForm = (id) => {
@@ -69,15 +67,10 @@ function Applications() {
             {applications.map(({ _id, positions, client, postulants, result }) => {
               const deleteBtn = (
                 <DeleteBtn
-                  onClick={(e) =>
-                    deleteApplication(
-                      e,
-                      _id,
-                      positions?.job,
-                      client?.customerName,
-                      `${postulants?.firstName} ${postulants?.lastName}`
-                    )
-                  }
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowConfirmModal(true);
+                  }}
                 />
               );
               const tableListItems = [
@@ -99,6 +92,7 @@ function Applications() {
                   )
                 }
                 show={showConfirmModal}
+                closeModal={() => setShowConfirmModal(false)}
                 subtitle={modalSubtitle}
               />;
               return (

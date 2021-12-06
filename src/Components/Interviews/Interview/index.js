@@ -1,50 +1,50 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from '../Interview/interview.module.css';
-import Modal from '../Modal';
+import Modal from '../../Shared/Modal';
 
 const Interviews = ({ interview }) => {
-  const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [error, setError] = useState('');
 
   const history = useHistory();
   const openEditForm = () => {
     history.push(`/interviews/form?id=${interview._id}`);
   };
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
-  const refreshPage = () => {
-    history.go(0);
-  };
-
-  const onDelete = (event) => {
+  const deleteInterview = (event) => {
     const url = `${process.env.REACT_APP_API}/interviews/${interview._id}`;
     event.stopPropagation();
     fetch(url, {
       method: 'DELETE'
     })
-      .then((res) => {
-        if (res.status !== 204) {
-          return res.json().then((message) => {
-            throw new Error(message);
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
           });
         }
+        setShowConfirmModal(false);
+        return history.go(0);
       })
-      .catch((error) => error)
-      .finally(() => {
-        refreshPage();
-      });
+      .catch((error) => setError(error.toString()));
   };
 
   return (
     <>
       <Modal
-        title="YOU'RE ABOUT TO DELETE AN INTERVIEW"
-        onConfirm={onDelete}
-        show={showModal}
-        closeModal={closeModal}
+        title="Are you sure you want to delete the selected interview?"
+        onConfirm={(e) => deleteInterview(e)}
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        type={'Confirm'}
+      />
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
       />
       <tr key={interview._id} onClick={openEditForm}>
         <td>{interview.positionId}</td>
@@ -55,7 +55,7 @@ const Interviews = ({ interview }) => {
             className={styles.button}
             onClick={(e) => {
               e.stopPropagation();
-              setShowModal(true);
+              setShowConfirmModal(true);
             }}
             interview={interview}
           >

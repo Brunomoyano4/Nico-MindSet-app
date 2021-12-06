@@ -5,6 +5,7 @@ import styles from './form.module.css';
 import Input from '../Input/index';
 import Select from '../Select';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Modal from '../../Shared/Modal';
 
 function Form() {
   const [positionIdValue, setPositionIdValue] = useState('');
@@ -24,20 +25,20 @@ function Form() {
       setParamId(interviewsId);
       fetch(`${process.env.REACT_APP_API}/interviews/${interviewsId}`)
         .then((response) => {
-          if (!response.ok) {
-            throw new Error('Could not fetch data properly');
+          if (response.status !== 200) {
+            return response.json().then(({ msg }) => {
+              throw new Error(msg);
+            });
           }
           return response.json();
         })
-        .then((response) => {
-          setPositionIdValue(response[0].positionId);
-          setPostulantIdValue(response[0].postulantId);
-          setDateTimeValue(response[0].dateTime);
-          setStatusValue(response[0].status);
+        .then((data) => {
+          setPositionIdValue(data[0].positionId);
+          setPostulantIdValue(data[0].postulantId);
+          setDateTimeValue(data[0].dateTime);
+          setStatusValue(data[0].status);
         })
-        .catch((error) => {
-          setError(error.message);
-        })
+        .catch((error) => setError(error.toString()))
         .finally(() => setLoading(false));
     }
   }, []);
@@ -88,22 +89,20 @@ function Form() {
 
     fetch(url, options)
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('BAD REQUEST');
+        if (response.status !== 200 && response.status !== 201) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
         }
-        return response.json();
+        return history.replace('/interviews');
       })
-      .then(() => history.replace('/interviews'))
-      .catch((error) => {
-        setError(error.message);
-      });
+      .catch((error) => setError(error.toString()));
   };
 
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={onSubmit}>
         <h1>INTERVIEWS FORM</h1>
-        <h4>{error}</h4>
         {loading && (
           <div className={styles.spinnerContainer}>
             <LoadingSpinner />
@@ -147,6 +146,13 @@ function Form() {
           SAVE
         </button>
       </form>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </div>
   );
 }

@@ -2,9 +2,9 @@ import React from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Input from '../Input';
-import Modal from '../../Shared/Modal';
 import styles from './form.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Modal from '../../Shared/Modal';
 
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');

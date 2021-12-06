@@ -3,6 +3,7 @@ import Psychologist from './Psychologist';
 import CreateBtn from './CreateBtn';
 import styles from './psychologists.module.css';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import Modal from '../Shared/Modal';
 
 function Psychologists() {
   const [psychologists, setPsychologists] = useState([]);
@@ -57,7 +58,13 @@ function Psychologists() {
         )}
       </section>
       <section className={styles.createBtnSection}>
-        {error && <div className={styles.error}>{error}</div>}
+        <Modal
+          title="Something went wrong!"
+          subtitle={error}
+          show={error}
+          closeModal={() => setError('')}
+          type={'Error'}
+        />
         <div>
           <CreateBtn name="CreateBtn" />
         </div>

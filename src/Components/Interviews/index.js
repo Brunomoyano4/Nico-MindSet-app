@@ -3,18 +3,25 @@ import styles from './interviews.module.css';
 import Interview from './Interview';
 import AddBtn from './AddBtn';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import Modal from '../Shared/Modal';
 
 function Interviews() {
   const [interviews, saveInterviews] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     setLoading(true);
     fetch(`${process.env.REACT_APP_API}/interviews`)
-      .then((response) => response.json())
       .then((response) => {
-        saveInterviews(response);
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
       })
+      .then((data) => saveInterviews(data))
       .finally(() => setLoading(false));
   }, []);
 
@@ -44,6 +51,13 @@ function Interviews() {
         )}
         <AddBtn className={styles.button} />
       </div>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </section>
   );
 }

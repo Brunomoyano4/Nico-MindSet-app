@@ -4,6 +4,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Modal from '../../Shared/Modal';
 
 function ProfilesForm() {
   const history = useHistory();
@@ -40,12 +41,9 @@ function ProfilesForm() {
             throw new Error(message);
           });
         }
-        return res.json();
+        return history.replace('/profiles');
       })
-      .then(() => history.replace('/profiles'))
-      .catch((error) => {
-        setError(error);
-      });
+      .catch((error) => setError(error.toString()));
   };
 
   function useQuery() {
@@ -71,48 +69,54 @@ function ProfilesForm() {
           setBranch(data[0].branch);
           setDescription(data[0].description);
         })
-        .catch((error) => {
-          setError(error.toString());
-        })
+        .catch((error) => setError(error.toString()))
         .finally(() => setLoading(false));
     }
   }, []);
 
   return (
-    <form className={styles.container} onSubmit={onSubmit}>
-      <h2>Profile Form</h2>
-      <h3>{error}</h3>
-      {loading && (
-        <div className={styles.spinnerContainer}>
-          <LoadingSpinner />
-        </div>
-      )}
-      <Input
-        placeholder="Profile Name"
-        value={profileName}
-        onChange={(e) => setProfileName(e.target.value)}
-        label="Profile Name:"
-        id="profile-name"
-        required
+    <>
+      <form className={styles.container} onSubmit={onSubmit}>
+        <h2>Profile Form</h2>
+        {loading && (
+          <div className={styles.spinnerContainer}>
+            <LoadingSpinner />
+          </div>
+        )}
+        <Input
+          placeholder="Profile Name"
+          value={profileName}
+          onChange={(e) => setProfileName(e.target.value)}
+          label="Profile Name:"
+          id="profile-name"
+          required
+        />
+        <Input
+          placeholder="Branch"
+          value={branch}
+          onChange={(e) => setBranch(e.target.value)}
+          label="Branch:"
+          id="profile-branch"
+          required
+        />
+        <Input
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          label="Description:"
+          id="profile-description"
+          required
+        />
+        <input type="submit"></input>
+      </form>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
       />
-      <Input
-        placeholder="Branch"
-        value={branch}
-        onChange={(e) => setBranch(e.target.value)}
-        label="Branch:"
-        id="profile-branch"
-        required
-      />
-      <Input
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        label="Description:"
-        id="profile-description"
-        required
-      />
-      <input type="submit"></input>
-    </form>
+    </>
   );
 }
 
