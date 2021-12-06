@@ -46,3 +46,8 @@
   max-width: 100%;
   cursor: pointer;
 }
+
+.nothingHere {
+  padding-block: 20px;
+  text-align: center;
+}
