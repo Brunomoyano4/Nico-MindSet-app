@@ -46,7 +46,14 @@ function Form(params) {
       method: 'PUT',
       body: JSON.stringify(position)
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
       .catch((error) => setError(error.toString()));
   }
 
