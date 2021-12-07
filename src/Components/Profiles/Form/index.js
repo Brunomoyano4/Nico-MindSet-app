@@ -54,8 +54,8 @@ function ProfilesForm() {
   }
 
   useEffect(() => {
-    setLoading(true);
     if (profileId) {
+      setLoading(true);
       fetch(`${process.env.REACT_APP_API}/profiles/${profileId}`)
         .then((res) => {
           if (res.status !== 200) {
