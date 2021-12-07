@@ -1,10 +1,9 @@
 import styles from './form.module.css';
-import Input from '../Input';
 import Modal from '../../Shared/Modal';
-import Select from '../Select';
+import Input from '../../Shared/Input';
+import Select from '../../Shared/Select';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 
 function ProfilesForm() {

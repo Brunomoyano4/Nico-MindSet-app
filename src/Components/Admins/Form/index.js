@@ -1,8 +1,7 @@
-import React from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import Modal from '../../Shared/Modal';
-import Input from '../Input';
+import React, { useState, useEffect } from 'react';
+import Input from '../../Shared/Input';
 import styles from './form.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 
