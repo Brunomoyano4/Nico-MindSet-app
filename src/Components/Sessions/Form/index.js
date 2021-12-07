@@ -96,7 +96,6 @@ function Form(params) {
   return (
     <div>
       {error}
-      {error}
       {created ? (
         <div>session created</div>
       ) : (
