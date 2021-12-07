@@ -22,7 +22,6 @@ function DeleteBtn({ admin }) {
           });
         }
         setShowConfirmModal(false);
-        //nuevo fetch a /psychologists
         return history.go(0);
       })
       .catch((error) => setError(error.toString()));

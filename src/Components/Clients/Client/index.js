@@ -32,7 +32,7 @@ const Client = ({ client }) => {
   return (
     <>
       <Modal
-        title="YOU'RE ABOUT TO DELETE A CLIENT"
+        title="You're about to delete a client"
         onConfirm={onDelete}
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
