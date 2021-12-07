@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Modal from '../../Shared/Modal';
 
-function DeleteBtn({ positionId, positions, filterPosition }) {
+const DeleteBtn = ({ positionId, positions, filterPosition }) => {
   const [error, setError] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -14,7 +14,6 @@ function DeleteBtn({ positionId, positions, filterPosition }) {
             throw new Error(msg);
           });
         }
-        // ?????
         return response.json();
       })
       .then((response) => {
@@ -55,6 +54,6 @@ function DeleteBtn({ positionId, positions, filterPosition }) {
       />
     </>
   );
-}
+};
 
 export default DeleteBtn;
