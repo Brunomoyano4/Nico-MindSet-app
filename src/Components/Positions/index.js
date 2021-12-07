@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import DeleteBtn from './DeleteBtn';
 import Form from './Form';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import Modal from '../Shared/Modal';
 
 const STATES = {
   LIST: 1,
@@ -33,24 +34,23 @@ function GetPositions() {
     setLoading(true);
     fetch(`${process.env.REACT_APP_API}/positions`)
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('Could not fetch data properly');
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
         }
         return response.json();
       })
-      .then((response) => {
-        if (response !== positions) setPositions(response);
+      .then((data) => {
+        if (data !== positions) setPositions(data);
       })
-      .catch((error) => {
-        setError(error.message);
-      })
+      .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
   }, [positions.length]);
 
   return (
     <section className={styles.container}>
       <h2 className={styles.title}>Positions</h2>
-      <h4>{error}</h4>
       <div className={styles.content}>
         {state !== STATES.LIST ? (
           <button onClick={(e) => changeState(STATES.LIST, e)}>List</button>
@@ -107,6 +107,13 @@ function GetPositions() {
           <Form position={state === STATES.UPDATE ? positionToUpdate : {}} />
         )}
       </div>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </section>
   );
 }

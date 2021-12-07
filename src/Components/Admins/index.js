@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Admin from './Admin';
+import Modal from '../Shared/Modal';
 import CreateBtn from './CreateBtn';
 import styles from './admins.module.css';
 import LoadingSpinner from '../Shared/LoadingSpinner';
@@ -16,7 +17,7 @@ function Admins() {
       .then((response) => {
         setAdmins(response);
       })
-      .catch((error) => setError(error))
+      .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
   }, []);
   return (
@@ -51,9 +52,15 @@ function Admins() {
         </div>
       </section>
       <section className={styles.createBtnSection}>
-        {error && <div className={styles.error}>{error}</div>}
         <CreateBtn name="CreateBtn" />
       </section>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </>
   );
 }

@@ -1,22 +1,15 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from '../Client/client.module.css';
-import Modal from '../Modal';
+import Modal from '../../Shared/Modal';
 
 const Client = ({ client }) => {
-  const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [error, setError] = useState('');
   const history = useHistory();
 
   const openEditForm = () => {
     history.push(`/clients/form?id=${client._id}`);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
-  const refreshPage = () => {
-    history.go(0);
   };
 
   const onDelete = (event) => {
@@ -26,25 +19,31 @@ const Client = ({ client }) => {
       method: 'DELETE'
     })
       .then((res) => {
-        if (res.status !== 204) {
+        if (res.status !== 200) {
           return res.json().then((message) => {
             throw new Error(message);
           });
         }
+        return (window.location.href = '/clients');
       })
-      .catch((error) => error)
-      .finally(() => {
-        refreshPage();
-      });
+      .catch((error) => setError(error.toString()));
   };
 
   return (
     <>
       <Modal
-        title="YOU'RE ABOUT TO DELETE A CLIENT"
+        title="You're about to delete a client"
         onConfirm={onDelete}
-        show={showModal}
-        closeModal={closeModal}
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        type={'Confirm'}
+      />
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
       />
       <tr key={client._id} onClick={openEditForm}>
         <td>{client.customerName}</td>
@@ -55,7 +54,7 @@ const Client = ({ client }) => {
             className={styles.button}
             onClick={(e) => {
               e.stopPropagation();
-              setShowModal(true);
+              setShowConfirmModal(true);
             }}
             client={client}
           >

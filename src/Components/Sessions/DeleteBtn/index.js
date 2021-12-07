@@ -1,33 +1,55 @@
 import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
-function DeleteBtn({ sessionId, sessions, filterSession }) {
+import Modal from '../../Shared/Modal';
+
+const DeleteBtn = ({ sessionId, sessions, filterSession }) => {
   const [error, setError] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const history = useHistory();
 
-  const refreshPage = () => {
-    history.go(0);
+  const openModal = (e) => {
+    e.stopPropagation();
+    setShowConfirmModal(true);
   };
-  function DeleteSessions(Id, event) {
+
+  const deleteSessions = (Id, event) => {
     event.stopPropagation();
     const filtered = sessions.filter((session) => session.sessionId != Id);
     fetch(`${process.env.REACT_APP_API}/sessions/${Id}`, { method: 'DELETE' })
       .then((response) => {
-        if (response.ok) {
-          filterSession(filtered);
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
         }
+        setShowConfirmModal(false);
+        filterSession(filtered);
+        return history.go(0);
       })
-      .catch((error) => setError(error.message))
-      .finally(() => {
-        refreshPage();
-      });
-  }
+      .catch((error) => setError(error.toString()));
+  };
 
   return (
-    <div>
-      <button onClick={(e) => DeleteSessions(sessionId, e)}>Delete</button>
-      <span>{error}</span>
-    </div>
+    <>
+      <div>
+        <button onClick={(e) => openModal(e)}>Delete</button>
+      </div>
+      <Modal
+        title="Are you sure you want to delete the selected psychologist?"
+        onConfirm={(e) => deleteSessions(sessionId, e)}
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        type={'Confirm'}
+      />
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
+    </>
   );
-}
+};
 
 export default DeleteBtn;

@@ -1,16 +1,13 @@
 import { useState } from 'react';
+import Modal from '../../Shared/Modal';
 import { useHistory } from 'react-router-dom';
-import Modal from '../Modal';
 import styles from './deleteBtn.module.css';
 
 function DeleteBtn({ admin }) {
-  const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [error, setError] = useState('');
 
   const history = useHistory();
-  const closeModal = () => {
-    setShowModal(false);
-  };
 
   const deleteAdmin = (event) => {
     event.stopPropagation();
@@ -18,10 +15,16 @@ function DeleteBtn({ admin }) {
     fetch(url, {
       method: 'DELETE'
     })
-      .then(() => {
-        history.go(0);
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        setShowConfirmModal(false);
+        return history.go(0);
       })
-      .catch((error) => setError(error));
+      .catch((error) => setError(error.toString()));
   };
 
   return (
@@ -30,7 +33,7 @@ function DeleteBtn({ admin }) {
         className={styles.deleteBtn}
         onClick={(e) => {
           e.stopPropagation();
-          setShowModal(true);
+          setShowConfirmModal(true);
         }}
       >
         <svg
@@ -47,9 +50,16 @@ function DeleteBtn({ admin }) {
       <Modal
         title="Are you sure you want to delete an admin?"
         onConfirm={(e) => deleteAdmin(e)}
-        show={showModal}
-        closeModal={closeModal}
-        error={error}
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        type={'Confirm'}
+      />
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
       />
     </>
   );

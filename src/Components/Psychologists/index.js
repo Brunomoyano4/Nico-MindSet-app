@@ -3,6 +3,7 @@ import Psychologist from './Psychologist';
 import CreateBtn from './CreateBtn';
 import styles from './psychologists.module.css';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import Modal from '../Shared/Modal';
 
 function Psychologists() {
   const [psychologists, setPsychologists] = useState([]);
@@ -12,9 +13,16 @@ function Psychologists() {
   useEffect(() => {
     setLoading(true);
     fetch(`${process.env.REACT_APP_API}/psychologists`)
-      .then((response) => response.json())
-      .then((response) => setPsychologists(response))
-      .catch((error) => setError(error))
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .then((data) => setPsychologists(data))
+      .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
   }, []);
 
@@ -50,7 +58,13 @@ function Psychologists() {
         )}
       </section>
       <section className={styles.createBtnSection}>
-        {error && <div className={styles.error}>{error}</div>}
+        <Modal
+          title="Something went wrong!"
+          subtitle={error}
+          show={error}
+          closeModal={() => setError('')}
+          type={'Error'}
+        />
         <div>
           <CreateBtn name="CreateBtn" />
         </div>

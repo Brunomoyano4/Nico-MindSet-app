@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import styles from './postulantsForm.module.css';
 import Input from '../../Shared/Input';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Modal from '../../Shared/Modal';
 
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
@@ -92,11 +93,16 @@ function Form() {
     if (postulantId) {
       setLoading(true);
       fetch(`${process.env.REACT_APP_API}/postulants/${postulantId}`)
-        .then((response) => response.json())
         .then((response) => {
-          setInputValues(response);
+          if (response.status !== 200 && response.status !== 201) {
+            return response.json().then(({ msg }) => {
+              throw new Error(msg);
+            });
+          }
+          return response.json();
         })
-        .catch((error) => setError(error))
+        .then((data) => setInputValues(data))
+        .catch((error) => setError(error.toString()))
         .finally(() => setLoading(false));
     }
   }, []);
@@ -119,14 +125,12 @@ function Form() {
             throw new Error(message);
           });
         }
-        return response.json();
+        return history.replace('/postulants');
       })
-      .then(() => history.replace('/postulants'))
-      .catch((error) => setError(error));
+      .catch((error) => setError(error.toString()));
   };
   return (
     <div className={styles.container}>
-      <p className={styles.error}>{error}</p>
       <form className={styles.form} onSubmit={onSubmit}>
         {loading && (
           <div className={styles.spinnerContainer}>
@@ -308,6 +312,13 @@ function Form() {
           Save
         </button>
       </form>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </div>
   );
 }

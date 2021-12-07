@@ -3,6 +3,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import styles from './form.module.css';
 import Input from '../../Shared/Input';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Modal from '../../Shared/Modal';
 
 function Form() {
   const [nameValue, setNameValue] = useState('');
@@ -24,8 +25,10 @@ function Form() {
       setParamId(clientId);
       fetch(`${process.env.REACT_APP_API}/clients/${clientId}`)
         .then((response) => {
-          if (!response.ok) {
-            throw new Error('Could not fetch data properly');
+          if (response.status !== 200) {
+            return response.json().then(({ msg }) => {
+              throw new Error(msg);
+            });
           }
           return response.json();
         })
@@ -36,9 +39,7 @@ function Form() {
           setEmailValue(response.email);
           setDescriptionValue(response.description);
         })
-        .catch((error) => {
-          setError(error.message);
-        })
+        .catch((error) => setError(error.toString()))
         .finally(() => setLoading(false));
     }
   }, []);
@@ -92,22 +93,28 @@ function Form() {
 
     fetch(url, options)
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('BAD REQUEST');
+        if (response.status !== 200 && response.status !== 201) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
         }
         return response.json();
       })
       .then(() => history.replace('/clients'))
-      .catch((error) => {
-        setError(error.message);
-      });
+      .catch((error) => setError(error.toString()));
   };
 
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={onSubmit}>
         <h1>CLIENTS FORM</h1>
-        <h4>{error}</h4>
+        <Modal
+          title="Something went wrong!"
+          subtitle={error}
+          show={error}
+          closeModal={() => setError('')}
+          type={'Error'}
+        />
         {loading && (
           <div className={styles.spinnerContainer}>
             <LoadingSpinner />

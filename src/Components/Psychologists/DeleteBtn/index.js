@@ -1,16 +1,12 @@
 import { useState } from 'react';
+import Modal from '../../Shared/Modal';
 import { useHistory } from 'react-router-dom';
-import Modal from '../Modal';
 import styles from './deleteBtn.module.css';
 
 function DeleteBtn({ psychologist }) {
-  const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [error, setError] = useState('');
   const history = useHistory();
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
 
   const deletePsychologist = (event) => {
     event.stopPropagation();
@@ -18,10 +14,16 @@ function DeleteBtn({ psychologist }) {
     fetch(url, {
       method: 'DELETE'
     })
-      .then(() => {
-        history.go(0);
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        setShowConfirmModal(false);
+        return history.go(0);
       })
-      .catch((error) => setError(error));
+      .catch((error) => setError(error.toString()));
   };
   return (
     <>
@@ -29,7 +31,7 @@ function DeleteBtn({ psychologist }) {
         className={styles.deleteBtn}
         onClick={(e) => {
           e.stopPropagation();
-          setShowModal(true);
+          setShowConfirmModal(true);
         }}
       >
         <svg
@@ -37,7 +39,7 @@ function DeleteBtn({ psychologist }) {
           height="18px"
           viewBox="0 0 24 24"
           width="18px"
-          fill="#ffffff"
+          fill="#000000"
         >
           <path d="M0 0h24v24H0z" fill="none" />
           <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
@@ -46,9 +48,16 @@ function DeleteBtn({ psychologist }) {
       <Modal
         title="Are you sure you want to delete the selected psychologist?"
         onConfirm={(e) => deletePsychologist(e)}
-        show={showModal}
-        closeModal={closeModal}
-        error={error}
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        type={'Confirm'}
+      />
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
       />
     </>
   );
