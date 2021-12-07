@@ -2,6 +2,7 @@ import styles from './positions.module.css';
 import { useEffect, useState } from 'react';
 import Form from './Form';
 import DeleteBtn from '../Shared/DeleteBtn/index';
+import LoadingSpinner from '../Shared/LoadingSpinner';
 
 const STATES = {
   LIST: 1,
@@ -28,6 +29,7 @@ function GetPositions() {
   }
 
   useEffect(() => {
+    setLoading(true);
     fetch(`${process.env.REACT_APP_API}/positions`)
       .then((response) => {
         if (!response.ok) {
@@ -96,6 +98,10 @@ function GetPositions() {
                   );
                 })}
             </table>
+            {loading && <LoadingSpinner circle={false} />}
+            {!loading && !positions.length && (
+              <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+            )}
           </>
         ) : (
           <Form position={state === STATES.UPDATE ? positionToUpdate : {}} />

@@ -2,16 +2,22 @@ import { useEffect, useState } from 'react';
 import Admin from './Admin';
 import CreateBtn from './CreateBtn';
 import styles from './admins.module.css';
+import LoadingSpinner from '../Shared/LoadingSpinner';
 
 function Admins() {
   const [admins, setAdmins] = useState([]);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     fetch(`${process.env.REACT_APP_API}/admins`)
       .then((response) => response.json())
-      .then((response) => setAdmins(response))
-      .catch((error) => setError(error));
+      .then((response) => {
+        setAdmins(response);
+      })
+      .catch((error) => setError(error))
+      .finally(() => setLoading(false));
   }, []);
   return (
     <>
@@ -31,12 +37,18 @@ function Admins() {
                 <th></th>
               </tr>
             </thead>
-            <tbody>
-              {admins.map((admin) => {
-                return <Admin key={admin._id} admin={admin} />;
-              })}
-            </tbody>
+            {!loading && (
+              <tbody>
+                {admins.map((admin) => {
+                  return <Admin key={admin._id} admin={admin} />;
+                })}
+              </tbody>
+            )}
           </table>
+          {loading && <LoadingSpinner circle={false} />}
+          {!loading && !admins.length && (
+            <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+          )}
         </div>
       </section>
       <section className={styles.createBtnSection}>

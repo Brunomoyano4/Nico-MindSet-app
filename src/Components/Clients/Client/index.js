@@ -1,12 +1,15 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styles from '../Client/client.module.css';
 import Modal from '../Modal';
 import DeleteBtn from '../../Shared/DeleteBtn/index';
 
 const Client = ({ client }) => {
   const [showModal, setShowModal] = useState(false);
+  const history = useHistory();
+
   const openEditForm = () => {
-    window.location.href = `/clients/form?id=${client._id}`;
+    history.push(`/clients/form?id=${client._id}`);
   };
 
   const closeModal = () => {
@@ -14,7 +17,7 @@ const Client = ({ client }) => {
   };
 
   const refreshPage = () => {
-    window.location.reload();
+    history.go(0);
   };
 
   const onDelete = (event) => {

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styles from '../Interview/interview.module.css';
 import Modal from '../Modal';
 import DeleteBtn from '../../Shared/DeleteBtn/index';
@@ -6,8 +7,9 @@ import DeleteBtn from '../../Shared/DeleteBtn/index';
 const Interviews = ({ interview }) => {
   const [showModal, setShowModal] = useState(false);
 
+  const history = useHistory();
   const openEditForm = () => {
-    window.location.href = `/interviews/form?id=${interview._id}`;
+    history.push(`/interviews/form?id=${interview._id}`);
   };
 
   const closeModal = () => {
@@ -15,7 +17,7 @@ const Interviews = ({ interview }) => {
   };
 
   const refreshPage = () => {
-    window.location.reload();
+    history.go(0);
   };
 
   const onDelete = (event) => {

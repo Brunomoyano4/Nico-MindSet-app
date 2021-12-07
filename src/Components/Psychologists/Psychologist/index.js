@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import DeleteBtn from '../../Shared/DeleteBtn';
 import Modal from '../Modal/index';
+import { useHistory } from 'react-router-dom';
 
 function Psychologist({ psychologist }) {
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState('');
-
+  const history = useHistory();
   const openEditForm = () => {
-    window.location.href = `/psychologists/form?id=${psychologist._id}`;
+    history.push(`/psychologists/form?id=${psychologist._id}`);
   };
 
   const modalShow = (event) => {

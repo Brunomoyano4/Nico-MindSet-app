@@ -2,6 +2,7 @@ import styles from './session.module.css';
 import { useEffect, useState } from 'react';
 import DeleteBtn from '../Shared/DeleteBtn/index';
 import Form from './Form';
+import LoadingSpinner from '../Shared/LoadingSpinner';
 
 const STATES = {
   LIST: 1,
@@ -16,6 +17,13 @@ function GetSessions() {
   const [sessionToUpdate, setSession] = useState();
   const [psychologys, setPsychologys] = useState([]);
   const [postulants, setPostulants] = useState([]);
+  const [loading, setLoading] = useState({
+    psychologistLoading: false,
+    sessionLoading: false,
+    postulantLoading: false
+  });
+
+  const updateSessions = () => setSessions(sessions);
 
   function changeState(n, e) {
     e.preventDefault();
@@ -29,18 +37,35 @@ function GetSessions() {
   }
 
   useEffect(() => {
+    setLoading({
+      psychologistLoading: true,
+      sessionLoading: true,
+      postulantLoading: true
+    });
     fetch(`${process.env.REACT_APP_API}/sessions`)
       .then((response) => response.json())
       .then((response) => {
         if (response !== sessions) setSessions(response);
       })
-      .catch((error) => setError(error.message));
+      .catch((error) => setError(error.message))
+      .finally(() =>
+        setLoading((prev) => {
+          return { ...prev, sessionLoading: false };
+        })
+      );
+
     fetch(`${process.env.REACT_APP_API}/psychologists`)
       .then((response) => response.json())
       .then((response) => {
         if (response !== psychologys) setPsychologys(response);
       })
-      .catch((error) => setError(error.message));
+      .catch((error) => setError(error.message))
+      .finally(() =>
+        setLoading((prev) => {
+          return { ...prev, psychologistLoading: false };
+        })
+      );
+
     fetch(`${process.env.REACT_APP_API}/postulants`)
       .then((response) => response.json())
       .then((response) => {
@@ -78,7 +103,7 @@ function GetSessions() {
           <></>
         )}
         {state === STATES.LIST ? (
-          sessions.length ? (
+          <>
             <table className={styles.tableSessions}>
               <thead>
                 <tr>
@@ -90,32 +115,38 @@ function GetSessions() {
                   <th>ACTION</th>
                 </tr>
               </thead>
-              <tbody>
-                {sessions.map((session) => {
-                  return (
-                    <tr key={session._id} onClick={(e) => updateSession(e, session)}>
-                      <td>
-                        {`${session.psychology?.firstName || ''}
-                        ${session.psychology?.lastName || ''}`}
-                      </td>
-                      <td>
-                        {`${session.postulant?.firstName || ''}
-                        ${session.postulant?.lastName || ''}`}
-                      </td>
-                      <td>{session.time}</td>
-                      <td>{session.date.slice(0, 10)}</td>
-                      <td>{session.stat}</td>
-                      <td>
-                        <DeleteBtn onClick={(e) => handleDelete(e, session._id)} />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
+              {!Object.values(loading).some(Boolean) && (
+                <tbody>
+                  {sessions.map((session) => {
+                    return (
+                      <tr key={session._id} onClick={(e) => updateSession(e, session)}>
+                        <td>
+                          {`${session.psychology?.firstName || ''} ${
+                            session.psychology?.lastName || ''
+                          }`}
+                        </td>
+                        <td>
+                          {`${session.postulant?.firstName || ''} ${
+                            session.postulant?.lastName || ''
+                          }`}
+                        </td>
+                        <td>{session.time}</td>
+                        <td>{session.date.slice(0, 10)}</td>
+                        <td>{session.stat}</td>
+                        <td>
+                          <DeleteBtn onClick={(e) => handleDelete(e, session._id)} />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              )}
             </table>
-          ) : (
-            <span>No sessions found</span>
-          )
+            {Object.values(loading).some(Boolean) && <LoadingSpinner circle={false} />}
+            {!Object.values(loading).some(Boolean) && !sessions.length && (
+              <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+            )}
+          </>
         ) : (
           <Form
             session={state === STATES.UPDATE ? sessionToUpdate : {}}
