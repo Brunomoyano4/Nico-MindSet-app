@@ -15,7 +15,7 @@ function Form(params) {
   const [error, setError] = useState();
 
   function savePositions(e) {
-    e.preventDefault();
+    e.stopPropagation();
     fetch(`${process.env.REACT_APP_API}/positions`, {
       headers: {
         Accept: 'application/json',

@@ -25,7 +25,9 @@ function Psychologist({ psychologist }) {
     fetch(url, {
       method: 'DELETE'
     })
-      .then(() => window.location.reload())
+      .then(() => {
+        history.go(0);
+      })
       .catch((error) => setError(error));
   };
 

@@ -15,15 +15,13 @@ function GetSessions() {
   const [sessions, setSessions] = useState([]);
   const [state, setState] = useState(1);
   const [sessionToUpdate, setSession] = useState();
-  const [psychologys, setPsychologys] = useState([]);
+  const [psychologist, setPsychologist] = useState([]);
   const [postulants, setPostulants] = useState([]);
   const [loading, setLoading] = useState({
     psychologistLoading: false,
     sessionLoading: false,
     postulantLoading: false
   });
-
-  const updateSessions = () => setSessions(sessions);
 
   function changeState(n, e) {
     e.preventDefault();
@@ -57,7 +55,7 @@ function GetSessions() {
     fetch(`${process.env.REACT_APP_API}/psychologists`)
       .then((response) => response.json())
       .then((response) => {
-        if (response !== psychologys) setPsychologys(response);
+        if (response !== psychologist) setPsychologist(response);
       })
       .catch((error) => setError(error.message))
       .finally(() =>
@@ -71,7 +69,12 @@ function GetSessions() {
       .then((response) => {
         if (response !== postulants) setPostulants(response);
       })
-      .catch((error) => setError(error.message));
+      .catch((error) => setError(error.message))
+      .finally(() =>
+        setLoading((prev) => {
+          return { ...prev, postulantLoading: false };
+        })
+      );
   }, [sessions.length]);
 
   function handleDelete(event, Id) {
@@ -151,7 +154,7 @@ function GetSessions() {
           <Form
             session={state === STATES.UPDATE ? sessionToUpdate : {}}
             postulants={postulants}
-            psychologys={psychologys}
+            psychologys={psychologist}
             allSessions={sessions}
           />
         )}

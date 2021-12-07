@@ -40,7 +40,8 @@ function GetPositions() {
       .then((response) => {
         if (response !== positions) setPositions(response);
       })
-      .catch((error) => setError(error.message));
+      .catch((error) => setError(error.message))
+      .finally(() => setLoading(false));
   }, [positions.length]);
 
   function handleDelete(event, Id) {
@@ -76,13 +77,15 @@ function GetPositions() {
         {state === STATES.LIST ? (
           <>
             <table className={styles.tablePositions}>
-              <tr>
-                <th>ID</th>
-                <th>JOB</th>
-                <th>DESCRIPTION</th>
-                <th>DATE</th>
-                <th>ACTIONS</th>
-              </tr>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>JOB</th>
+                  <th>DESCRIPTION</th>
+                  <th>DATE</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
               {!loading &&
                 positions.map((position) => {
                   return (
