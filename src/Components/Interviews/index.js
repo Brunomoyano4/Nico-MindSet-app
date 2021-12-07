@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import styles from './interviews.module.css';
 import Interview from './Interview';
-import AddBtn from './AddBtn';
+import Button from '../Shared/Button';
 import LoadingSpinner from '../Shared/LoadingSpinner';
 
 function Interviews() {
   const [interviews, saveInterviews] = useState([]);
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     setLoading(true);
@@ -17,6 +19,10 @@ function Interviews() {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  const CreateBtn = () => {
+    history.push(`/interviews/form`);
+  };
 
   return (
     <section className={styles.container}>
@@ -42,7 +48,7 @@ function Interviews() {
         {!loading && !interviews.length && (
           <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
         )}
-        <AddBtn className={styles.button} />
+        <Button onClick={CreateBtn} content={'CREATE INTERVIEW'} />
       </div>
     </section>
   );

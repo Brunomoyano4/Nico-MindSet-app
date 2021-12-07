@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import styles from './clients.module.css';
 import Client from './Client';
-import AddBtn from './AddBtn';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import Button from '../Shared/Button';
 
 function Clients() {
   const [clients, saveClients] = useState([]);
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     setLoading(true);
@@ -17,6 +19,10 @@ function Clients() {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  const CreateBtn = () => {
+    history.push(`/clients/form`);
+  };
 
   return (
     <section className={styles.container}>
@@ -43,7 +49,7 @@ function Clients() {
         {!loading && !clients.length && (
           <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
         )}
-        <AddBtn className={styles.button} />
+        <Button onClick={CreateBtn} content={'CREATE CLIENT'} />
       </div>
     </section>
   );

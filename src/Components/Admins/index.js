@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import Admin from './Admin';
-import CreateBtn from './CreateBtn';
+import Button from '../Shared/Button';
 import styles from './admins.module.css';
 import LoadingSpinner from '../Shared/LoadingSpinner';
 
@@ -8,6 +9,7 @@ function Admins() {
   const [admins, setAdmins] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     setLoading(true);
@@ -19,11 +21,16 @@ function Admins() {
       .catch((error) => setError(error))
       .finally(() => setLoading(false));
   }, []);
+
+  const CreateBtn = () => {
+    history.push(`/admins/form`);
+  };
+
   return (
     <>
       <section className={styles.container}>
         <div className={styles.header}>
-          <h2>Admins</h2>
+          <h2>ADMINS</h2>
         </div>
         <div className={styles.tableContainer}>
           <table className={styles.table}>
@@ -49,11 +56,11 @@ function Admins() {
           {!loading && !admins.length && (
             <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
           )}
+          <Button onClick={CreateBtn} content={'CREATE ADMIN'} />
         </div>
       </section>
       <section className={styles.createBtnSection}>
         {error && <div className={styles.error}>{error}</div>}
-        <CreateBtn name="CreateBtn" />
       </section>
     </>
   );

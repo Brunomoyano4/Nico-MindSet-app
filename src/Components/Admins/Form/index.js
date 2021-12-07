@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Input from '../Input';
 import styles from './form.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Button from '../../Shared/Button';
 
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
@@ -133,9 +134,7 @@ function Form() {
             />
           </div>
           <div className={styles.saveBtnSection}>
-            <button className={styles.saveBtn} type="submit">
-              Save
-            </button>
+            <Button onClick={onSubmit} content={'SAVE'} />
           </div>
           {error && <div className={styles.error}>{error}</div>}
         </form>

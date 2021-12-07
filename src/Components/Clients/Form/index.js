@@ -4,6 +4,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import styles from './form.module.css';
 import Input from '../Input/index';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Button from '../../Shared/Button';
 
 function Form() {
   const [nameValue, setNameValue] = useState('');
@@ -149,9 +150,7 @@ function Form() {
           onChange={onChangeDescriptionInput}
           required
         />
-        <button className={styles.button} value="Send" type="submit">
-          SAVE
-        </button>
+        <Button onClick={onSubmit} content={'SAVE'} />
       </form>
     </div>
   );

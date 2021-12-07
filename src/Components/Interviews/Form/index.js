@@ -5,6 +5,7 @@ import styles from './form.module.css';
 import Input from '../Input/index';
 import Select from '../Select';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Button from '../../Shared/Button';
 
 function Form() {
   const [positionIdValue, setPositionIdValue] = useState('');
@@ -143,9 +144,7 @@ function Form() {
             { value: 'finished', label: 'Finished' }
           ]}
         />
-        <button className={styles.button} value="Send" type="submit">
-          SAVE
-        </button>
+        <Button onClick={onSubmit} content={'SAVE'} />
       </form>
     </div>
   );

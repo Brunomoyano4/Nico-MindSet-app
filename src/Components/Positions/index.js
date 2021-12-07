@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Form from './Form';
 import DeleteBtn from '../Shared/DeleteBtn/index';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import Button from '../Shared/Button';
 
 const STATES = {
   LIST: 1,
@@ -62,14 +63,12 @@ function GetPositions() {
       <h4>{error}</h4>
       <div className={styles.content}>
         {state !== STATES.LIST ? (
-          <button onClick={(e) => changeState(STATES.LIST, e)}>List</button>
+          <Button content="BACK" onClick={(e) => changeState(STATES.LIST, e)} />
         ) : (
           <></>
         )}
         {state === STATES.LIST ? (
-          <button className={styles.createButton} onClick={(e) => changeState(STATES.CREATE, e)}>
-            Create
-          </button>
+          <Button content="CREATE POSITION" onClick={(e) => changeState(STATES.CREATE, e)} />
         ) : (
           <></>
         )}
