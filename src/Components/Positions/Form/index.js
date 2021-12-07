@@ -16,7 +16,7 @@ function Form(params) {
   const [error, setError] = useState();
 
   function savePositions(e) {
-    e.preventDefault();
+    e.stopPropagation();
     fetch(`${process.env.REACT_APP_API}/positions`, {
       headers: {
         Accept: 'application/json',
@@ -26,8 +26,9 @@ function Form(params) {
       body: JSON.stringify(position)
     })
       .then((response) => {
-        if (response.status === 201) setCreated(true);
-        else
+        if (response.status === 201) {
+          setCreated(true);
+        } else
           return response.json().then((error) => {
             throw new Error(error);
           });

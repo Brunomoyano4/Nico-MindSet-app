@@ -7,10 +7,12 @@ const Input = (props) => (
       className={styles.input}
       type={props.type ?? 'text'}
       id={props.id}
+      name={props.name}
       value={props.value}
       required={props.required}
       onChange={props.onChange}
       placeholder={props.placeholder}
+      pattern={props.pattern}
       disabled={props.disabled}
     />
   </>
