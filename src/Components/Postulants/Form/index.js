@@ -1,8 +1,8 @@
 import React from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import styles from './form.module.css';
-import Input from '../Input';
+import styles from './postulantsForm.module.css';
+import Input from '../../Shared/Input';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 
 function Form() {
@@ -143,6 +143,7 @@ function Form() {
           required
         />
         <Input
+          className={styles.input}
           name="lastName"
           value={lastNameValue}
           onChange={(e) => setLastNameValue(e.target.value)}
@@ -151,6 +152,7 @@ function Form() {
           required
         />
         <Input
+          className={styles.input}
           name="userValue"
           value={userValue}
           onChange={(e) => setUserNameValue(e.target.value)}
@@ -158,6 +160,7 @@ function Form() {
           required
         />
         <Input
+          className={styles.input}
           name="mailValue"
           value={emailValue}
           onChange={(e) => setEmailValue(e.target.value)}
@@ -165,6 +168,7 @@ function Form() {
           required
         />
         <Input
+          className={styles.input}
           name="passwordValue"
           value={passwordValue}
           onChange={(e) => setPasswordValue(e.target.value)}
@@ -172,6 +176,7 @@ function Form() {
           required
         />
         <Input
+          className={styles.input}
           name="birthdayValue"
           value={birthdayValue}
           onChange={(e) => setBirthdayValue(e.target.value)}
@@ -179,6 +184,7 @@ function Form() {
           required
         />
         <Input
+          className={styles.input}
           name="streetValue"
           value={streetValue}
           onChange={(e) => setStreetValue(e.target.value)}
@@ -186,6 +192,7 @@ function Form() {
           required
         />
         <Input
+          className={styles.input}
           name="streetNumberValue"
           value={streetNumberValue}
           onChange={(e) => setStreetNumberValue(e.target.value)}
@@ -195,6 +202,7 @@ function Form() {
           required
         />
         <Input
+          className={styles.input}
           name="zipCodeValue"
           value={zipCodeValue}
           onChange={(e) => setZipCodeValue(e.target.value)}
@@ -203,6 +211,7 @@ function Form() {
           required
         />
         <Input
+          className={styles.input}
           name="cityValue"
           value={cityValue}
           onChange={(e) => setCityValue(e.target.value)}
@@ -210,6 +219,7 @@ function Form() {
           required
         />
         <Input
+          className={styles.input}
           name="provinceValue"
           value={provinceValue}
           onChange={(e) => setProvinceValue(e.target.value)}
@@ -217,6 +227,7 @@ function Form() {
           required
         />
         <Input
+          className={styles.input}
           name="countryValue"
           value={countryValue}
           onChange={(e) => setCountryValue(e.target.value)}
@@ -224,6 +235,7 @@ function Form() {
           required
         />
         <Input
+          className={styles.input}
           name="telephoneValue"
           value={telephoneValue}
           onChange={(e) => setTelephoneValue(e.target.value)}
@@ -234,6 +246,7 @@ function Form() {
         <div className={styles.form}>
           <h3>Job info</h3>
           <Input
+            className={styles.input}
             name="jobPositionValue"
             placeholder="Job Position"
             value={jobPositionValue}
@@ -241,6 +254,7 @@ function Form() {
             required
           />
           <Input
+            className={styles.input}
             name="employerValue"
             placeholder="Employer"
             value={employerValue}
@@ -248,6 +262,7 @@ function Form() {
             required
           />
           <Input
+            className={styles.input}
             name="startDateValue"
             type="text"
             value={startDateValue}
@@ -264,6 +279,7 @@ function Form() {
             required
           />
           <Input
+            className={styles.input}
             name="endDateValue"
             type="text"
             value={endDateValue}
@@ -280,6 +296,7 @@ function Form() {
             required
           />
           <Input
+            className={styles.input}
             name="descriptionValue"
             placeholder="Description"
             value={descriptionValue}

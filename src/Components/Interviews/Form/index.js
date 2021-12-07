@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import styles from './form.module.css';
-import Input from '../Input/index';
+import Input from '../../Shared/Input';
 import Select from '../Select';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 

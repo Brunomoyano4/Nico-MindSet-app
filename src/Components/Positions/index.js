@@ -68,15 +68,17 @@ function GetPositions() {
         {state === STATES.LIST ? (
           <>
             <table className={styles.tablePositions}>
-              <tr>
-                <th>ID</th>
-                <th>JOB</th>
-                <th>DESCRIPTION</th>
-                <th>DATE</th>
-                <th>ACTIONS</th>
-              </tr>
-              {!loading &&
-                positions.map((position) => {
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>JOB</th>
+                  <th>DESCRIPTION</th>
+                  <th>DATE</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {positions.map((position) => {
                   return (
                     <tr key={position._id} onClick={(e) => updatePosition(e, position)}>
                       <td>{position.clientId}</td>
@@ -94,6 +96,7 @@ function GetPositions() {
                     </tr>
                   );
                 })}
+              </tbody>
             </table>
             {loading && <LoadingSpinner circle={false} />}
             {!loading && !positions.length && (
