@@ -10,7 +10,7 @@ function Profiles() {
   const tableHeaderItems = ['Branch', 'Name', 'Description', ''];
   const [profiles, setProfiles] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [modalSubtitle, setModalSubtitle] = useState(['modalSubtitle']);
+  const [modalSubtitle, setModalSubtitle] = useState(['']);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -53,6 +53,7 @@ function Profiles() {
         return response.json();
       })
       .then((data) => setProfiles(data))
+      .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
   };
   useEffect(getProfiles, []);
@@ -67,13 +68,6 @@ function Profiles() {
             {profiles.map(({ _id, profileName, branch, description }) => {
               const deleteBtn = <DeleteBtn onClick={(e) => openModal(e, branch, profileName)} />;
               const tableListItems = [branch, profileName, description, deleteBtn];
-              <Modal
-                title="You are about to delete a profile"
-                onConfirm={() => deleteProfile(_id)}
-                show={showConfirmModal}
-                closeModal={() => setShowConfirmModal(false)}
-                subtitle={modalSubtitle}
-              />;
               return (
                 <ListItem
                   key={_id}
@@ -88,6 +82,13 @@ function Profiles() {
       </table>
       {loading && <LoadingSpinner circle={false} />}
       {!loading && !profiles.length && <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>}
+      <Modal
+        title="You are about to delete a profile"
+        onConfirm={() => deleteProfile(profiles.id)}
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        subtitle={modalSubtitle}
+      />
       <Modal
         title="Something went wrong!"
         subtitle={error}

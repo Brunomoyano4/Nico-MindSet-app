@@ -6,6 +6,7 @@ const Select = (props) => {
       {props.label && <label className={styles.label}>{props.label}</label>}
       <select
         className={styles.select}
+        name={props.name}
         id={props.id}
         value={props.value}
         onChange={props.onChange}

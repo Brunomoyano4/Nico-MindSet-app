@@ -10,9 +10,10 @@ function Applications() {
   const tableHeaderItems = ['Position', 'Client', 'Postulant', 'Result', ''];
   const [applications, setApplications] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [modalSubtitle, setModalSubtitle] = useState(['modalSubtitle']);
+  const [modalSubtitle, setModalSubtitle] = useState(['']);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [currentApplication, setCurrentApplication] = useState({});
 
   const history = useHistory();
 
@@ -46,12 +47,18 @@ function Applications() {
   const getApplications = () => {
     setLoading(true);
     fetch(`${process.env.REACT_APP_API}/applications`)
-      .then((res) => {
-        return res.json();
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
       })
-      .then((res) => {
-        setApplications(res);
+      .then((data) => {
+        setApplications(data);
       })
+      .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
   };
 
@@ -64,43 +71,29 @@ function Applications() {
         <ListItem headerItems={tableHeaderItems} />
         {!loading && (
           <tbody className={styles.tableBody}>
-            {applications.map(({ _id, positions, client, postulants, result }) => {
+            {applications.map((application) => {
               const deleteBtn = (
                 <DeleteBtn
                   onClick={(e) => {
                     e.stopPropagation();
+                    setCurrentApplication(application);
                     setShowConfirmModal(true);
                   }}
                 />
               );
               const tableListItems = [
-                positions?.job,
-                client?.customerName,
-                `${postulants?.firstName} ${postulants?.lastName}`,
-                result,
+                application.positions?.job,
+                application.client?.customerName,
+                `${application.postulants?.firstName} ${application.postulants?.lastName}`,
+                application.result,
                 deleteBtn
               ];
-              <Modal
-                title="You are about to delete an application"
-                onConfirm={(e) =>
-                  deleteApplication(
-                    e,
-                    _id,
-                    positions?.job,
-                    client?.customerName,
-                    `${postulants?.firstName} ${postulants?.lastName}`
-                  )
-                }
-                show={showConfirmModal}
-                closeModal={() => setShowConfirmModal(false)}
-                subtitle={modalSubtitle}
-              />;
               return (
                 <ListItem
-                  key={_id}
+                  key={application._id}
                   listItems={tableListItems}
-                  id={_id}
-                  onRowClick={() => toForm(_id)}
+                  id={application._id}
+                  onRowClick={() => toForm(application._id)}
                 />
               );
             })}
@@ -111,6 +104,22 @@ function Applications() {
       {!loading && !applications.length && (
         <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
       )}
+      <Modal
+        title="You are about to delete an application"
+        onConfirm={(e) =>
+          deleteApplication(
+            e,
+            currentApplication._id,
+            currentApplication.positions.job,
+            currentApplication.client.customerName,
+            `${currentApplication.postulants.firstName} ${currentApplication.postulants.lastName}`
+          )
+        }
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        subtitle={modalSubtitle}
+        type={'Confirm'}
+      />
       <Modal
         title="Something went wrong!"
         subtitle={error}
