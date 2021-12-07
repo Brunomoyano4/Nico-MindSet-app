@@ -71,6 +71,10 @@
   font-weight: 600;
 }
 
+.postulantsForm input.inputMaxWidth {
+  width: 100%;
+}
+
 .spinnerContainer {
   position: absolute;
 }

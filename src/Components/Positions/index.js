@@ -85,8 +85,8 @@ function GetPositions() {
                   <th>ACTIONS</th>
                 </tr>
               </thead>
-              {!loading &&
-                positions.map((position) => {
+              <tbody>
+                {positions.map((position) => {
                   return (
                     <tr key={position._id} onClick={(e) => updatePosition(e, position)}>
                       <td>{position.clientId}</td>
@@ -99,6 +99,7 @@ function GetPositions() {
                     </tr>
                   );
                 })}
+              </tbody>
             </table>
             {loading && <LoadingSpinner circle={false} />}
             {!loading && !positions.length && (

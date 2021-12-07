@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from './form.module.css';
+import Input from '../../Shared/Input';
 
 function Form(params) {
   const initialState = params.position._id
@@ -25,8 +26,9 @@ function Form(params) {
       body: JSON.stringify(position)
     })
       .then((response) => {
-        if (response.status === 201) setCreated(true);
-        else
+        if (response.status === 201) {
+          setCreated(true);
+        } else
           return response.json().then((error) => {
             throw new Error(error);
           });
@@ -61,29 +63,29 @@ function Form(params) {
         <div>position created</div>
       ) : (
         <form className={styles.positionsForm}>
-          <label>Id</label>
-          <input
-            type="text"
-            id="id"
+          <Input
+            label="Id"
             name="clientId"
+            id="id"
+            type="text"
             value={position.clientId}
             onChange={handleInputChange}
             required
           />
-          <label>Job</label>
-          <input
-            type="text"
-            id="job"
+          <Input
+            label="Job"
             name="job"
+            id="job"
+            type="text"
             value={position.job}
             onChange={handleInputChange}
             required
           />
-          <label>Description</label>
-          <input
-            type="text"
-            id="description"
+          <Input
+            label="Description"
             name="description"
+            id="description"
+            type="text"
             value={position.description}
             onChange={handleInputChange}
             required

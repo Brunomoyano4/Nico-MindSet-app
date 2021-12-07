@@ -1,23 +1,21 @@
 import styles from './input.module.css';
 
-function Input(props) {
-  return (
+const Input = (props) => (
+  <>
+    {props.label && <label className={styles.label}>{props.label}</label>}
     <input
       className={styles.input}
-      type={props.type}
+      type={props.type ?? 'text'}
+      id={props.id}
       name={props.name}
       value={props.value}
-      defaultValue={props.defaultValue}
-      onChange={props.onChange}
-      onFocus={props.onFocus}
-      onBlur={props.onBlur}
-      placeholder={props.placeholder}
       required={props.required}
+      onChange={props.onChange}
+      placeholder={props.placeholder}
       pattern={props.pattern}
-      title={props.title}
-      min={props.min}
+      disabled={props.disabled}
     />
-  );
-}
+  </>
+);
 
 export default Input;
