@@ -1,45 +1,108 @@
-import { useEffect, useState } from 'react';
 import styles from './positions.module.css';
-import AddBtn from './AddBtn';
-import Position from './Position';
+import { useEffect, useState } from 'react';
+import Form from './Form';
+import DeleteBtn from '../Shared/DeleteBtn/index';
 
-function Positions() {
-  const [positions, savePositions] = useState([]);
+const STATES = {
+  LIST: 1,
+  CREATE: 2,
+  UPDATE: 3
+};
+
+function GetPositions() {
+  const [positions, setPositions] = useState([]);
+  const [state, setState] = useState(1);
+  const [positionToUpdate, setPosition] = useState();
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  function changeState(n, e) {
+    e.preventDefault();
+    setState(n);
+  }
+
+  function updatePosition(e, position) {
+    e.preventDefault();
+    setPosition(position);
+    setState(STATES.UPDATE);
+  }
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API}/positions`)
-      .then((response) => response.json())
       .then((response) => {
-        savePositions(response);
-      });
-  }, []);
+        if (!response.ok) {
+          throw new Error('Could not fetch data properly');
+        }
+        return response.json();
+      })
+      .then((response) => {
+        if (response !== positions) setPositions(response);
+      })
+      .catch((error) => setError(error.message));
+  }, [positions.length]);
+
+  function handleDelete(event, Id) {
+    event.stopPropagation();
+    fetch(`${process.env.REACT_APP_API}/positions/${Id}`, { method: 'DELETE' })
+      .then((response) => {
+        if (response.ok) {
+          setPositions([]);
+        }
+        return response.json();
+      })
+      .catch((error) => setError(error.message));
+  }
 
   return (
     <section className={styles.container}>
-      <div className={styles.header}>
-        <h2>Positions</h2>
-      </div>
-      <div className={styles.tableContainer}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Client</th>
-              <th>Job</th>
-              <th>Description</th>
-              <th>Creation Date</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {positions.map((position) => {
-              return <Position key={position._id} position={position} />;
-            })}
-          </tbody>
-        </table>
-        <AddBtn className={styles.button} />
+      <h2 className={styles.title}>Positions</h2>
+      <h4>{error}</h4>
+      <div className={styles.content}>
+        {state !== STATES.LIST ? (
+          <button onClick={(e) => changeState(STATES.LIST, e)}>List</button>
+        ) : (
+          <></>
+        )}
+        {state === STATES.LIST ? (
+          <button className={styles.createButton} onClick={(e) => changeState(STATES.CREATE, e)}>
+            Create
+          </button>
+        ) : (
+          <></>
+        )}
+        {}
+        {state === STATES.LIST ? (
+          <>
+            <table className={styles.tablePositions}>
+              <tr>
+                <th>ID</th>
+                <th>JOB</th>
+                <th>DESCRIPTION</th>
+                <th>DATE</th>
+                <th>ACTIONS</th>
+              </tr>
+              {!loading &&
+                positions.map((position) => {
+                  return (
+                    <tr key={position._id} onClick={(e) => updatePosition(e, position)}>
+                      <td>{position.clientId}</td>
+                      <td>{position.job}</td>
+                      <td>{position.description}</td>
+                      <td>{position.createdAt}</td>
+                      <td>
+                        <DeleteBtn onClick={(e) => handleDelete(e, position._id)} />
+                      </td>
+                    </tr>
+                  );
+                })}
+            </table>
+          </>
+        ) : (
+          <Form position={state === STATES.UPDATE ? positionToUpdate : {}} />
+        )}
       </div>
     </section>
   );
 }
 
-export default Positions;
+export default GetPositions;

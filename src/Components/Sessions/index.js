@@ -1,6 +1,6 @@
-import styles from './sessions.module.css';
+import styles from './session.module.css';
 import { useEffect, useState } from 'react';
-import DeleteBtn from './DeleteBtn';
+import DeleteBtn from '../Shared/DeleteBtn/index';
 import Form from './Form';
 
 const STATES = {
@@ -16,7 +16,6 @@ function GetSessions() {
   const [sessionToUpdate, setSession] = useState();
   const [psychologys, setPsychologys] = useState([]);
   const [postulants, setPostulants] = useState([]);
-  const updateSessions = () => setSessions(sessions);
 
   function changeState(n, e) {
     e.preventDefault();
@@ -48,7 +47,18 @@ function GetSessions() {
         if (response !== postulants) setPostulants(response);
       })
       .catch((error) => setError(error.message));
-  }, [sessions.lenght]);
+  }, [sessions.length]);
+
+  function handleDelete(event, Id) {
+    event.stopPropagation();
+    fetch(`${process.env.REACT_APP_API}/sessions/${Id}`, { method: 'DELETE' })
+      .then((response) => {
+        if (response.ok) {
+          setSessions([]);
+        }
+      })
+      .catch((error) => setError(error.message));
+  }
 
   return (
     <section className={styles.container}>
@@ -77,7 +87,7 @@ function GetSessions() {
                   <th>TIME</th>
                   <th>DATE</th>
                   <th>STAT</th>
-                  <th>ACCTION</th>
+                  <th>ACTION</th>
                 </tr>
               </thead>
               <tbody>
@@ -96,12 +106,7 @@ function GetSessions() {
                       <td>{session.date.slice(0, 10)}</td>
                       <td>{session.stat}</td>
                       <td>
-                        <DeleteBtn
-                          className={styles.deleteButton}
-                          sessionId={session._id}
-                          sessions={sessions}
-                          filterSession={updateSessions}
-                        ></DeleteBtn>
+                        <DeleteBtn onClick={(e) => handleDelete(e, session._id)} />
                       </td>
                     </tr>
                   );
