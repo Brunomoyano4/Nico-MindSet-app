@@ -32,20 +32,6 @@ const Interviews = ({ interview }) => {
 
   return (
     <>
-      <Modal
-        title="Are you sure you want to delete the selected interview?"
-        onConfirm={(e) => deleteInterview(e)}
-        show={showConfirmModal}
-        closeModal={() => setShowConfirmModal(false)}
-        type={'Confirm'}
-      />
-      <Modal
-        title="Something went wrong!"
-        subtitle={error}
-        show={error}
-        closeModal={() => setError('')}
-        type={'Error'}
-      />
       <tr key={interview._id} onClick={openEditForm}>
         <td>{interview.positionId}</td>
         <td>{interview.postulantId}</td>
@@ -63,6 +49,21 @@ const Interviews = ({ interview }) => {
           </button>
         </td>
       </tr>
+      <Modal
+        title="Are you sure you want to delete the selected interview?"
+        onConfirm={(e) => deleteInterview(e)}
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        type={'Confirm'}
+      />
+
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </>
   );
 };

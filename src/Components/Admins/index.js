@@ -17,7 +17,7 @@ function Admins() {
       .then((response) => {
         setAdmins(response);
       })
-      .catch((error) => setError(error))
+      .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
   }, []);
   return (

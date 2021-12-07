@@ -40,7 +40,6 @@ const List = ({ thName, dataList, setPostulants, loading }) => {
         onConfirm={(e) => handleDelete(e, idToDelete)}
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
-        subtitle={`ID: ${idToDelete}`}
       />
       <table className={styles.list}>
         <thead>

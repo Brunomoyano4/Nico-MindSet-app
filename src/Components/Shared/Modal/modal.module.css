@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  flex-direction: column;
   position: fixed;
   justify-content: center;
   align-items: center;
@@ -19,6 +20,12 @@
   border-radius: 1px;
 }
 
+.title {
+  font-size: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 .modal button:disabled {
 	background: #555;
 	cursor: not-allowed;
@@ -27,7 +34,6 @@
 .modal button {
   display:inline-block;
   justify-content: center;
-  justify-content: space-around;
   box-sizing: border-box;
 	width: 40%;
 	max-width: 580px;
@@ -41,7 +47,10 @@
 }
 
 .subtitle {
+  display: flex;
   color: darkred;
+  padding-top: 70px;
+  justify-content: center;
 }
 
 .confirmBtnModal{
@@ -53,7 +62,7 @@
 }
 
 .cancelBtnModal{
-  background: #646464;
+  background: #646464  !important;
 }
 
 .cancelBtnModal:hover {

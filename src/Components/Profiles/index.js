@@ -13,16 +13,13 @@ function Profiles() {
   const [modalSubtitle, setModalSubtitle] = useState(['']);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [currentProfile, setCurrentProfile] = useState({});
 
   const history = useHistory();
 
-  const openModal = (e, branch, name) => {
+  const deleteProfile = (e, id, branch, name) => {
     e.stopPropagation();
-    setShowConfirmModal(true);
     setModalSubtitle([`Branch: ${branch}`, `Name: ${name}`]);
-  };
-
-  const deleteProfile = (id) => {
     fetch(`${process.env.REACT_APP_API}/profiles/${id}`, {
       method: 'DELETE'
     })
@@ -65,15 +62,28 @@ function Profiles() {
         <ListItem headerItems={tableHeaderItems} />
         {!loading && (
           <tbody className={styles.tableBody}>
-            {profiles.map(({ _id, profileName, branch, description }) => {
-              const deleteBtn = <DeleteBtn onClick={(e) => openModal(e, branch, profileName)} />;
-              const tableListItems = [branch, profileName, description, deleteBtn];
+            {profiles.map((profile) => {
+              const deleteBtn = (
+                <DeleteBtn
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentProfile(profile);
+                    setShowConfirmModal(true);
+                  }}
+                />
+              );
+              const tableListItems = [
+                profile.branch,
+                profile.profileName,
+                profile.description,
+                deleteBtn
+              ];
               return (
                 <ListItem
-                  key={_id}
+                  key={profile._id}
                   listItems={tableListItems}
-                  id={_id}
-                  onRowClick={() => toForm(_id)}
+                  id={profile._id}
+                  onRowClick={() => toForm(profile._id)}
                 />
               );
             })}
@@ -84,10 +94,13 @@ function Profiles() {
       {!loading && !profiles.length && <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>}
       <Modal
         title="You are about to delete a profile"
-        onConfirm={() => deleteProfile(profiles.id)}
+        onConfirm={(e) =>
+          deleteProfile(e, currentProfile._id, currentProfile.branch, currentProfile.profileName)
+        }
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
         subtitle={modalSubtitle}
+        type={'Confirm'}
       />
       <Modal
         title="Something went wrong!"

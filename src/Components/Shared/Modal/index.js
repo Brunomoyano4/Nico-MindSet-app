@@ -18,8 +18,10 @@ function Modal(props) {
   return (
     <div className={styles.container} onClick={(e) => onCloseModal(e)}>
       <div className={styles.modal}>
-        <h2>{props.title}</h2>
-        <span className={styles.subtitle}>{props.subtitle}</span>
+        <div>
+          <h2 className={styles.title}>{props.title}</h2>
+          <span className={styles.subtitle}>{props.subtitle}</span>
+        </div>
         {!(props.type === 'Error') ? (
           <>
             <button className={styles.confirmBtnModal} onClick={(e) => onConfirm(e)}>

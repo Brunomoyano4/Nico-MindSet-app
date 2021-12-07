@@ -106,15 +106,7 @@ function Applications() {
       )}
       <Modal
         title="You are about to delete an application"
-        onConfirm={(e) =>
-          deleteApplication(
-            e,
-            currentApplication._id,
-            currentApplication.positions.job,
-            currentApplication.client.customerName,
-            `${currentApplication.postulants.firstName} ${currentApplication.postulants.lastName}`
-          )
-        }
+        onConfirm={(e) => deleteApplication(e, currentApplication._id)}
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
         subtitle={modalSubtitle}
