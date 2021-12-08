@@ -98,7 +98,7 @@ function Applications() {
           <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
         )}
       </section>
-      <Button onClick={toForm} content={'CREATE APPLICATIONS'} />
+      <Button onClick={() => toForm()} content={'CREATE APPLICATIONS'} />
     </>
   );
 }

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import DeleteBtn from '../Shared/DeleteBtn/index';
 import Form from './Form';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import Button from '../Shared/Button/index';
 
 const STATES = {
   LIST: 1,
@@ -99,9 +100,11 @@ function GetSessions() {
           <></>
         )}
         {state === STATES.LIST ? (
-          <button className={styles.createButton} onClick={(e) => changeState(STATES.CREATE, e)}>
-            Create
-          </button>
+          <Button
+            className={styles.createButton}
+            onClick={(e) => changeState(STATES.CREATE, e)}
+            content="CREATE SESSION"
+          />
         ) : (
           <></>
         )}

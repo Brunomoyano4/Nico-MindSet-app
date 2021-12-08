@@ -5,6 +5,7 @@ import ListItem from './ListItem';
 import DeleteBtn from '../Shared/DeleteBtn/index';
 import Modal from './Modal';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import Button from '../Shared/Button';
 
 function Profiles() {
   const tableHeaderItems = ['Branch', 'Name', 'Description', ''];
@@ -75,9 +76,7 @@ function Profiles() {
       </table>
       {loading && <LoadingSpinner circle={false} />}
       {!loading && !profiles.length && <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>}
-      <button className={styles.addBtn} type="button" onClick={() => toForm()}>
-        Add Profile
-      </button>
+      <Button className={styles.addBtn} onClick={() => toForm()} />
     </section>
   );
 }

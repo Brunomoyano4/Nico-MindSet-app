@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from './form.module.css';
 import Input from '../../Shared/Input';
 import Select from '../../Shared/Select';
+import Button from '../../Shared/Button/index';
 
 function Form(params) {
   const [error, setError] = useState('');
@@ -149,13 +150,12 @@ function Form(params) {
             onChange={handleInputChange}
             required
           />
-          <button
+          <Button
+            content={params.session._id ? 'Update Session' : 'Create session'}
             onClick={(e) => {
               params.session._id ? updateSession(e) : saveSessions(e);
             }}
-          >
-            {params.session._id ? 'Update Session' : 'Create session'}
-          </button>
+          />
         </form>
       )}
     </div>

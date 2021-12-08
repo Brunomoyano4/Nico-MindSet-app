@@ -4,6 +4,7 @@ import Select from '../../Shared/Select';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import Button from '../../Shared/Button';
 
 function ProfilesForm() {
   const history = useHistory();
@@ -220,10 +221,10 @@ function ProfilesForm() {
         id="result-input"
         required
       />
-      <input
+      <Button
         type="submit"
         disabled={Object.values(loading).some(Boolean) ? 'disabled' : ''}
-        value={applicationId ? 'Update Application' : 'Add Application'}
+        content={applicationId ? 'UPDATE APPLICATIONS' : 'CREATE APPLICATION'}
       />
     </form>
   );
