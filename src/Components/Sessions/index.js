@@ -1,4 +1,4 @@
-import styles from './session.module.css';
+import styles from './sessions.module.css';
 import { useEffect, useState } from 'react';
 import DeleteBtn from '../Shared/DeleteBtn/index';
 import Form from './Form';
