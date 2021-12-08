@@ -16,6 +16,14 @@
   text-align: center;
 }
 
+.list tbody tr:hover td:last-child img {
+  width: 100%;
+}
+
+.list tbody tr:hover td:last-child {
+  opacity: unset;
+}
+
 .addBtn {
   box-sizing: border-box;
   width: 20%;

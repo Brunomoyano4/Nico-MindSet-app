@@ -4,19 +4,29 @@ import styles from './clients.module.css';
 import Client from './Client';
 import LoadingSpinner from '../Shared/LoadingSpinner';
 import Button from '../Shared/Button';
+import Modal from '../Shared/Modal';
 
 function Clients() {
   const [clients, saveClients] = useState([]);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const [error, setError] = useState('');
 
   useEffect(() => {
     setLoading(true);
     fetch(`${process.env.REACT_APP_API}/clients`)
-      .then((response) => response.json())
       .then((response) => {
-        saveClients(response);
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
       })
+      .then((data) => {
+        saveClients(data);
+      })
+      .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
   }, []);
 
@@ -51,6 +61,13 @@ function Clients() {
         )}
         <Button onClick={CreateBtn} content={'CREATE CLIENT'} />
       </div>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </section>
   );
 }

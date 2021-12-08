@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from './form.module.css';
+import Modal from '../../Shared/Modal';
 import Input from '../../Shared/Input';
 
 function Form(params) {
@@ -33,7 +34,7 @@ function Form(params) {
             throw new Error(error);
           });
       })
-      .catch((error) => error);
+      .catch((error) => setError(error.toString()));
   }
   function updatePosition(e) {
     e.stopPropagation();
@@ -45,10 +46,15 @@ function Form(params) {
       method: 'PUT',
       body: JSON.stringify(position)
     })
-      .then((response) => response.json())
-      .catch((error) => {
-        setError(error.message);
-      });
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .catch((error) => setError(error.toString()));
   }
 
   function handleInputChange(e) {
@@ -58,7 +64,6 @@ function Form(params) {
 
   return (
     <div>
-      {error}
       {created ? (
         <div>position created</div>
       ) : (
@@ -99,6 +104,13 @@ function Form(params) {
           </button>
         </form>
       )}
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </div>
   );
 }

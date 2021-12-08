@@ -3,25 +3,42 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import ListItem from './ListItem';
 import DeleteBtn from '../Shared/DeleteBtn/index';
-import Modal from './Modal';
+import Modal from '../Shared/Modal';
 import LoadingSpinner from '../Shared/LoadingSpinner';
 import Button from '../Shared/Button';
 
 function Applications() {
   const tableHeaderItems = ['Position', 'Client', 'Postulant', 'Result', ''];
   const [applications, setApplications] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [modalSubtitle, setModalSubtitle] = useState(['modalSubtitle']);
-  const [deleteId, setDeleteId] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [modalSubtitle, setModalSubtitle] = useState(['']);
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [currentApplication, setCurrentApplication] = useState({});
 
   const history = useHistory();
 
   const deleteApplication = (e, id, position, client, postulant) => {
     e.stopPropagation();
-    setModalSubtitle([`Position: ${position}`, `Client: ${client}`, `Postulant: ${postulant}`]);
-    setDeleteId(id);
-    setShowModal(true);
+    setModalSubtitle([
+      `ID: ${id}`,
+      `Position: ${position}`,
+      `Client: ${client}`,
+      `Postulant: ${postulant}`
+    ]);
+    fetch(`${process.env.REACT_APP_API}/applications/${id}`, {
+      method: 'DELETE'
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        setShowConfirmModal(false);
+        getApplications();
+      })
+      .catch((error) => setError(error.toString()));
   };
 
   const toForm = (id) => {
@@ -31,75 +48,80 @@ function Applications() {
   const getApplications = () => {
     setLoading(true);
     fetch(`${process.env.REACT_APP_API}/applications`)
-      .then((res) => {
-        return res.json();
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
       })
-      .then((res) => {
-        setApplications(res);
+      .then((data) => {
+        setApplications(data);
       })
+      .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
   };
 
   useEffect(getApplications, []);
 
   return (
-    <>
-      <section className={styles.container}>
-        <Modal
-          showHook={setShowModal}
-          showModal={showModal}
-          title="You are about to delete an application"
-          subtitle={modalSubtitle}
-          closeBtnText="Close"
-          proceedBtnText="Proceed"
-          id={deleteId}
-          getApplications={getApplications}
-        />
-        <h2>Applications</h2>
-        <table className={styles.list}>
-          <ListItem headerItems={tableHeaderItems} />
-          {!loading && (
-            <tbody className={styles.tableBody}>
-              {applications.map(({ _id, positions, client, postulants, result }) => {
-                const deleteBtn = (
-                  <DeleteBtn
-                    onClick={(e) =>
-                      deleteApplication(
-                        e,
-                        _id,
-                        positions?.job,
-                        client?.customerName,
-                        `${postulants?.firstName} ${postulants?.lastName}`
-                      )
-                    }
-                  />
-                );
-                const tableListItems = [
-                  positions?.job,
-                  client?.customerName,
-                  `${postulants?.firstName} ${postulants?.lastName}`,
-                  result,
-                  deleteBtn
-                ];
-                return (
-                  <ListItem
-                    key={_id}
-                    listItems={tableListItems}
-                    id={_id}
-                    onRowClick={() => toForm(_id)}
-                  />
-                );
-              })}
-            </tbody>
-          )}
-        </table>
-        {loading && <LoadingSpinner circle={false} />}
-        {!loading && !applications.length && (
-          <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+    <section className={styles.container}>
+      <h2>Applications</h2>
+      <table className={styles.list}>
+        <ListItem headerItems={tableHeaderItems} />
+        {!loading && (
+          <tbody className={styles.tableBody}>
+            {applications.map((application) => {
+              const deleteBtn = (
+                <DeleteBtn
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentApplication(application);
+                    setShowConfirmModal(true);
+                  }}
+                />
+              );
+              const tableListItems = [
+                application.positions?.job,
+                application.client?.customerName,
+                `${application.postulants?.firstName} ${application.postulants?.lastName}`,
+                application.result,
+                deleteBtn
+              ];
+              return (
+                <ListItem
+                  key={application._id}
+                  listItems={tableListItems}
+                  id={application._id}
+                  onRowClick={() => toForm(application._id)}
+                />
+              );
+            })}
+          </tbody>
         )}
-      </section>
+      </table>
+      {loading && <LoadingSpinner circle={false} />}
+      {!loading && !applications.length && (
+        <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+      )}
+      <Modal
+        title="You are about to delete an application"
+        onConfirm={(e) => deleteApplication(e, currentApplication._id)}
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        subtitle={modalSubtitle}
+        type={'Confirm'}
+      />
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
       <Button onClick={() => toForm()} content={'CREATE APPLICATIONS'} />
-    </>
+    </section>
   );
 }
 

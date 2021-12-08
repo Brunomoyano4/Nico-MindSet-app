@@ -3,8 +3,9 @@ import styles from './form.module.css';
 import Input from '../../Shared/Input';
 import Select from '../../Shared/Select';
 import Button from '../../Shared/Button/index';
+import Modal from '../../Shared/Modal';
 
-function Form(params) {
+const Form = (params) => {
   const [error, setError] = useState('');
   const [create, setCreate] = useState(true);
   const [created, setCreated] = useState(false);
@@ -38,7 +39,7 @@ function Form(params) {
     };
   });
 
-  function saveSessions(e) {
+  const saveSessions = (e) => {
     e.stopPropagation();
     fetch(`${process.env.REACT_APP_API}/sessions`, {
       headers: {
@@ -50,14 +51,20 @@ function Form(params) {
     })
       .then((response) => response.json())
       .then((response) => {
+        if (response.status !== 201) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
         if (response.psychologyId === session.psychologyId) {
           setCreated(true);
+          return response.json();
         }
       })
-      .catch((error) => setError(error.message));
-  }
+      .catch((error) => setError(error.toString()));
+  };
 
-  function updateSession(e) {
+  const updateSession = (e) => {
     e.stopPropagation();
     fetch(`${process.env.REACT_APP_API}/sessions/${session._id}`, {
       headers: {
@@ -67,9 +74,16 @@ function Form(params) {
       method: 'PUT',
       body: JSON.stringify(session)
     })
-      .then((response) => response.json())
-      .catch((error) => setError(error.message));
-  }
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .catch((error) => setError(error.toString()));
+  };
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -158,8 +172,15 @@ function Form(params) {
           />
         </form>
       )}
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </div>
   );
-}
+};
 
 export default Form;

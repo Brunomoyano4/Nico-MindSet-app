@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import Admin from './Admin';
 import Button from '../Shared/Button';
+import Modal from '../Shared/Modal';
 import styles from './admins.module.css';
 import LoadingSpinner from '../Shared/LoadingSpinner';
 
@@ -14,11 +15,18 @@ function Admins() {
   useEffect(() => {
     setLoading(true);
     fetch(`${process.env.REACT_APP_API}/admins`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
       .then((response) => {
         setAdmins(response);
       })
-      .catch((error) => setError(error))
+      .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
   }, []);
 
@@ -62,6 +70,13 @@ function Admins() {
       <section className={styles.createBtnSection}>
         {error && <div className={styles.error}>{error}</div>}
       </section>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </>
   );
 }

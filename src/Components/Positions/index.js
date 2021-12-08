@@ -1,9 +1,10 @@
 import styles from './positions.module.css';
 import { useEffect, useState } from 'react';
 import Form from './Form';
-import DeleteBtn from '../Shared/DeleteBtn/index';
+import DeleteBtn from '../Shared/DeleteBtn';
 import LoadingSpinner from '../Shared/LoadingSpinner';
 import Button from '../Shared/Button';
+import Modal from '../Shared/Modal';
 
 const STATES = {
   LIST: 1,
@@ -17,6 +18,8 @@ function GetPositions() {
   const [positionToUpdate, setPosition] = useState();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [positionToDelete, setPositionToDelete] = useState('');
 
   function changeState(n, e) {
     e.preventDefault();
@@ -33,34 +36,38 @@ function GetPositions() {
     setLoading(true);
     fetch(`${process.env.REACT_APP_API}/positions`)
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('Could not fetch data properly');
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
         }
         return response.json();
       })
-      .then((response) => {
-        if (response !== positions) setPositions(response);
+      .then((data) => {
+        if (data !== positions) setPositions(data);
       })
-      .catch((error) => setError(error.message))
+      .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
   }, [positions.length]);
 
-  function handleDelete(event, Id) {
+  const deletePositions = (Id, event) => {
     event.stopPropagation();
     fetch(`${process.env.REACT_APP_API}/positions/${Id}`, { method: 'DELETE' })
       .then((response) => {
-        if (response.ok) {
-          setPositions([]);
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
         }
-        return response.json();
+        setShowConfirmModal(false);
+        return history.go(0);
       })
-      .catch((error) => setError(error.message));
-  }
+      .catch((error) => setError(error.toString()));
+  };
 
   return (
     <section className={styles.container}>
       <h2 className={styles.title}>Positions</h2>
-      <h4>{error}</h4>
       <div className={styles.content}>
         {state !== STATES.LIST ? (
           <Button content="BACK" onClick={(e) => changeState(STATES.LIST, e)} />
@@ -68,7 +75,11 @@ function GetPositions() {
           <></>
         )}
         {state === STATES.LIST ? (
-          <Button content="CREATE POSITION" onClick={(e) => changeState(STATES.CREATE, e)} />
+          <Button
+            className={styles.createButton}
+            onClick={(e) => changeState(STATES.CREATE, e)}
+            content="CREATE POSITION"
+          />
         ) : (
           <></>
         )}
@@ -94,7 +105,13 @@ function GetPositions() {
                       <td>{position.description}</td>
                       <td>{position.createdAt}</td>
                       <td>
-                        <DeleteBtn onClick={(e) => handleDelete(e, position._id)} />
+                        <DeleteBtn
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowConfirmModal(true);
+                            setPositionToDelete(position._id);
+                          }}
+                        />
                       </td>
                     </tr>
                   );
@@ -110,6 +127,20 @@ function GetPositions() {
           <Form position={state === STATES.UPDATE ? positionToUpdate : {}} />
         )}
       </div>
+      <Modal
+        title="Are you sure you want to delete the selected Position?"
+        onConfirm={(e) => deletePositions(positionToDelete, e)}
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        type={'Confirm'}
+      />
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </section>
   );
 }

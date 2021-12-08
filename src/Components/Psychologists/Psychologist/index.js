@@ -1,44 +1,50 @@
 import { useState } from 'react';
 import DeleteBtn from '../../Shared/DeleteBtn';
-import Modal from '../Modal/index';
 import { useHistory } from 'react-router-dom';
+import Modal from '../../Shared/Modal';
 
 function Psychologist({ psychologist }) {
-  const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [error, setError] = useState('');
   const history = useHistory();
+
   const openEditForm = () => {
     history.push(`/psychologists/form?id=${psychologist._id}`);
   };
 
-  const modalShow = (event) => {
+  const deletePsychologist = (event) => {
     event.stopPropagation();
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
-  const handleDelete = () => {
     const url = `${process.env.REACT_APP_API}/psychologists/${psychologist._id}`;
     fetch(url, {
       method: 'DELETE'
     })
-      .then(() => {
-        history.go(0);
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        setShowConfirmModal(false);
+        return history.go(0);
       })
-      .catch((error) => setError(error));
+      .catch((error) => setError(error.toString()));
   };
 
   return (
     <>
       <Modal
         title="Are you sure you want to delete the selected psychologist?"
-        onConfirm={(e) => handleDelete(e)}
-        show={showModal}
-        closeModal={closeModal}
-        error={error}
+        onConfirm={(e) => deletePsychologist(e)}
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        type={'Confirm'}
+      />
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
       />
       <tr key={psychologist._id} onClick={openEditForm}>
         <td>{psychologist.userName}</td>
@@ -47,7 +53,12 @@ function Psychologist({ psychologist }) {
         <td>{psychologist.email}</td>
         <td>{psychologist.password}</td>
         <td>
-          <DeleteBtn onClick={(e) => modalShow(e)} />
+          <DeleteBtn
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowConfirmModal(true);
+            }}
+          />
         </td>
       </tr>
     </>

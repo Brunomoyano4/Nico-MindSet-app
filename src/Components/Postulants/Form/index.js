@@ -5,6 +5,7 @@ import styles from './postulantsForm.module.css';
 import Input from '../../Shared/Input';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Button from '../../Shared/Button';
+import Modal from '../../Shared/Modal';
 
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
@@ -131,7 +132,6 @@ function Form() {
   };
   return (
     <div className={styles.container}>
-      <p className={styles.error}>{error}</p>
       <form className={styles.form} onSubmit={onSubmit}>
         {loading && (
           <div className={styles.spinnerContainer}>
@@ -311,6 +311,13 @@ function Form() {
         </div>
         <Button onClick={(e) => onSubmit(e)} content={'SAVE'} />
       </form>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </div>
   );
 }
