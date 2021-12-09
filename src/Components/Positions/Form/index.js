@@ -15,9 +15,11 @@ function Form(params) {
   const [position, setPosition] = useState(initialState);
   const [created, setCreated] = useState(false);
   const [error, setError] = useState();
+  const [disableButton, setDisableButton] = useState(false);
 
   function savePositions(e) {
     e.stopPropagation();
+    setDisableButton(true);
     fetch(`${process.env.REACT_APP_API}/positions`, {
       headers: {
         Accept: 'application/json',
@@ -38,6 +40,7 @@ function Form(params) {
   }
   function updatePosition(e) {
     e.stopPropagation();
+    setDisableButton(true);
     fetch(`${process.env.REACT_APP_API}/positions/${position._id}`, {
       headers: {
         Accept: 'application/json',
@@ -99,6 +102,7 @@ function Form(params) {
             onClick={(e) => {
               params.position._id ? updatePosition(e) : savePositions(e);
             }}
+            disabled={disableButton}
           >
             {params.position._id ? 'Update Position' : 'Create position'}
           </button>
