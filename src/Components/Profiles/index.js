@@ -59,40 +59,50 @@ function Profiles() {
   return (
     <section className={styles.container}>
       <h2>Profiles</h2>
-      <table className={styles.list}>
-        <ListItem headerItems={tableHeaderItems} />
-        {!loading && (
-          <tbody className={styles.tableBody}>
-            {profiles.map((profile) => {
-              const deleteBtn = (
-                <DeleteBtn
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrentProfile(profile);
-                    setShowConfirmModal(true);
-                  }}
-                />
-              );
-              const tableListItems = [
-                profile.branch,
-                profile.profileName,
-                profile.description,
-                deleteBtn
-              ];
-              return (
-                <ListItem
-                  key={profile._id}
-                  listItems={tableListItems}
-                  id={profile._id}
-                  onRowClick={() => toForm(profile._id)}
-                />
-              );
-            })}
-          </tbody>
-        )}
+      <table>
+        <div className={styles.list}>
+          <ListItem headerItems={tableHeaderItems} />
+          {!loading && (
+            <tbody className={styles.tableBody}>
+              {profiles.map((profile) => {
+                const deleteBtn = (
+                  <DeleteBtn
+                    className={styles.button}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentProfile(profile);
+                      setShowConfirmModal(true);
+                    }}
+                  />
+                );
+                const tableListItems = [
+                  profile.branch,
+                  profile.profileName,
+                  profile.description,
+                  deleteBtn
+                ];
+                return (
+                  <ListItem
+                    key={profile._id}
+                    listItems={tableListItems}
+                    id={profile._id}
+                    onRowClick={() => toForm(profile._id)}
+                  />
+                );
+              })}
+            </tbody>
+          )}
+          {loading && <LoadingSpinner circle={false} />}
+          {!loading && !profiles.length && (
+            <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+          )}
+        </div>
+        <Button
+          className={styles.button}
+          onClick={() => toForm()}
+          content={'CREATE APPLICATIONS'}
+        />
       </table>
-      {loading && <LoadingSpinner circle={false} />}
-      {!loading && !profiles.length && <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>}
       <Modal
         title="You are about to delete a profile"
         onConfirm={(e) =>
@@ -110,7 +120,6 @@ function Profiles() {
         closeModal={() => setError('')}
         type={'Error'}
       />
-      <Button className={styles.addBtn} onClick={() => toForm()} />
     </section>
   );
 }

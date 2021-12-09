@@ -114,8 +114,9 @@ const Form = (params) => {
       {created ? (
         <div>session created</div>
       ) : (
-        <form className={styles.sessionsForm}>
+        <form className={styles.form}>
           <Select
+            className={styles.select}
             value={selectedPsychology}
             onChange={(e) => {
               setPsychology(e.target.value);
@@ -127,6 +128,7 @@ const Form = (params) => {
             options={PsychologyList}
           />
           <Select
+            className={styles.select}
             value={selectedPostulant}
             onChange={(e) => {
               setPostulant(e.target.value);
@@ -138,6 +140,7 @@ const Form = (params) => {
             options={PostulantList}
           />
           <Input
+            className={styles.input}
             label="date"
             name="date"
             id="date"
@@ -147,6 +150,7 @@ const Form = (params) => {
             required
           />
           <Input
+            className={styles.input}
             label="time"
             name="time"
             id="time"
@@ -156,6 +160,7 @@ const Form = (params) => {
             required
           />
           <Input
+            className={styles.input}
             label="stat"
             name="stat"
             id="stat"
@@ -165,7 +170,8 @@ const Form = (params) => {
             required
           />
           <Button
-            content={params.session._id ? 'Update Session' : 'Create session'}
+            className={styles.button}
+            content={params.session._id ? 'SAVE' : 'Create Session'}
             onClick={(e) => {
               params.session._id ? updateSession(e) : saveSessions(e);
             }}

@@ -119,19 +119,10 @@ function GetSessions() {
 
   return (
     <section className={styles.container}>
-      <h2 className={styles.title}>Sessions</h2>
-      <div className={styles.content}>
+      <h2>Sessions</h2>
+      <div className={styles.list}>
         {state != STATES.LIST ? (
-          <button onClick={(e) => changeState(STATES.LIST, e)}>List</button>
-        ) : (
-          <></>
-        )}
-        {state === STATES.LIST ? (
-          <Button
-            className={styles.createButton}
-            onClick={(e) => changeState(STATES.CREATE, e)}
-            content="CREATE SESSION"
-          />
+          <Button content="BACK" onClick={(e) => changeState(STATES.LIST, e)} />
         ) : (
           <></>
         )}
@@ -185,6 +176,11 @@ function GetSessions() {
             {!Object.values(loading).some(Boolean) && !sessions.length && (
               <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
             )}
+            <Button
+              className={styles.button}
+              onClick={(e) => changeState(STATES.CREATE, e)}
+              content="CREATE SESSION"
+            />
           </>
         ) : (
           <Form

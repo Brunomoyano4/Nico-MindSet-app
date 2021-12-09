@@ -37,11 +37,9 @@ function Psychologists() {
   return (
     <>
       <section className={styles.container}>
-        <div className={styles.header}>
-          <h2>Psychologists</h2>
-        </div>
-        <div className={styles.tableContainer}>
-          <table className={styles.table}>
+        <h2>Psychologists</h2>
+        <div>
+          <table className={styles.list}>
             <thead>
               <tr>
                 <th>Username</th>
@@ -49,6 +47,7 @@ function Psychologists() {
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Password</th>
+                <th></th>
               </tr>
             </thead>
             {!loading && (
@@ -59,11 +58,12 @@ function Psychologists() {
               </tbody>
             )}
           </table>
+          {loading && <LoadingSpinner circle={false} />}
+          {!loading && !psychologists.length && (
+            <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+          )}
+          <Button className={styles.button} onClick={CreateBtn} content={'CREATE PSYCHOLOGIST'} />
         </div>
-        {loading && <LoadingSpinner circle={false} />}
-        {!loading && !psychologists.length && (
-          <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
-        )}
       </section>
       <section className={styles.createBtnSection}>
         <Modal
@@ -73,9 +73,6 @@ function Psychologists() {
           closeModal={() => setError('')}
           type={'Error'}
         />
-        <div>
-          <Button onClick={CreateBtn} content={'CREATE PSYCHOLOGIST'} />
-        </div>
       </section>
     </>
   );

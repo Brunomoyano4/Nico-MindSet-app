@@ -37,11 +37,9 @@ function Admins() {
   return (
     <>
       <section className={styles.container}>
-        <div className={styles.header}>
-          <h2>ADMINS</h2>
-        </div>
-        <div className={styles.tableContainer}>
-          <table className={styles.table}>
+        <h2>Admins</h2>
+        <div>
+          <table className={styles.list}>
             <thead>
               <tr>
                 <th>Username</th>
@@ -64,7 +62,7 @@ function Admins() {
           {!loading && !admins.length && (
             <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
           )}
-          <Button onClick={CreateBtn} content={'CREATE ADMIN'} />
+          <Button className={styles.button} onClick={CreateBtn} content={'CREATE ADMIN'} />
         </div>
       </section>
       <section className={styles.createBtnSection}>

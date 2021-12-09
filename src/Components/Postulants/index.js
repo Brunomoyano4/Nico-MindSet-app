@@ -27,9 +27,9 @@ function Postulants() {
   return (
     <section className={styles.container}>
       <h2>Postulants</h2>
-      <div>
+      <div className={styles.list}>
         <List
-          thName={['Name', 'Mail', 'Phone', 'Location', 'Actions']}
+          thName={['Name', 'Mail', 'Phone', 'Location', '']}
           dataList={postulants}
           setPostulants={setPostulants}
           loading={loading}
