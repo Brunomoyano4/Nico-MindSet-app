@@ -4,6 +4,7 @@ import Input from '../../Shared/Input';
 import styles from './form.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Modal from '../../Shared/Modal';
+import Button from '../../Shared/Button';
 
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
@@ -13,6 +14,7 @@ function Form() {
   const [passwordValue, setPasswordValue] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
 
   const setInputValues = ({ firstName, lastName, userName, email, password }) => {
     setFirstNameValue(firstName || 'N/A');
@@ -66,7 +68,7 @@ function Form() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-
+    setDisableButton(true);
     if (psychologistId) {
       options.method = 'PUT';
       url = `${process.env.REACT_APP_API}/psychologists/${psychologistId}`;
@@ -83,7 +85,10 @@ function Form() {
         }
         return history.replace('/psychologists');
       })
-      .catch((error) => setError(error.toString()));
+      .catch((error) => {
+        setError(error.toString());
+        setDisableButton(false);
+      });
   };
 
   return (
@@ -97,7 +102,7 @@ function Form() {
             <LoadingSpinner />
           </div>
         )}
-        <form onSubmit={onSubmit}>
+        <form>
           <div className={styles.inputContainer}>
             <Input
               name="First Name"
@@ -145,9 +150,11 @@ function Form() {
             />
           </div>
           <div className={styles.saveBtnSection}>
-            <button className={styles.saveBtn} type="submit">
-              Save
-            </button>
+            <Button
+              onClick={(e) => onSubmit(e)}
+              content={'SAVE'}
+              disabled={loading || disableButton}
+            />
           </div>
         </form>
       </div>
