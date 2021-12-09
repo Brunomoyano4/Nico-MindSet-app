@@ -16,10 +16,11 @@ function Form() {
   const [paramId, setParamId] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const [disableButton, setDisableButton] = useState(false);
   const history = useHistory();
   const params = useQuery();
   const interviewsId = params.get('id');
+
   useEffect(() => {
     if (interviewsId) {
       setLoading(true);
@@ -46,7 +47,6 @@ function Form() {
 
   function useQuery() {
     const { search } = useLocation();
-
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
 
@@ -65,9 +65,8 @@ function Form() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-
+    setDisableButton(true);
     let url = '';
-
     const options = {
       headers: {
         'Content-Type': 'application/json'
@@ -143,7 +142,7 @@ function Form() {
             { value: 'finished', label: 'Finished' }
           ]}
         />
-        <Button onClick={onSubmit} content={'SAVE'} />
+        <Button onClick={onSubmit} content={'SAVE'} disabled={loading || disableButton} />
       </form>
       <Modal
         title="Something went wrong!"
