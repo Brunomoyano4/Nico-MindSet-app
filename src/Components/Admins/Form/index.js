@@ -110,7 +110,7 @@ function Form() {
               onChange={(e) => setFirstNameValue(e.target.value)}
               pattern="[a-zA-Z\s]+"
             />
-            <Input //Dummy change to make draft PR
+            <Input
               name="Last Name"
               placeholder="Last name"
               type="text"
