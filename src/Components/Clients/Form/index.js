@@ -110,55 +110,67 @@ function Form() {
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={onSubmit}>
-        <h1>CLIENTS FORM</h1>
-        <Modal
-          title="Something went wrong!"
-          subtitle={error}
-          show={error}
-          closeModal={() => setError('')}
-          type={'Error'}
+        <h2>Form</h2>
+        <div className={styles.form}>
+          <Modal
+            title="Something went wrong!"
+            subtitle={error}
+            show={error}
+            closeModal={() => setError('')}
+            type={'Error'}
+          />
+          {loading && (
+            <div className={styles.spinnerContainer}>
+              <LoadingSpinner />
+            </div>
+          )}
+          <Input
+            className={styles.input}
+            name="name"
+            placeholder="Customer's Name"
+            value={nameValue}
+            onChange={onChangeNameInput}
+            required
+          />
+          <Input
+            className={styles.input}
+            name="branch"
+            placeholder="Branchs's Name"
+            value={branchValue}
+            onChange={onChangeBranchInput}
+            required
+          />
+          <Input
+            className={styles.input}
+            name="phone"
+            placeholder="Customer's Phone"
+            value={phoneValue}
+            onChange={onChangePhoneInput}
+            required
+          />
+          <Input
+            className={styles.input}
+            name="email"
+            placeholder="Customer's Email"
+            value={emailValue}
+            onChange={onChangeEmailInput}
+            required
+          />
+          <Input
+            className={styles.input}
+            name="description"
+            placeholder="Customer's Description"
+            value={descriptionValue}
+            onChange={onChangeDescriptionInput}
+            required
+          />
+        </div>
+        <Button
+          className={styles.button}
+          onClick={onSubmit}
+          content={'SAVE'}
+          disabled={loading || disableButton}
         />
-        {loading && (
-          <div className={styles.spinnerContainer}>
-            <LoadingSpinner />
-          </div>
-        )}
-        <Input
-          name="name"
-          placeholder="Customer's Name"
-          value={nameValue}
-          onChange={onChangeNameInput}
-          required
-        />
-        <Input
-          name="branch"
-          placeholder="Branchs's Name"
-          value={branchValue}
-          onChange={onChangeBranchInput}
-          required
-        />
-        <Input
-          name="phone"
-          placeholder="Customer's Phone"
-          value={phoneValue}
-          onChange={onChangePhoneInput}
-          required
-        />
-        <Input
-          name="email"
-          placeholder="Customer's Email"
-          value={emailValue}
-          onChange={onChangeEmailInput}
-          required
-        />
-        <Input
-          name="description"
-          placeholder="Customer's Description"
-          value={descriptionValue}
-          onChange={onChangeDescriptionInput}
-          required
-        />
-        <Button onClick={onSubmit} content={'SAVE'} disabled={loading || disableButton} />
       </form>
     </div>
   );

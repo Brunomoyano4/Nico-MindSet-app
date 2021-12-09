@@ -37,8 +37,8 @@ function Clients() {
   return (
     <section className={styles.container}>
       <h2>Clients</h2>
-      <div>
-        <table className={styles.list}>
+      <table>
+        <div className={styles.list}>
           <thead>
             <tr>
               <th>Name</th>
@@ -54,13 +54,13 @@ function Clients() {
               })}
             </tbody>
           )}
-        </table>
-        {loading && <LoadingSpinner circle={false} />}
-        {!loading && !clients.length && (
-          <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
-        )}
-        <Button onClick={CreateBtn} content={'CREATE CLIENT'} />
-      </div>
+          {loading && <LoadingSpinner circle={false} />}
+          {!loading && !clients.length && (
+            <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+          )}
+        </div>
+        <Button className={styles.button} onClick={CreateBtn} content={'CREATE CLIENT'} />
+      </table>
       <Modal
         title="Something went wrong!"
         subtitle={error}

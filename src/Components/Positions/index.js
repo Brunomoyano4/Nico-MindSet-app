@@ -67,26 +67,17 @@ function GetPositions() {
 
   return (
     <section className={styles.container}>
-      <h2 className={styles.title}>Positions</h2>
-      <div className={styles.content}>
+      <h2>Positions</h2>
+      <div className={styles.list}>
         {state !== STATES.LIST ? (
           <Button content="BACK" onClick={(e) => changeState(STATES.LIST, e)} />
         ) : (
           <></>
         )}
-        {state === STATES.LIST ? (
-          <Button
-            className={styles.createButton}
-            onClick={(e) => changeState(STATES.CREATE, e)}
-            content="CREATE POSITION"
-          />
-        ) : (
-          <></>
-        )}
-        {}
+
         {state === STATES.LIST ? (
           <>
-            <table className={styles.tablePositions}>
+            <table className={styles.list}>
               <thead>
                 <tr>
                   <th>ID</th>
@@ -122,6 +113,16 @@ function GetPositions() {
             {!loading && !positions.length && (
               <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
             )}
+            {state === STATES.LIST ? (
+              <Button
+                className={styles.button}
+                onClick={(e) => changeState(STATES.CREATE, e)}
+                content="CREATE POSITION"
+              />
+            ) : (
+              <></>
+            )}
+            {}
           </>
         ) : (
           <Form position={state === STATES.UPDATE ? positionToUpdate : {}} />

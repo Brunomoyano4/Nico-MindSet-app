@@ -105,55 +105,61 @@ function Form() {
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={onSubmit}>
-        <h1>INTERVIEWS FORM</h1>
-        {loading && (
-          <div className={styles.spinnerContainer}>
-            <LoadingSpinner />
-          </div>
-        )}
-        <Input
-          name="Position Id"
-          placeholder="Position's Id"
-          value={positionIdValue}
-          onChange={onChangePositionIdInput}
-          required
-        />
-        <Input
-          name="Postulant Id"
-          placeholder="Postulant's Id"
-          value={postulantIdValue}
-          onChange={onChangePostulantIdInput}
-          required
-        />
-        <Input
-          name="Date time"
-          placeholder="DD/MM/YYYY HH:MM"
-          value={dateTimeValue}
-          onChange={onChangeDateTimeInput}
-          required
-        />
-        <Select
-          name="Status"
-          placeholder="Status"
-          value={statusValue}
-          onChange={onChangeStatusInput}
-          required
-          options={[
-            { value: 'pending', label: 'Pending' },
-            { value: 'cancelled', label: 'Cancelled' },
-            { value: 'next step', label: 'Next Step' },
-            { value: 'finished', label: 'Finished' }
-          ]}
-        />
+        <h2>Form</h2>
+        <div className={styles.form}>
+          <Modal
+            title="Something went wrong!"
+            subtitle={error}
+            show={error}
+            closeModal={() => setError('')}
+            type={'Error'}
+          />
+          {loading && (
+            <div className={styles.spinnerContainer}>
+              <LoadingSpinner />
+            </div>
+          )}
+          <Input
+            className={styles.input}
+            name="Position Id"
+            placeholder="Position's Id"
+            value={positionIdValue}
+            onChange={onChangePositionIdInput}
+            required
+          />
+          <Input
+            className={styles.input}
+            name="Postulant Id"
+            placeholder="Postulant's Id"
+            value={postulantIdValue}
+            onChange={onChangePostulantIdInput}
+            required
+          />
+          <Input
+            className={styles.input}
+            name="Date time"
+            placeholder="DD/MM/YYYY HH:MM"
+            value={dateTimeValue}
+            onChange={onChangeDateTimeInput}
+            required
+          />
+          <Select
+            className={styles.select}
+            name="Status"
+            placeholder="Status"
+            value={statusValue}
+            onChange={onChangeStatusInput}
+            required
+            options={[
+              { value: 'pending', label: 'Pending' },
+              { value: 'cancelled', label: 'Cancelled' },
+              { value: 'next step', label: 'Next Step' },
+              { value: 'finished', label: 'Finished' }
+            ]}
+          />
+        </div>
         <Button onClick={onSubmit} content={'SAVE'} disabled={loading || disableButton} />
       </form>
-      <Modal
-        title="Something went wrong!"
-        subtitle={error}
-        show={error}
-        closeModal={() => setError('')}
-        type={'Error'}
-      />
     </div>
   );
 }

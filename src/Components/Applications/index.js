@@ -68,43 +68,52 @@ function Applications() {
   return (
     <section className={styles.container}>
       <h2>Applications</h2>
-      <table className={styles.list}>
-        <ListItem headerItems={tableHeaderItems} />
-        {!loading && (
-          <tbody className={styles.tableBody}>
-            {applications.map((application) => {
-              const deleteBtn = (
-                <DeleteBtn
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrentApplication(application);
-                    setShowConfirmModal(true);
-                  }}
-                />
-              );
-              const tableListItems = [
-                application.positions?.job,
-                application.client?.customerName,
-                `${application.postulants?.firstName} ${application.postulants?.lastName}`,
-                application.result,
-                deleteBtn
-              ];
-              return (
-                <ListItem
-                  key={application._id}
-                  listItems={tableListItems}
-                  id={application._id}
-                  onRowClick={() => toForm(application._id)}
-                />
-              );
-            })}
-          </tbody>
-        )}
+      <table>
+        <div className={styles.list}>
+          <ListItem headerItems={tableHeaderItems} />
+          {!loading && (
+            <tbody className={styles.tableBody}>
+              {applications.map((application) => {
+                const deleteBtn = (
+                  <DeleteBtn
+                    className={styles.button}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentApplication(application);
+                      setShowConfirmModal(true);
+                    }}
+                  />
+                );
+                const tableListItems = [
+                  application.positions?.job,
+                  application.client?.customerName,
+                  `${application.postulants?.firstName} ${application.postulants?.lastName}`,
+                  application.result,
+                  deleteBtn
+                ];
+                return (
+                  <ListItem
+                    key={application._id}
+                    listItems={tableListItems}
+                    id={application._id}
+                    onRowClick={() => toForm(application._id)}
+                  />
+                );
+              })}
+            </tbody>
+          )}
+          {loading && <LoadingSpinner circle={false} />}
+          {!loading && !applications.length && (
+            <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+          )}
+        </div>
+        <Button
+          className={styles.button}
+          onClick={() => toForm()}
+          content={'CREATE APPLICATIONS'}
+        />
       </table>
-      {loading && <LoadingSpinner circle={false} />}
-      {!loading && !applications.length && (
-        <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
-      )}
+
       <Modal
         title="You are about to delete an application"
         onConfirm={(e) => deleteApplication(e, currentApplication._id)}
@@ -120,7 +129,6 @@ function Applications() {
         closeModal={() => setError('')}
         type={'Error'}
       />
-      <Button onClick={() => toForm()} content={'CREATE APPLICATIONS'} />
     </section>
   );
 }

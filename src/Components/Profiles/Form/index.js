@@ -80,48 +80,58 @@ function ProfilesForm() {
   }, []);
 
   return (
-    <>
-      <form className={styles.container}>
-        <h2>Profile Form</h2>
-        {loading && (
-          <div className={styles.spinnerContainer}>
-            <LoadingSpinner />
-          </div>
-        )}
-        <Input
-          placeholder="Profile Name"
-          value={profileName}
-          onChange={(e) => setProfileName(e.target.value)}
-          label="Profile Name:"
-          id="profile-name"
-          required
+    <div className={styles.container}>
+      <form className={styles.form} onSubmit={onSubmit}>
+        <h2>Form</h2>
+        <div className={styles.form}>
+          <Modal
+            title="Something went wrong!"
+            subtitle={error}
+            show={error}
+            closeModal={() => setError('')}
+            type={'Error'}
+          />
+          {loading && (
+            <div className={styles.spinnerContainer}>
+              <LoadingSpinner />
+            </div>
+          )}
+          <Input
+            className={styles.input}
+            placeholder="Profile Name"
+            value={profileName}
+            onChange={(e) => setProfileName(e.target.value)}
+            label="Profile Name:"
+            id="profile-name"
+            required
+          />
+          <Input
+            className={styles.input}
+            placeholder="Branch"
+            value={branch}
+            onChange={(e) => setBranch(e.target.value)}
+            label="Branch:"
+            id="profile-branch"
+            required
+          />
+          <Input
+            className={styles.input}
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            label="Description:"
+            id="profile-description"
+            required
+          />
+        </div>
+        <Button
+          className={styles.button}
+          type="submit"
+          disabled={loading || disableButton}
+          content={profileId ? 'SAVE' : 'CREATE PROFILE'}
         />
-        <Input
-          placeholder="Branch"
-          value={branch}
-          onChange={(e) => setBranch(e.target.value)}
-          label="Branch:"
-          id="profile-branch"
-          required
-        />
-        <Input
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          label="Description:"
-          id="profile-description"
-          required
-        />
-        <Button onClick={(e) => onSubmit(e)} content={'SAVE'} disabled={loading || disableButton} />
       </form>
-      <Modal
-        title="Something went wrong!"
-        subtitle={error}
-        show={error}
-        closeModal={() => setError('')}
-        type={'Error'}
-      />
-    </>
+    </div>
   );
 }
 
