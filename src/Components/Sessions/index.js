@@ -1,8 +1,9 @@
 import styles from './sessions.module.css';
 import { useEffect, useState } from 'react';
-import DeleteBtn from './DeleteBtn';
+import DeleteBtn from '../Shared/DeleteBtn/index';
 import Form from './Form';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import Button from '../Shared/Button/index';
 import Modal from '../Shared/Modal';
 
 const STATES = {
@@ -16,15 +17,15 @@ function GetSessions() {
   const [sessions, setSessions] = useState([]);
   const [state, setState] = useState(1);
   const [sessionToUpdate, setSession] = useState();
-  const [psychologys, setPsychologys] = useState([]);
+  const [psychologist, setPsychologist] = useState([]);
   const [postulants, setPostulants] = useState([]);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [sessionToDelete, setSessionToDelete] = useState('');
   const [loading, setLoading] = useState({
     psychologistLoading: false,
     sessionLoading: false,
     postulantLoading: false
   });
-
-  const updateSessions = () => setSessions(sessions);
 
   function changeState(n, e) {
     e.preventDefault();
@@ -72,7 +73,7 @@ function GetSessions() {
         return response.json();
       })
       .then((data) => {
-        if (data !== psychologys) setPsychologys(data);
+        if (data !== psychologist) setPsychologist(data);
       })
       .catch((error) => setError(error.toString()))
       .finally(() =>
@@ -99,7 +100,22 @@ function GetSessions() {
           return { ...prev, postulantLoading: false };
         })
       );
-  }, [sessions.lenght]);
+  }, [sessions.length]);
+
+  const deleteSessions = (Id, event) => {
+    event.stopPropagation();
+    fetch(`${process.env.REACT_APP_API}/sessions/${Id}`, { method: 'DELETE' })
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        setShowConfirmModal(false);
+        return history.go(0);
+      })
+      .catch((error) => setError(error.toString()));
+  };
 
   return (
     <section className={styles.container}>
@@ -111,9 +127,11 @@ function GetSessions() {
           <></>
         )}
         {state === STATES.LIST ? (
-          <button className={styles.createButton} onClick={(e) => changeState(STATES.CREATE, e)}>
-            Create
-          </button>
+          <Button
+            className={styles.createButton}
+            onClick={(e) => changeState(STATES.CREATE, e)}
+            content="CREATE SESSION"
+          />
         ) : (
           <></>
         )}
@@ -127,7 +145,7 @@ function GetSessions() {
                   <th>TIME</th>
                   <th>DATE</th>
                   <th>STAT</th>
-                  <th>ACCTION</th>
+                  <th>ACTION</th>
                 </tr>
               </thead>
               {!Object.values(loading).some(Boolean) && (
@@ -150,11 +168,12 @@ function GetSessions() {
                         <td>{session.stat}</td>
                         <td>
                           <DeleteBtn
-                            className={styles.deleteButton}
-                            sessionId={session._id}
-                            sessions={sessions}
-                            filterSession={updateSessions}
-                          ></DeleteBtn>
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowConfirmModal(true);
+                              setSessionToDelete(session._id);
+                            }}
+                          />
                         </td>
                       </tr>
                     );
@@ -171,11 +190,18 @@ function GetSessions() {
           <Form
             session={state === STATES.UPDATE ? sessionToUpdate : {}}
             postulants={postulants}
-            psychologys={psychologys}
+            psychologys={psychologist}
             allSessions={sessions}
           />
         )}
       </div>
+      <Modal
+        title="Are you sure you want to delete the selected Session?"
+        onConfirm={(e) => deleteSessions(sessionToDelete, e)}
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        type={'Confirm'}
+      />
       <Modal
         title="Something went wrong!"
         subtitle={error}

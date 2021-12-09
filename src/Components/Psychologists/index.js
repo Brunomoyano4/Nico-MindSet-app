@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import Psychologist from './Psychologist';
-import CreateBtn from './CreateBtn';
+import Button from '../Shared/Button';
 import styles from './psychologists.module.css';
 import LoadingSpinner from '../Shared/LoadingSpinner';
 import Modal from '../Shared/Modal';
@@ -9,6 +10,7 @@ function Psychologists() {
   const [psychologists, setPsychologists] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     setLoading(true);
@@ -21,10 +23,16 @@ function Psychologists() {
         }
         return response.json();
       })
-      .then((data) => setPsychologists(data))
+      .then((response) => {
+        setPsychologists(response);
+      })
       .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
   }, []);
+
+  const CreateBtn = () => {
+    history.push(`/psychologists/form`);
+  };
 
   return (
     <>
@@ -66,7 +74,7 @@ function Psychologists() {
           type={'Error'}
         />
         <div>
-          <CreateBtn name="CreateBtn" />
+          <Button onClick={CreateBtn} content={'CREATE PSYCHOLOGIST'} />
         </div>
       </section>
     </>

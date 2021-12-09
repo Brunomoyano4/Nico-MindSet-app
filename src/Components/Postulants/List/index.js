@@ -4,6 +4,7 @@ import Postulant from '../Postulant';
 import Modal from '../../Shared/Modal';
 import styles from './list.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Button from '../../Shared/Button';
 
 const List = ({ thName, dataList, setPostulants, loading }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -69,9 +70,7 @@ const List = ({ thName, dataList, setPostulants, loading }) => {
       </table>
       {loading && <LoadingSpinner circle={false} />}
       {!loading && !dataList.length && <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>}
-      <button className={styles.button} onClick={openNewForm}>
-        ADD NEW POSTULANT
-      </button>
+      <Button onClick={openNewForm} content={'CREATE POSTULANT'} />
       <Modal
         title="Something went wrong!"
         subtitle={error}

@@ -1,15 +1,15 @@
 .button {
   box-sizing: border-box;
   width: 100%;
-  max-width: 580px;
+  max-width: 100%;
   padding: 15px;
   background: #27ae60;
-  border-bottom: 2px solid #30c29e;
+  border-bottom: none;
   border-top-style: none;
   border-right-style: none;
   border-left-style: none;
   color: #fff;
-  text-align: center;
+  cursor: pointer;
 }
 
 .button:hover {

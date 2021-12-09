@@ -2,9 +2,10 @@ import styles from './applications.module.css';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import ListItem from './ListItem';
-import DeleteBtn from './DeleteBtn';
+import DeleteBtn from '../Shared/DeleteBtn/index';
 import Modal from '../Shared/Modal';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import Button from '../Shared/Button';
 
 function Applications() {
   const tableHeaderItems = ['Position', 'Client', 'Postulant', 'Result', ''];
@@ -119,9 +120,7 @@ function Applications() {
         closeModal={() => setError('')}
         type={'Error'}
       />
-      <button className={styles.addBtn} type="button" onClick={() => toForm()}>
-        Add Application
-      </button>
+      <Button onClick={() => toForm()} content={'CREATE APPLICATIONS'} />
     </section>
   );
 }

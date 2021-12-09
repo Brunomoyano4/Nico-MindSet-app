@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from '../Client/client.module.css';
+import DeleteBtn from '../../Shared/DeleteBtn/index';
 import Modal from '../../Shared/Modal';
 
 const Client = ({ client }) => {
@@ -50,16 +51,14 @@ const Client = ({ client }) => {
         <td>{client.phone}</td>
         <td>{client.branch}</td>
         <td>
-          <button
+          <DeleteBtn
             className={styles.button}
             onClick={(e) => {
               e.stopPropagation();
               setShowConfirmModal(true);
             }}
             client={client}
-          >
-            DELETE
-          </button>
+          />
         </td>
       </tr>
     </>

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import styles from './postulantsForm.module.css';
 import Input from '../../Shared/Input';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Button from '../../Shared/Button';
 import Modal from '../../Shared/Modal';
 
 function Form() {
@@ -308,9 +309,7 @@ function Form() {
             required
           />
         </div>
-        <button className={styles.button} type="submit">
-          Save
-        </button>
+        <Button onClick={(e) => onSubmit(e)} content={'SAVE'} />
       </form>
       <Modal
         title="Something went wrong!"

@@ -5,6 +5,7 @@ import styles from './form.module.css';
 import Input from '../../Shared/Input';
 import Select from '../Select';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Button from '../../Shared/Button';
 import Modal from '../../Shared/Modal';
 
 function Form() {
@@ -142,9 +143,7 @@ function Form() {
             { value: 'finished', label: 'Finished' }
           ]}
         />
-        <button className={styles.button} value="Send" type="submit">
-          SAVE
-        </button>
+        <Button onClick={onSubmit} content={'SAVE'} />
       </form>
       <Modal
         title="Something went wrong!"

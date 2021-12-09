@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from '../Interview/interview.module.css';
+import DeleteBtn from '../../Shared/DeleteBtn/index';
 import Modal from '../../Shared/Modal';
 
 const Interviews = ({ interview }) => {
@@ -37,16 +38,14 @@ const Interviews = ({ interview }) => {
         <td>{interview.postulantId}</td>
         <td>{interview.dateTime}</td>
         <td>
-          <button
+          <DeleteBtn
             className={styles.button}
             onClick={(e) => {
               e.stopPropagation();
               setShowConfirmModal(true);
             }}
             interview={interview}
-          >
-            DELETE
-          </button>
+          />
         </td>
       </tr>
       <Modal

@@ -2,9 +2,10 @@ import styles from './profiles.module.css';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import ListItem from './ListItem';
-import DeleteBtn from './DeleteBtn';
+import DeleteBtn from '../Shared/DeleteBtn/index';
 import Modal from '../Shared/Modal';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import Button from '../Shared/Button';
 
 function Profiles() {
   const tableHeaderItems = ['Branch', 'Name', 'Description', ''];
@@ -109,9 +110,7 @@ function Profiles() {
         closeModal={() => setError('')}
         type={'Error'}
       />
-      <button className={styles.addBtn} type="button" onClick={() => toForm()}>
-        Add Profile
-      </button>
+      <Button className={styles.addBtn} onClick={() => toForm()} />
     </section>
   );
 }
