@@ -101,7 +101,10 @@ function Form() {
         return response.json();
       })
       .then(() => history.replace('/clients'))
-      .catch((error) => setError(error.toString()));
+      .catch((error) => {
+        setError(error.toString());
+        setDisableButton(false);
+      });
   };
 
   return (

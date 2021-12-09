@@ -96,7 +96,10 @@ function Form() {
         }
         return history.replace('/interviews');
       })
-      .catch((error) => setError(error.toString()));
+      .catch((error) => {
+        setError(error.toString());
+        setDisableButton(false);
+      });
   };
 
   return (

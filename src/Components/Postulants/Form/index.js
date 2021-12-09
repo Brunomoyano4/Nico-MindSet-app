@@ -129,7 +129,10 @@ function Form() {
         }
         return history.replace('/postulants');
       })
-      .catch((error) => setError(error.toString()));
+      .catch((error) => {
+        setError(error.toString());
+        setDisableButton(false);
+      });
   };
   return (
     <div className={styles.container}>

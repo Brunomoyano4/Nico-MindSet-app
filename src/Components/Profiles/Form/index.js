@@ -45,7 +45,10 @@ function ProfilesForm() {
         }
         return history.replace('/profiles');
       })
-      .catch((error) => setError(error.toString()));
+      .catch((error) => {
+        setError(error.toString());
+        setDisableButton(false);
+      });
   };
 
   function useQuery() {

@@ -86,7 +86,10 @@ function Form() {
         return (window.location.href = '/admins');
       })
       .then(() => history.replace('/admins'))
-      .catch((error) => setError(error.toString()));
+      .catch((error) => {
+        setError(error.toString());
+        setDisableButton(false);
+      });
   };
 
   return (

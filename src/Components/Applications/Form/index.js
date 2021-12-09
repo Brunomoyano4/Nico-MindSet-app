@@ -62,7 +62,10 @@ function ProfilesForm() {
         return res.json();
       })
       .then(() => history.replace('/applications'))
-      .catch((error) => setError(error.toString()));
+      .catch((error) => {
+        setError(error.toString());
+        setDisableButton(false);
+      });
   };
 
   useEffect(() => {
