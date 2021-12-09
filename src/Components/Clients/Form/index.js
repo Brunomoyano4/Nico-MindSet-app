@@ -15,7 +15,7 @@ function Form() {
   const [paramId, setParamId] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const [disableButton, setDisableButton] = useState(false);
   const history = useHistory();
   const params = useQuery();
   const clientId = params.get('id');
@@ -68,9 +68,8 @@ function Form() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-
+    setDisableButton(true);
     let url = '';
-
     const options = {
       headers: {
         'Content-Type': 'application/json'
@@ -156,7 +155,7 @@ function Form() {
           onChange={onChangeDescriptionInput}
           required
         />
-        <Button onClick={onSubmit} content={'SAVE'} />
+        <Button onClick={onSubmit} content={'SAVE'} disabled={loading || disableButton} />
       </form>
     </div>
   );
