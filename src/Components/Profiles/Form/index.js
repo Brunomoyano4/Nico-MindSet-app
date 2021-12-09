@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Modal from '../../Shared/Modal';
+import Button from '../../Shared/Button';
 
 function ProfilesForm() {
   const history = useHistory();
@@ -14,9 +15,11 @@ function ProfilesForm() {
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
 
   const onSubmit = (e) => {
     e.preventDefault();
+    setDisableButton(true);
     let url = `${process.env.REACT_APP_API}/profiles`;
     const options = {
       headers: {
@@ -75,7 +78,7 @@ function ProfilesForm() {
 
   return (
     <>
-      <form className={styles.container} onSubmit={onSubmit}>
+      <form className={styles.container}>
         <h2>Profile Form</h2>
         {loading && (
           <div className={styles.spinnerContainer}>
@@ -106,7 +109,7 @@ function ProfilesForm() {
           id="profile-description"
           required
         />
-        <input type="submit"></input>
+        <Button onClick={(e) => onSubmit(e)} content={'SAVE'} disabled={loading || disableButton} />
       </form>
       <Modal
         title="Something went wrong!"
