@@ -2,6 +2,7 @@ import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
 import DeleteBtn from '../../Shared/DeleteBtn';
 import Modal from '../../Shared/Modal';
+import styles from './admin.module.css';
 
 function Admin({ admin }) {
   const [error, setError] = useState('');
@@ -47,7 +48,7 @@ function Admin({ admin }) {
         closeModal={() => setError('')}
         type={'Error'}
       />
-      <tr key={admin._id} onClick={openEditForm}>
+      <tr className={styles.tr} key={admin._id} onClick={openEditForm}>
         <td>{admin.username}</td>
         <td>{admin.firstName}</td>
         <td>{admin.lastName}</td>

@@ -172,59 +172,70 @@ function ProfilesForm() {
   }, []);
 
   return (
-    <form className={styles.container} onSubmit={onSubmit}>
-      <h2>Application Form</h2>
-      <Modal
-        title="Something went wrong!"
-        subtitle={error}
-        show={error}
-        closeModal={() => setError('')}
-        type={'Error'}
-      />
-      <h3 className={error ? styles.error : ''}>{error}</h3>
-      {Object.values(loading).some(Boolean) && (
-        <div className={styles.spinnerContainer}>
-          <LoadingSpinner />
-        </div>
-      )}
-      <Select
-        value={positionsValue}
-        onChange={(e) => setPositionsValue(e.target.value)}
-        label="Position:"
-        id="positions-select"
-        options={positionsOption}
-        required
-      />
-      <Select
-        value={clientValue}
-        onChange={(e) => setClientValue(e.target.value)}
-        label="Client:"
-        id="client-select"
-        options={clientOption}
-        required
-      />
-      <Select
-        value={postulantsValue}
-        onChange={(e) => setPostulantsValue(e.target.value)}
-        label="Postulant:"
-        id="postulants-select"
-        options={postulantsOption}
-        required
-      />
-      <Input
-        placeholder="Result"
-        value={result}
-        onChange={(e) => setResult(e.target.value)}
-        label="Result:"
-        id="result-input"
-        required
-      />
-      <Button
-        type="submit"
-        disabled={Object.values(loading).some(Boolean) ? 'disabled' : ''}
-        content={applicationId ? 'UPDATE APPLICATIONS' : 'CREATE APPLICATION'}
-      />
-    </form>
+    <>
+      <div className={styles.container}>
+        <form className={styles.form} onSubmit={onSubmit}>
+          <h2>Form</h2>
+          <div className={styles.form}>
+            <Modal
+              title="Something went wrong!"
+              subtitle={error}
+              show={error}
+              closeModal={() => setError('')}
+              type={'Error'}
+            />
+            <h3 className={error ? styles.error : ''}>{error}</h3>
+            {Object.values(loading).some(Boolean) && (
+              <div className={styles.spinnerContainer}>
+                <LoadingSpinner />
+              </div>
+            )}
+            <Select
+              className={styles.select}
+              value={positionsValue}
+              onChange={(e) => setPositionsValue(e.target.value)}
+              label="Position:"
+              id="positions-select"
+              options={positionsOption}
+              required
+            />
+            <Select
+              className={styles.select}
+              value={clientValue}
+              onChange={(e) => setClientValue(e.target.value)}
+              label="Client:"
+              id="client-select"
+              options={clientOption}
+              required
+            />
+            <Select
+              className={styles.select}
+              value={postulantsValue}
+              onChange={(e) => setPostulantsValue(e.target.value)}
+              label="Postulant:"
+              id="postulants-select"
+              options={postulantsOption}
+              required
+            />
+            <Input
+              className={styles.input}
+              placeholder="Result"
+              value={result}
+              onChange={(e) => setResult(e.target.value)}
+              label="Result:"
+              id="result-input"
+              required
+            />
+          </div>
+          <Button
+            className={styles.button}
+            type="submit"
+            disabled={Object.values(loading).some(Boolean) ? 'disabled' : ''}
+            content={applicationId ? 'SAVE' : 'CREATE APPLICATION'}
+          />
+        </form>
+      </div>
+    </>
   );
 }
 

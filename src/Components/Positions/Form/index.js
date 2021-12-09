@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styles from './form.module.css';
 import Modal from '../../Shared/Modal';
 import Input from '../../Shared/Input';
+import Button from '../../Shared/Button';
 
 function Form(params) {
   const initialState = params.position._id
@@ -67,8 +68,9 @@ function Form(params) {
       {created ? (
         <div>position created</div>
       ) : (
-        <form className={styles.positionsForm}>
+        <form className={styles.form}>
           <Input
+            className={styles.input}
             label="Id"
             name="clientId"
             id="id"
@@ -78,6 +80,7 @@ function Form(params) {
             required
           />
           <Input
+            className={styles.input}
             label="Job"
             name="job"
             id="job"
@@ -87,6 +90,7 @@ function Form(params) {
             required
           />
           <Input
+            className={styles.input}
             label="Description"
             name="description"
             id="description"
@@ -95,13 +99,13 @@ function Form(params) {
             onChange={handleInputChange}
             required
           />
-          <button
+          <Button
+            className={styles.button}
             onClick={(e) => {
               params.position._id ? updatePosition(e) : savePositions(e);
             }}
-          >
-            {params.position._id ? 'Update Position' : 'Create position'}
-          </button>
+            content={params.position._id ? 'Update Position' : 'Create position'}
+          />
         </form>
       )}
       <Modal

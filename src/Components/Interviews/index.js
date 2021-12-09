@@ -34,13 +34,14 @@ function Interviews() {
   return (
     <section className={styles.container}>
       <h2>Interviews</h2>
-      <div>
-        <table className={styles.list}>
+      <table>
+        <div className={styles.list}>
           <thead>
             <tr>
-              <th>Position:</th>
-              <th>Postulant:</th>
-              <th>Date time:</th>
+              <th>Position</th>
+              <th>Postulant</th>
+              <th>Date time</th>
+              <th></th>
             </tr>
           </thead>
           {!loading && (
@@ -50,13 +51,13 @@ function Interviews() {
               })}
             </tbody>
           )}
-        </table>
+        </div>
         {loading && <LoadingSpinner circle={false} />}
         {!loading && !interviews.length && (
           <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
         )}
         <Button onClick={CreateBtn} content={'CREATE INTERVIEW'} />
-      </div>
+      </table>
       <Modal
         title="Something went wrong!"
         subtitle={error}
