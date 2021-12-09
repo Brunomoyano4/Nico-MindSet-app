@@ -1,8 +1,10 @@
 import styles from './positions.module.css';
 import { useEffect, useState } from 'react';
-import DeleteBtn from './DeleteBtn';
 import Form from './Form';
+import DeleteBtn from '../Shared/DeleteBtn';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import Button from '../Shared/Button';
+import Modal from '../Shared/Modal';
 
 const STATES = {
   LIST: 1,
@@ -14,9 +16,10 @@ function GetPositions() {
   const [positions, setPositions] = useState([]);
   const [state, setState] = useState(1);
   const [positionToUpdate, setPosition] = useState();
-  const updatePositions = () => setPositions([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [positionToDelete, setPositionToDelete] = useState('');
 
   function changeState(n, e) {
     e.preventDefault();
@@ -33,34 +36,50 @@ function GetPositions() {
     setLoading(true);
     fetch(`${process.env.REACT_APP_API}/positions`)
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('Could not fetch data properly');
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
         }
         return response.json();
       })
-      .then((response) => {
-        if (response !== positions) setPositions(response);
+      .then((data) => {
+        if (data !== positions) setPositions(data);
       })
-      .catch((error) => {
-        setError(error.message);
-      })
+      .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
   }, [positions.length]);
+
+  const deletePositions = (Id, event) => {
+    event.stopPropagation();
+    fetch(`${process.env.REACT_APP_API}/positions/${Id}`, { method: 'DELETE' })
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        setShowConfirmModal(false);
+        return history.go(0);
+      })
+      .catch((error) => setError(error.toString()));
+  };
 
   return (
     <section className={styles.container}>
       <h2 className={styles.title}>Positions</h2>
-      <h4>{error}</h4>
       <div className={styles.content}>
         {state !== STATES.LIST ? (
-          <button onClick={(e) => changeState(STATES.LIST, e)}>List</button>
+          <Button content="BACK" onClick={(e) => changeState(STATES.LIST, e)} />
         ) : (
           <></>
         )}
         {state === STATES.LIST ? (
-          <button className={styles.createButton} onClick={(e) => changeState(STATES.CREATE, e)}>
-            Create
-          </button>
+          <Button
+            className={styles.createButton}
+            onClick={(e) => changeState(STATES.CREATE, e)}
+            content="CREATE POSITION"
+          />
         ) : (
           <></>
         )}
@@ -68,15 +87,17 @@ function GetPositions() {
         {state === STATES.LIST ? (
           <>
             <table className={styles.tablePositions}>
-              <tr>
-                <th>ID</th>
-                <th>JOB</th>
-                <th>DESCRIPTION</th>
-                <th>DATE</th>
-                <th>ACTIONS</th>
-              </tr>
-              {!loading &&
-                positions.map((position) => {
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>JOB</th>
+                  <th>DESCRIPTION</th>
+                  <th>DATE</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {positions.map((position) => {
                   return (
                     <tr key={position._id} onClick={(e) => updatePosition(e, position)}>
                       <td>{position.clientId}</td>
@@ -85,15 +106,17 @@ function GetPositions() {
                       <td>{position.createdAt}</td>
                       <td>
                         <DeleteBtn
-                          className={styles.deleteButton}
-                          positionId={position._id}
-                          positions={positions}
-                          filterPosition={updatePositions}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowConfirmModal(true);
+                            setPositionToDelete(position._id);
+                          }}
                         />
                       </td>
                     </tr>
                   );
                 })}
+              </tbody>
             </table>
             {loading && <LoadingSpinner circle={false} />}
             {!loading && !positions.length && (
@@ -104,6 +127,20 @@ function GetPositions() {
           <Form position={state === STATES.UPDATE ? positionToUpdate : {}} />
         )}
       </div>
+      <Modal
+        title="Are you sure you want to delete the selected Position?"
+        onConfirm={(e) => deletePositions(positionToDelete, e)}
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        type={'Confirm'}
+      />
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </section>
   );
 }

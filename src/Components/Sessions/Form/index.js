@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import styles from './form.module.css';
+import Input from '../../Shared/Input';
+import Select from '../../Shared/Select';
+import Button from '../../Shared/Button/index';
+import Modal from '../../Shared/Modal';
 
-function Form(params) {
+const Form = (params) => {
   const [error, setError] = useState('');
   const [create, setCreate] = useState(true);
   const [created, setCreated] = useState(false);
@@ -22,22 +26,20 @@ function Form(params) {
       };
   const [session, setSession] = useState(initialState);
   let PsychologyList = params.psychologys.map((s) => {
-    return (
-      <option key={s._id} value={s._id}>
-        {s.firstName} {s.lastName}
-      </option>
-    );
+    return {
+      value: s._id,
+      label: `${s.firstName} ${s.lastName}`
+    };
   });
 
   let PostulantList = params.postulants.map((s) => {
-    return (
-      <option key={s._id} value={s._id}>
-        {s.firstName} {s.lastName}
-      </option>
-    );
+    return {
+      value: s._id,
+      label: `${s.firstName} ${s.lastName}`
+    };
   });
 
-  function saveSessions(e) {
+  const saveSessions = (e) => {
     e.stopPropagation();
     fetch(`${process.env.REACT_APP_API}/sessions`, {
       headers: {
@@ -49,14 +51,20 @@ function Form(params) {
     })
       .then((response) => response.json())
       .then((response) => {
+        if (response.status !== 201) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
         if (response.psychologyId === session.psychologyId) {
           setCreated(true);
+          return response.json();
         }
       })
-      .catch((error) => setError(error.message));
-  }
+      .catch((error) => setError(error.toString()));
+  };
 
-  function updateSession(e) {
+  const updateSession = (e) => {
     e.stopPropagation();
     fetch(`${process.env.REACT_APP_API}/sessions/${session._id}`, {
       headers: {
@@ -66,9 +74,16 @@ function Form(params) {
       method: 'PUT',
       body: JSON.stringify(session)
     })
-      .then((response) => response.json())
-      .catch((error) => setError(error.message));
-  }
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .catch((error) => setError(error.toString()));
+  };
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -96,73 +111,76 @@ function Form(params) {
   return (
     <div>
       {error}
-      {error}
       {created ? (
         <div>session created</div>
       ) : (
         <form className={styles.sessionsForm}>
-          <label>Psychology Id</label>
-          <select
+          <Select
             value={selectedPsychology}
-            id="psychology"
             onChange={(e) => {
               setPsychology(e.target.value);
               handleSelectChange(e.target.id, e.target.value, e.target.name);
             }}
+            label="Psychology Id"
+            id="psychology"
             name="psychology"
-          >
-            {PsychologyList}
-          </select>
-          <label>Postulant Id</label>
-          <select
+            options={PsychologyList}
+          />
+          <Select
             value={selectedPostulant}
-            id="postulant"
             onChange={(e) => {
               setPostulant(e.target.value);
               handleSelectChange(e.target.id, e.target.value, e.target.name);
             }}
+            label="Postulant Id"
+            id="postulant"
             name="postulant"
-          >
-            {PostulantList}
-          </select>
-          <label>date</label>
-          <input
-            type="datetime"
-            id="date"
+            options={PostulantList}
+          />
+          <Input
+            label="date"
             name="date"
+            id="date"
+            type="datetime"
             value={session.date}
             onChange={handleInputChange}
             required
           />
-          <label>time</label>
-          <input
-            type="text"
-            id="time"
+          <Input
+            label="time"
             name="time"
+            id="time"
+            type="text"
             value={session.time}
             onChange={handleInputChange}
             required
           />
-          <label>stat</label>
-          <input
-            type="text"
-            id="stat"
+          <Input
+            label="stat"
             name="stat"
+            id="stat"
+            type="text"
             value={session.stat}
             onChange={handleInputChange}
             required
           />
-          <button
+          <Button
+            content={params.session._id ? 'Update Session' : 'Create session'}
             onClick={(e) => {
               params.session._id ? updateSession(e) : saveSessions(e);
             }}
-          >
-            {params.session._id ? 'Update Session' : 'Create session'}
-          </button>
+          />
         </form>
       )}
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </div>
   );
-}
+};
 
 export default Form;

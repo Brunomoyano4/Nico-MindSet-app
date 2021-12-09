@@ -1,12 +1,18 @@
 import { useState } from 'react';
-function DeleteBtn({ positionId, positions, filterPosition }) {
+import Modal from '../../Shared/Modal';
+
+const DeleteBtn = ({ positionId, positions, filterPosition }) => {
   const [error, setError] = useState('');
-  function DeletePositions(Id, event) {
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  const deletePositions = (Id, event) => {
     event.stopPropagation();
     fetch(`${process.env.REACT_APP_API}/positions/${Id}`, { method: 'DELETE' })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('Could not fetch data properly');
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
         }
         return response.json();
       })
@@ -16,17 +22,38 @@ function DeleteBtn({ positionId, positions, filterPosition }) {
           filterPosition(filtered);
         }
       })
-      .catch((error) => {
-        setError(error.message);
-      });
-  }
+      .catch((error) => setError(error.toString()));
+  };
 
   return (
-    <div>
-      <button onClick={(e) => DeletePositions(positionId, e, error)}>Delete</button>
-      <h4>{error}</h4>
-    </div>
+    <>
+      <div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowConfirmModal(true);
+          }}
+        >
+          Delete
+        </button>
+        <h4>{error}</h4>
+      </div>
+      <Modal
+        title="Are you sure you want to delete the selected position?"
+        onConfirm={(e) => deletePositions(positionId, e, error)}
+        show={showConfirmModal}
+        closeModal={() => setShowConfirmModal(false)}
+        type={'Confirm'}
+      />
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
+    </>
   );
-}
+};
 
 export default DeleteBtn;

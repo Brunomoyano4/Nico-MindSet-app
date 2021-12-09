@@ -1,6 +1,6 @@
 thead tr {
-  background-color: #72bc8e;
-  color: #ffffff;
+  background-color: #72BC8E;
+  color: #FFFFFF;
   text-align: left;
 }
 
@@ -12,11 +12,11 @@ td {
 }
 
 tbody tr {
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #DDDDDD;
 }
 
 tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
+  background-color: #F3F3F3;
 }
 
 tbody tr:last-of-type {
@@ -25,7 +25,7 @@ tbody tr:last-of-type {
 
 tbody tr.active-row {
   font-weight: bold;
-  color: #72bc8e;
+  color: #72BC8E;
 }
 
 td {
@@ -41,9 +41,7 @@ tbody tr:hover {
 }
 
 td:last-child {
-  background: linear-gradient(90deg, #72bc8e00 0%, #72bc8eaa 100%);
+  background: linear-gradient(90deg, #72bc8e00 0%, #F26D4C 100%);
   padding: 0;
   height: fit-content;
-  opacity: 0;
-  transition: opacity 250ms linear;
 }

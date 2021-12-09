@@ -1,22 +1,38 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import Psychologist from './Psychologist';
-import CreateBtn from './CreateBtn';
+import Button from '../Shared/Button';
 import styles from './psychologists.module.css';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import Modal from '../Shared/Modal';
 
 function Psychologists() {
   const [psychologists, setPsychologists] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     setLoading(true);
     fetch(`${process.env.REACT_APP_API}/psychologists`)
-      .then((response) => response.json())
-      .then((response) => setPsychologists(response))
-      .catch((error) => setError(error))
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .then((response) => {
+        setPsychologists(response);
+      })
+      .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
   }, []);
+
+  const CreateBtn = () => {
+    history.push(`/psychologists/form`);
+  };
 
   return (
     <>
@@ -50,9 +66,15 @@ function Psychologists() {
         )}
       </section>
       <section className={styles.createBtnSection}>
-        {error && <div className={styles.error}>{error}</div>}
+        <Modal
+          title="Something went wrong!"
+          subtitle={error}
+          show={error}
+          closeModal={() => setError('')}
+          type={'Error'}
+        />
         <div>
-          <CreateBtn name="CreateBtn" />
+          <Button onClick={CreateBtn} content={'CREATE PSYCHOLOGIST'} />
         </div>
       </section>
     </>

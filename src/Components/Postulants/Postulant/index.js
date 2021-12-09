@@ -1,5 +1,5 @@
+import DeleteBtn from '../../Shared/DeleteBtn/index';
 import { useHistory } from 'react-router-dom';
-import DeleteBtn from '../DeleteBtn';
 import styles from './postulant.module.css';
 
 const Postulant = ({ object, onClick }) => {
@@ -20,7 +20,7 @@ const Postulant = ({ object, onClick }) => {
           {object.city}, {object.country}
         </td>
         <td>
-          <DeleteBtn object={object} onClick={onClick} />
+          <DeleteBtn onClick={onClick} />
         </td>
       </tr>
     </>

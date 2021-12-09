@@ -1,10 +1,11 @@
 import styles from './form.module.css';
-import Input from '../Input';
-import Select from '../Select';
+import Modal from '../../Shared/Modal';
+import Input from '../../Shared/Input';
+import Select from '../../Shared/Select';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import Button from '../../Shared/Button';
 
 function ProfilesForm() {
   const history = useHistory();
@@ -60,9 +61,7 @@ function ProfilesForm() {
         return res.json();
       })
       .then(() => history.replace('/applications'))
-      .catch((error) => {
-        setError(JSON.stringify(error));
-      });
+      .catch((error) => setError(error.toString()));
   };
 
   useEffect(() => {
@@ -88,9 +87,7 @@ function ProfilesForm() {
           setPostulantsValue(data?.postulants?._id);
           setResult(data.result);
         })
-        .catch((error) => {
-          setError(JSON.stringify(error));
-        })
+        .catch((error) => setError(error.toString()))
         .finally(() =>
           setLoading((prev) => {
             return { ...prev, applicationIdLoading: false };
@@ -116,9 +113,7 @@ function ProfilesForm() {
         );
         setClientValue(res[0]._id);
       })
-      .catch((error) => {
-        setError(error.toString());
-      })
+      .catch((error) => setError(error.toString()))
       .finally(() => {
         setLoading((prev) => {
           return { ...prev, clientLoading: false };
@@ -143,9 +138,7 @@ function ProfilesForm() {
         );
         setPostulantsValue(res[0]._id);
       })
-      .catch((error) => {
-        setError(error.toString());
-      })
+      .catch((error) => setError(error.toString()))
       .finally(() => {
         setLoading((prev) => {
           return { ...prev, postulantLoading: false };
@@ -170,9 +163,7 @@ function ProfilesForm() {
         );
         setPositionsValue(res[0]._id);
       })
-      .catch((error) => {
-        setError(error.toString());
-      })
+      .catch((error) => setError(error.toString()))
       .finally(() => {
         setLoading((prev) => {
           return { ...prev, positionLoading: false };
@@ -183,6 +174,13 @@ function ProfilesForm() {
   return (
     <form className={styles.container} onSubmit={onSubmit}>
       <h2>Application Form</h2>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
       <h3 className={error ? styles.error : ''}>{error}</h3>
       {Object.values(loading).some(Boolean) && (
         <div className={styles.spinnerContainer}>
@@ -221,10 +219,10 @@ function ProfilesForm() {
         id="result-input"
         required
       />
-      <input
+      <Button
         type="submit"
         disabled={Object.values(loading).some(Boolean) ? 'disabled' : ''}
-        value={applicationId ? 'Update Application' : 'Add Application'}
+        content={applicationId ? 'UPDATE APPLICATIONS' : 'CREATE APPLICATION'}
       />
     </form>
   );

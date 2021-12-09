@@ -1,9 +1,9 @@
-import React from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import Input from '../Input';
+import React, { useState, useEffect } from 'react';
+import Input from '../../Shared/Input';
 import styles from './form.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Modal from '../../Shared/Modal';
 
 function Form() {
   const [firstNameValue, setFirstNameValue] = useState('');
@@ -44,9 +44,16 @@ function Form() {
     useEffect(() => {
       setLoading(true);
       fetch(`${process.env.REACT_APP_API}/psychologists/${psychologistId}`)
-        .then((response) => response.json())
+        .then((response) => {
+          if (response.status !== 200) {
+            return response.json().then(({ msg }) => {
+              throw new Error(msg);
+            });
+          }
+          return response.json();
+        })
         .then((data) => setInputValues(data))
-        .catch((error) => setError(JSON.stringify(error)))
+        .catch((error) => setError(error.toString()))
         .finally(() => setLoading(false));
     }, []);
   }
@@ -68,8 +75,15 @@ function Form() {
       url = `${process.env.REACT_APP_API}/psychologists`;
     }
     fetch(url, options)
-      .then(() => history.replace('/psychologists'))
-      .catch((error) => setError(JSON.stringify(error)));
+      .then((response) => {
+        if (response.status !== 200 && response.status !== 201) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return history.replace('/psychologists');
+      })
+      .catch((error) => setError(error.toString()));
   };
 
   return (
@@ -135,9 +149,15 @@ function Form() {
               Save
             </button>
           </div>
-          {error && <span className={styles.error}>{error}</span>}
         </form>
       </div>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
     </div>
   );
 }

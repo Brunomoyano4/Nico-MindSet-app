@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .header {
@@ -15,10 +16,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 70%;
 }
 
 .table {
-  width: 65%;
+  width: 100%;
   padding: 0;
   margin: 0;
 }
