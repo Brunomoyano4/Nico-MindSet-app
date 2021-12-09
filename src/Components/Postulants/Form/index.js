@@ -28,6 +28,7 @@ function Form() {
   const [descriptionValue, setDescriptionValue] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
 
   const setInputValues = (data) => {
     setFirstNameValue(data.firstName || '-');
@@ -118,7 +119,7 @@ function Form() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-
+    setDisableButton(true);
     fetch(url, options)
       .then((response) => {
         if (response.status !== 200 && response.status !== 201) {
@@ -309,7 +310,7 @@ function Form() {
             required
           />
         </div>
-        <Button onClick={(e) => onSubmit(e)} content={'SAVE'} />
+        <Button onClick={(e) => onSubmit(e)} content={'SAVE'} disabled={loading || disableButton} />
       </form>
       <Modal
         title="Something went wrong!"
