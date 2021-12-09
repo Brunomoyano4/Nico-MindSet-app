@@ -14,7 +14,7 @@ function Form() {
   const [passwordValue, setPasswordValue] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [disableBtn, setDisableBtn] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
 
   const setInputValues = ({ firstName, lastName, username, email, password }) => {
     setFirstNameValue(firstName || 'N/A');
@@ -43,7 +43,6 @@ function Form() {
   };
 
   useEffect(() => {
-    setDisableBtn(false);
     if (adminId) {
       setLoading(true);
       fetch(`${process.env.REACT_APP_API}/admins/${adminId}`)
@@ -69,7 +68,7 @@ function Form() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    setDisableBtn(true);
+    setDisableButton(true);
     if (adminId) {
       options.method = 'PUT';
       url = `${process.env.REACT_APP_API}/admins/${adminId}`;
@@ -149,7 +148,7 @@ function Form() {
             />
           </div>
           <div className={styles.saveBtnSection}>
-            <Button onClick={onSubmit} content={'SAVE'} disabled={loading || disableBtn} />
+            <Button onClick={onSubmit} content={'SAVE'} disabled={loading || disableButton} />
           </div>
         </form>
       </div>
