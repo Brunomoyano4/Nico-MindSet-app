@@ -14,6 +14,7 @@ function Form() {
   const [passwordValue, setPasswordValue] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [disableBtn, setDisableBtn] = useState(false);
 
   const setInputValues = ({ firstName, lastName, username, email, password }) => {
     setFirstNameValue(firstName || 'N/A');
@@ -41,8 +42,9 @@ function Form() {
     })
   };
 
-  if (adminId) {
-    useEffect(() => {
+  useEffect(() => {
+    setDisableBtn(false);
+    if (adminId) {
       setLoading(true);
       fetch(`${process.env.REACT_APP_API}/admins/${adminId}`)
         .then((response) => {
@@ -56,8 +58,8 @@ function Form() {
         .then((data) => setInputValues(data))
         .catch((error) => setError(error.toString()))
         .finally(() => setLoading(false));
-    }, []);
-  }
+    }
+  }, []);
 
   function useQuery() {
     const { search } = useLocation();
@@ -67,7 +69,7 @@ function Form() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-
+    setDisableBtn(true);
     if (adminId) {
       options.method = 'PUT';
       url = `${process.env.REACT_APP_API}/admins/${adminId}`;
@@ -147,7 +149,7 @@ function Form() {
             />
           </div>
           <div className={styles.saveBtnSection}>
-            <Button onClick={onSubmit} content={'SAVE'} />
+            <Button onClick={onSubmit} content={'SAVE'} disabled={loading || disableBtn} />
           </div>
         </form>
       </div>
