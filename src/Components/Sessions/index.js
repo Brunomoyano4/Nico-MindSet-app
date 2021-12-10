@@ -188,6 +188,8 @@ function GetSessions() {
             postulants={postulants}
             psychologys={psychologist}
             allSessions={sessions}
+            stateHook={setState}
+            sessionsHook={setSessions}
           />
         )}
       </div>

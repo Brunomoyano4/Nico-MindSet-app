@@ -15,9 +15,11 @@ function ProfilesForm() {
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
 
   const onSubmit = (e) => {
     e.preventDefault();
+    setDisableButton(true);
     let url = `${process.env.REACT_APP_API}/profiles`;
     const options = {
       headers: {
@@ -43,7 +45,10 @@ function ProfilesForm() {
         }
         return history.replace('/profiles');
       })
-      .catch((error) => setError(error.toString()));
+      .catch((error) => {
+        setError(error.toString());
+        setDisableButton(false);
+      });
   };
 
   function useQuery() {
@@ -122,7 +127,7 @@ function ProfilesForm() {
         <Button
           className={styles.button}
           type="submit"
-          disabled={Object.values(loading).some(Boolean) ? 'disabled' : ''}
+          disabled={loading || disableButton}
           content={profileId ? 'SAVE' : 'CREATE PROFILE'}
         />
       </form>

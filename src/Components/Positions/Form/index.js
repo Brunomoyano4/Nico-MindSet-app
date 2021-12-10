@@ -16,9 +16,11 @@ function Form(params) {
   const [position, setPosition] = useState(initialState);
   const [created, setCreated] = useState(false);
   const [error, setError] = useState();
+  const [disableButton, setDisableButton] = useState(false);
 
   function savePositions(e) {
     e.stopPropagation();
+    setDisableButton(true);
     fetch(`${process.env.REACT_APP_API}/positions`, {
       headers: {
         Accept: 'application/json',
@@ -34,11 +36,14 @@ function Form(params) {
           return response.json().then((error) => {
             throw new Error(error);
           });
+        params.positionsHook([]);
+        params.stateHook(1);
       })
       .catch((error) => setError(error.toString()));
   }
   function updatePosition(e) {
     e.stopPropagation();
+    setDisableButton(true);
     fetch(`${process.env.REACT_APP_API}/positions/${position._id}`, {
       headers: {
         Accept: 'application/json',
@@ -53,7 +58,8 @@ function Form(params) {
             throw new Error(msg);
           });
         }
-        return response.json();
+        params.positionsHook([]);
+        params.stateHook(1);
       })
       .catch((error) => setError(error.toString()));
   }
@@ -105,6 +111,7 @@ function Form(params) {
               params.position._id ? updatePosition(e) : savePositions(e);
             }}
             content={params.position._id ? 'Update Position' : 'Create position'}
+            disabled={disableButton}
           />
         </form>
       )}

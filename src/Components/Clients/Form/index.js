@@ -15,7 +15,7 @@ function Form() {
   const [paramId, setParamId] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const [disableButton, setDisableButton] = useState(false);
   const history = useHistory();
   const params = useQuery();
   const clientId = params.get('id');
@@ -68,9 +68,8 @@ function Form() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-
+    setDisableButton(true);
     let url = '';
-
     const options = {
       headers: {
         'Content-Type': 'application/json'
@@ -102,7 +101,10 @@ function Form() {
         return response.json();
       })
       .then(() => history.replace('/clients'))
-      .catch((error) => setError(error.toString()));
+      .catch((error) => {
+        setError(error.toString());
+        setDisableButton(false);
+      });
   };
 
   return (
@@ -163,7 +165,12 @@ function Form() {
             required
           />
         </div>
-        <Button className={styles.button} onClick={onSubmit} content={'SAVE'} />
+        <Button
+          className={styles.button}
+          onClick={onSubmit}
+          content={'SAVE'}
+          disabled={loading || disableButton}
+        />
       </form>
     </div>
   );

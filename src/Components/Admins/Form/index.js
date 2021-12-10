@@ -14,6 +14,7 @@ function Form() {
   const [passwordValue, setPasswordValue] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
 
   const setInputValues = ({ firstName, lastName, username, email, password }) => {
     setFirstNameValue(firstName || 'N/A');
@@ -41,8 +42,8 @@ function Form() {
     })
   };
 
-  if (adminId) {
-    useEffect(() => {
+  useEffect(() => {
+    if (adminId) {
       setLoading(true);
       fetch(`${process.env.REACT_APP_API}/admins/${adminId}`)
         .then((response) => {
@@ -56,8 +57,8 @@ function Form() {
         .then((data) => setInputValues(data))
         .catch((error) => setError(error.toString()))
         .finally(() => setLoading(false));
-    }, []);
-  }
+    }
+  }, []);
 
   function useQuery() {
     const { search } = useLocation();
@@ -67,7 +68,7 @@ function Form() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-
+    setDisableButton(true);
     if (adminId) {
       options.method = 'PUT';
       url = `${process.env.REACT_APP_API}/admins/${adminId}`;
@@ -85,7 +86,10 @@ function Form() {
         return (window.location.href = '/admins');
       })
       .then(() => history.replace('/admins'))
-      .catch((error) => setError(error.toString()));
+      .catch((error) => {
+        setError(error.toString());
+        setDisableButton(false);
+      });
   };
 
   return (
@@ -148,7 +152,12 @@ function Form() {
             onChange={(e) => setPasswordValue(e.target.value)}
           />
         </div>
-        <Button className={styles.button} onClick={onSubmit} content={'SAVE'} />
+        <Button
+          className={styles.button}
+          onClick={onSubmit}
+          content={'SAVE'}
+          disabled={loading || disableButton}
+        />
       </form>
       <Modal
         title="Something went wrong!"

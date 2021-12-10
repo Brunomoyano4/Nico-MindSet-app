@@ -19,6 +19,7 @@ function ProfilesForm() {
   const [postulantsValue, setPostulantsValue] = useState('');
   const [result, setResult] = useState('');
   const [error, setError] = useState('');
+  const [disableButton, setDisableButton] = useState(false);
   const [loading, setLoading] = useState({
     positionLoading: false,
     clientLoading: false,
@@ -28,12 +29,12 @@ function ProfilesForm() {
 
   function useQuery() {
     const { search } = useLocation();
-
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
 
   const onSubmit = (e) => {
     e.preventDefault();
+    setDisableButton(true);
     let url = `${process.env.REACT_APP_API}/applications`;
     const options = {
       headers: {
@@ -61,7 +62,10 @@ function ProfilesForm() {
         return res.json();
       })
       .then(() => history.replace('/applications'))
-      .catch((error) => setError(error.toString()));
+      .catch((error) => {
+        setError(error.toString());
+        setDisableButton(false);
+      });
   };
 
   useEffect(() => {
@@ -230,7 +234,7 @@ function ProfilesForm() {
           <Button
             className={styles.button}
             type="submit"
-            disabled={Object.values(loading).some(Boolean) ? 'disabled' : ''}
+            disabled={Object.values(loading).some(Boolean) || disableButton}
             content={applicationId ? 'SAVE' : 'CREATE APPLICATION'}
           />
         </form>
