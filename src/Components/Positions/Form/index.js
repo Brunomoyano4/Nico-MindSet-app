@@ -36,6 +36,7 @@ function Form(params) {
           return response.json().then((error) => {
             throw new Error(error);
           });
+        params.stateHook(1);
       })
       .catch((error) => setError(error.toString()));
   }
@@ -56,7 +57,7 @@ function Form(params) {
             throw new Error(msg);
           });
         }
-        return response.json();
+        params.stateHook(1);
       })
       .catch((error) => setError(error.toString()));
   }
