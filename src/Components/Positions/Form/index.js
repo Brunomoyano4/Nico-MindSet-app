@@ -36,6 +36,7 @@ function Form(params) {
           return response.json().then((error) => {
             throw new Error(error);
           });
+        params.positionsHook([]);
         params.stateHook(1);
       })
       .catch((error) => setError(error.toString()));
@@ -57,6 +58,7 @@ function Form(params) {
             throw new Error(msg);
           });
         }
+        params.positionsHook([]);
         params.stateHook(1);
       })
       .catch((error) => setError(error.toString()));

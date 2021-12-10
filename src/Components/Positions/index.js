@@ -125,7 +125,11 @@ function GetPositions() {
             {}
           </>
         ) : (
-          <Form position={state === STATES.UPDATE ? positionToUpdate : {}} stateHook={setState} />
+          <Form
+            position={state === STATES.UPDATE ? positionToUpdate : {}}
+            stateHook={setState}
+            positionsHook={setPositions}
+          />
         )}
       </div>
       <Modal

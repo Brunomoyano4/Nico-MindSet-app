@@ -9,6 +9,7 @@ const Form = (params) => {
   const [error, setError] = useState('');
   const [create, setCreate] = useState(true);
   const [created, setCreated] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
   const [selectedPsychology, setPsychology] = useState(
     params.psychologys ? params.psychologys[0]._id : session.psychology
   );
@@ -41,6 +42,7 @@ const Form = (params) => {
 
   const saveSessions = (e) => {
     e.stopPropagation();
+    setDisableButton(true);
     fetch(`${process.env.REACT_APP_API}/sessions`, {
       headers: {
         Accept: 'application/json',
@@ -49,7 +51,6 @@ const Form = (params) => {
       method: 'POST',
       body: JSON.stringify(session)
     })
-      .then((response) => response.json())
       .then((response) => {
         if (response.status !== 201) {
           return response.json().then(({ msg }) => {
@@ -58,14 +59,16 @@ const Form = (params) => {
         }
         if (response.psychologyId === session.psychologyId) {
           setCreated(true);
-          return response.json();
         }
+        params.sessionsHook([]);
+        params.stateHook(1);
       })
       .catch((error) => setError(error.toString()));
   };
 
   const updateSession = (e) => {
     e.stopPropagation();
+    setDisableButton(true);
     fetch(`${process.env.REACT_APP_API}/sessions/${session._id}`, {
       headers: {
         Accept: 'application/json',
@@ -80,7 +83,8 @@ const Form = (params) => {
             throw new Error(msg);
           });
         }
-        return response.json();
+        params.sessionsHook([]);
+        params.stateHook(1);
       })
       .catch((error) => setError(error.toString()));
   };
@@ -175,6 +179,7 @@ const Form = (params) => {
             onClick={(e) => {
               params.session._id ? updateSession(e) : saveSessions(e);
             }}
+            disabled={disableButton}
           />
         </form>
       )}
