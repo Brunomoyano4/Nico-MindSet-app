@@ -10,10 +10,10 @@ import { getAdmins } from '../../redux/admins/thunks';
 
 function Admins() {
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
   const admins = useSelector((store) => store.admins.list);
+  const loading = useSelector((store) => store.admins.isLoading);
 
   useEffect(() => {
     dispatch(getAdmins());

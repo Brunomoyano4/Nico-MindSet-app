@@ -10,10 +10,7 @@ import {
   DELETE_ADMINS_REJECTED,
   UPDATE_ADMINS_FETCHING,
   UPDATE_ADMINS_FULFILLED,
-  UPDATE_ADMINS_REJECTED,
-  GET_ADMIN_FETCHING,
-  GET_ADMIN_FULFILLED,
-  GET_ADMIN_REJECTED
+  UPDATE_ADMINS_REJECTED
 } from './constants';
 
 const initialState = {
@@ -87,23 +84,6 @@ const adminsReducer = (state = initialState, action) => {
         list: state.list.filter((admins) => admins._id !== action.payload)
       };
     case UPDATE_ADMINS_REJECTED:
-      return {
-        ...state,
-        isLoading: false,
-        error: action.error
-      };
-    case GET_ADMIN_FETCHING:
-      return {
-        ...state,
-        isLoading: true
-      };
-    case GET_ADMIN_FULFILLED:
-      return {
-        ...state,
-        isLoading: false,
-        admin: action.payload
-      };
-    case GET_ADMIN_REJECTED:
       return {
         ...state,
         isLoading: false,

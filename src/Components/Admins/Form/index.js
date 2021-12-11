@@ -6,7 +6,7 @@ import styles from './adminsForm.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Button from '../../Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAdmin, updateAdmin, getAdmin } from '../../../redux/admins/thunks';
+import { addAdmin, updateAdmin, getAdmins } from '../../../redux/admins/thunks';
 
 function Form() {
   const dispatch = useDispatch();
@@ -16,79 +16,54 @@ function Form() {
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
-  const data = useSelector((store) => store.admins.admin);
+  const data = useSelector((store) => store.admins.list);
+  const loading = useSelector((store) => store.admins.isLoading);
 
   const setInputValues = ({ firstName, lastName, username, email, password }) => {
-    setFirstNameValue(firstName || 'N/A');
-    setLastNameValue(lastName || 'N/A');
-    setUsernameValue(username || 'N/A');
-    setEmailValue(email || 'N/A');
-    setPasswordValue(password || 'N/A');
+    setFirstNameValue(firstName || 'First name');
+    setLastNameValue(lastName || 'Last name');
+    setUsernameValue(username || 'Username');
+    setEmailValue(email || 'Email');
+    setPasswordValue(password || 'Password');
   };
 
-  let url;
   const history = useHistory();
   const params = useQuery();
   const adminId = params.get('id');
 
-  const options = {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      firstName: firstNameValue,
-      lastName: lastNameValue,
-      email: emailValue,
-      username: usernameValue,
-      password: passwordValue
-    })
+  const values = {
+    firstName: firstNameValue,
+    lastName: lastNameValue,
+    email: emailValue,
+    username: usernameValue,
+    password: passwordValue
   };
-
-  useEffect(() => {
-    if (adminId) {
-      // setLoading(true);
-      dispatch(getAdmin(adminId));
-      setInputValues(data);
-      // .finally(() => setLoading(false));
-    }
-  }, [dispatch]);
 
   function useQuery() {
     const { search } = useLocation();
-
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
+
+  useEffect(() => {
+    if (adminId) {
+      data.forEach((admin) => {
+        if (admin._id === adminId) setInputValues(admin);
+      });
+    }
+  }, [adminId]);
 
   const onSubmit = (event) => {
     event.preventDefault();
     setDisableButton(true);
     if (adminId) {
-      dispatch(
-        updateAdmin(adminId, {
-          firstName: firstNameValue,
-          lastName: lastNameValue,
-          email: emailValue,
-          username: usernameValue,
-          password: passwordValue
-        })
-      );
-      history.replace('/admins');
-      setDisableButton(false);
+      dispatch(updateAdmin(adminId, values));
     } else {
-      dispatch(
-        addAdmin({
-          firstName: firstNameValue,
-          lastName: lastNameValue,
-          email: emailValue,
-          username: usernameValue,
-          password: passwordValue
-        })
-      );
-      history.replace('/admins');
-      setDisableButton(false);
+      dispatch(addAdmin(values));
     }
+    dispatch(getAdmins());
+    history.replace('/admins');
+    setDisableButton(false);
   };
 
   return (
@@ -151,12 +126,7 @@ function Form() {
             onChange={(e) => setPasswordValue(e.target.value)}
           />
         </div>
-        <Button
-          className={styles.button}
-          onClick={onSubmit}
-          content={'SAVE'}
-          disabled={loading || disableButton}
-        />
+        <Button className={styles.button} content={'SAVE'} disabled={loading || disableButton} />
       </form>
       <Modal
         title="Something went wrong!"

@@ -10,10 +10,7 @@ import {
   DELETE_ADMINS_REJECTED,
   UPDATE_ADMINS_FETCHING,
   UPDATE_ADMINS_FULFILLED,
-  UPDATE_ADMINS_REJECTED,
-  GET_ADMIN_FETCHING,
-  GET_ADMIN_FULFILLED,
-  GET_ADMIN_REJECTED
+  UPDATE_ADMINS_REJECTED
 } from './constants';
 
 export const getAdminsFetching = () => ({
@@ -69,19 +66,5 @@ export const updateAdminsFulfilled = (payload) => ({
 
 export const updateAdminsRejected = (error) => ({
   type: UPDATE_ADMINS_REJECTED,
-  error
-});
-
-export const getAdminFetching = () => ({
-  type: GET_ADMIN_FETCHING
-});
-
-export const getAdminFulfilled = (payload) => ({
-  type: GET_ADMIN_FULFILLED,
-  payload
-});
-
-export const getAdminRejected = (error) => ({
-  type: GET_ADMIN_REJECTED,
   error
 });
