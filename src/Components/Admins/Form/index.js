@@ -5,8 +5,11 @@ import Input from '../../Shared/Input';
 import styles from './adminsForm.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Button from '../../Shared/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAdmin, updateAdmin, getAdmin } from '../../../redux/admins/thunks';
 
 function Form() {
+  const dispatch = useDispatch();
   const [firstNameValue, setFirstNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [usernameValue, setUsernameValue] = useState('');
@@ -15,6 +18,7 @@ function Form() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
+  const data = useSelector((store) => store.admins.admin);
 
   const setInputValues = ({ firstName, lastName, username, email, password }) => {
     setFirstNameValue(firstName || 'N/A');
@@ -44,21 +48,12 @@ function Form() {
 
   useEffect(() => {
     if (adminId) {
-      setLoading(true);
-      fetch(`${process.env.REACT_APP_API}/admins/${adminId}`)
-        .then((response) => {
-          if (response.status !== 200) {
-            return response.json().then(({ msg }) => {
-              throw new Error(msg);
-            });
-          }
-          return response.json();
-        })
-        .then((data) => setInputValues(data))
-        .catch((error) => setError(error.toString()))
-        .finally(() => setLoading(false));
+      // setLoading(true);
+      dispatch(getAdmin(adminId));
+      setInputValues(data);
+      // .finally(() => setLoading(false));
     }
-  }, []);
+  }, [dispatch]);
 
   function useQuery() {
     const { search } = useLocation();
@@ -70,26 +65,30 @@ function Form() {
     event.preventDefault();
     setDisableButton(true);
     if (adminId) {
-      options.method = 'PUT';
-      url = `${process.env.REACT_APP_API}/admins/${adminId}`;
+      dispatch(
+        updateAdmin(adminId, {
+          firstName: firstNameValue,
+          lastName: lastNameValue,
+          email: emailValue,
+          username: usernameValue,
+          password: passwordValue
+        })
+      );
+      history.replace('/admins');
+      setDisableButton(false);
     } else {
-      options.method = 'POST';
-      url = `${process.env.REACT_APP_API}/admins`;
+      dispatch(
+        addAdmin({
+          firstName: firstNameValue,
+          lastName: lastNameValue,
+          email: emailValue,
+          username: usernameValue,
+          password: passwordValue
+        })
+      );
+      history.replace('/admins');
+      setDisableButton(false);
     }
-    fetch(url, options)
-      .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return (window.location.href = '/admins');
-      })
-      .then(() => history.replace('/admins'))
-      .catch((error) => {
-        setError(error.toString());
-        setDisableButton(false);
-      });
   };
 
   return (

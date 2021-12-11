@@ -6,27 +6,25 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import Routes from './routes';
-import rootReducer from './redux/reducers/rootReducer';
+import rootReducer from './redux/store';
+import generateStore from './redux/store';
 import './reset.css';
 import './index.css';
 
-const configureStore = () => {
-  const enhancer = composeWithDevTools(applyMiddleware(thunk));
-  return createStore(rootReducer, enhancer);
-};
+// const configureStore = () => {
+//   const enhancer = composeWithDevTools(applyMiddleware(thunk));
+//   return createStore(rootReducer, enhancer);
+// };
 
-const store = configureStore();
+const store = generateStore();
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <Routes />
-    </Router>
-    <Provider store={store}>
-      <Router>
+      <Provider store={store}>
         <Routes />
-      </Router>
-    </Provider>
+      </Provider>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );

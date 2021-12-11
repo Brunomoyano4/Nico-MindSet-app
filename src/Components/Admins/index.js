@@ -5,30 +5,19 @@ import Button from '../Shared/Button';
 import Modal from '../Shared/Modal';
 import styles from './admins.module.css';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAdmins } from '../../redux/admins/thunks';
 
 function Admins() {
-  const [admins, setAdmins] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const dispatch = useDispatch();
+  const admins = useSelector((store) => store.admins.list);
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`${process.env.REACT_APP_API}/admins`)
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return response.json();
-      })
-      .then((response) => {
-        setAdmins(response);
-      })
-      .catch((error) => setError(error.toString()))
-      .finally(() => setLoading(false));
-  }, []);
+    dispatch(getAdmins());
+  }, [dispatch]);
 
   const CreateBtn = () => {
     history.push(`/admins/form`);

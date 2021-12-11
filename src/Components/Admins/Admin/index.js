@@ -3,8 +3,11 @@ import { useState } from 'react';
 import DeleteBtn from '../../Shared/DeleteBtn';
 import Modal from '../../Shared/Modal';
 import styles from './admin.module.css';
+import { useDispatch } from 'react-redux';
+import { deleteAdmin } from '../../../redux/admins/thunks';
 
 function Admin({ admin }) {
+  const dispatch = useDispatch();
   const [error, setError] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -14,29 +17,14 @@ function Admin({ admin }) {
     history.push(`/admins/form?id=${admin._id}`);
   };
 
-  const deleteAdmin = (event) => {
-    event.stopPropagation();
-    const url = `${process.env.REACT_APP_API}/admins/${admin._id}`;
-    fetch(url, {
-      method: 'DELETE'
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        setShowConfirmModal(false);
-        return history.go(0);
-      })
-      .catch((error) => setError(error.toString()));
-  };
-
   return (
     <>
       <Modal
         title="Are you sure you want to delete an Admin?"
-        onConfirm={(e) => deleteAdmin(e)}
+        onConfirm={(e) => {
+          e.stopPropagation();
+          dispatch(deleteAdmin(admin._id));
+        }}
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
         type={'Confirm'}
