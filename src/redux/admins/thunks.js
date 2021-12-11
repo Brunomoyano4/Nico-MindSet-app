@@ -13,7 +13,7 @@ import {
   updateAdminsRejected
 } from './actions';
 
-const URL = 'http://localhost:4000/api/admins';
+const URL = `${process.env.REACT_APP_API}/admins`;
 
 export const getAdmins = () => {
   return (dispatch) => {
