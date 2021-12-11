@@ -6,64 +6,86 @@ import DeleteBtn from '../Shared/DeleteBtn/index';
 import Modal from '../Shared/Modal';
 import LoadingSpinner from '../Shared/LoadingSpinner';
 import Button from '../Shared/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getApplications,
+  addApplications,
+  deleteApplications
+} from '../../redux/applications/thunks';
 
 function Applications() {
+  const dispatch = useDispatch();
+  const applications = useSelector((store) => store.application.list);
+  const error = useSelector((store) => store.application.error);
+
   const tableHeaderItems = ['Position', 'Client', 'Postulant', 'Result', ''];
-  const [applications, setApplications] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [modalSubtitle, setModalSubtitle] = useState(['']);
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [currentApplication, setCurrentApplication] = useState({});
 
   const history = useHistory();
 
-  const deleteApplication = (e, id, position, client, postulant) => {
-    e.stopPropagation();
-    setModalSubtitle([
-      `ID: ${id}`,
-      `Position: ${position}`,
-      `Client: ${client}`,
-      `Postulant: ${postulant}`
-    ]);
-    fetch(`${process.env.REACT_APP_API}/applications/${id}`, {
-      method: 'DELETE'
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        setShowConfirmModal(false);
-        getApplications();
-      })
-      .catch((error) => setError(error.toString()));
-  };
+  useEffect(() => {
+    dispatch(getApplications());
+  }, [dispatch]);
 
   const toForm = (id) => {
     history.push(id ? `/applications/form?id=${id}` : '/applications/form');
   };
 
-  const getApplications = () => {
-    setLoading(true);
-    fetch(`${process.env.REACT_APP_API}/applications`)
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setApplications(data);
-      })
-      .catch((error) => setError(error.toString()))
-      .finally(() => setLoading(false));
+  const deleteApplication = (application) => {
+    dispatch(deleteApplications(application));
+    setShowConfirmModal(false);
+    dispatch(getApplications(applications));
   };
 
-  useEffect(getApplications, []);
+  // -------------------- Delete Applications ----------------------
+
+  // const deleteApplication = (e, id, position, client, postulant) => {
+  //   e.stopPropagation();
+  //   setModalSubtitle([
+  //     `ID: ${id}`,
+  //     `Position: ${position}`,
+  //     `Client: ${client}`,
+  //     `Postulant: ${postulant}`
+  //   ]);
+  //   fetch(`${process.env.REACT_APP_API}/applications/${id}`, {
+  //     method: 'DELETE'
+  //   })
+  //     .then((response) => {
+  //       if (response.status !== 200) {
+  //         return response.json().then(({ msg }) => {
+  //           throw new Error(msg);
+  //         });
+  //       }
+  //       setShowConfirmModal(false);
+  //       // getApplications();
+  //     })
+  //     .catch((error) => setError(error.toString()));
+  // };
+  // ---------------------------------------------------------------
+
+  // --------------------- GET APPLICATIONS ------------------------
+  // const getApplications = () => {
+  //   setLoading(true);
+  //   fetch(`${process.env.REACT_APP_API}/applications`)
+  //     .then((response) => {
+  //       if (response.status !== 200) {
+  //         return response.json().then(({ msg }) => {
+  //           throw new Error(msg);
+  //         });
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       setApplications(data);
+  //     })
+  //     .catch((error) => setError(error.toString()))
+  //     .finally(() => setLoading(false));
+  // };
+
+  // ---------------------------------------------------------------
 
   return (
     <section className={styles.container}>
@@ -79,7 +101,7 @@ function Applications() {
                     className={styles.button}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setCurrentApplication(application);
+                      setCurrentApplication(applications);
                       setShowConfirmModal(true);
                     }}
                   />
@@ -116,9 +138,9 @@ function Applications() {
 
       <Modal
         title="You are about to delete an application"
-        onConfirm={(e) => deleteApplication(e, currentApplication._id)}
+        onConfirm={(e) => deleteApplication(e, applications._id)}
         show={showConfirmModal}
-        closeModal={() => setShowConfirmModal(false)}
+        closeModal={() => getApplications()}
         subtitle={modalSubtitle}
         type={'Confirm'}
       />
@@ -126,7 +148,7 @@ function Applications() {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => error('')}
         type={'Error'}
       />
     </section>
