@@ -6,7 +6,7 @@ import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Modal from '../../Shared/Modal';
 import Button from '../../Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPosition, updatePosition, getPositions } from '../../../redux/positions/thunks';
+import { addPosition, updatePosition } from '../../../redux/positions/thunks';
 
 function Form() {
   const [clientIdValue, setClientIdValue] = useState('');
@@ -59,7 +59,6 @@ function Form() {
     } else {
       dispatch(addPosition(values));
     }
-    dispatch(getPositions());
     history.replace('/positions');
     setDisableButton(false);
   };
