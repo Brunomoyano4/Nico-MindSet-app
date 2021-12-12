@@ -17,9 +17,86 @@ const initialState = {
   isLoading: false,
   list: [],
   error: false,
-  position: []
+  client: []
 };
 
-const clientsReducer = (state = initialState, action) => {};
+const clientsReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case GET_CLIENTS_FETCHING:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case GET_CLIENTS_FULFILLED:
+      return {
+        ...state,
+        isLoading: false,
+        list: action.payload,
+        error: ''
+      };
+    case GET_CLIENTS_REJECTED:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error
+      };
+    case ADD_CLIENTS_FETCHING:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case ADD_CLIENTS_FULFILLED:
+      return {
+        ...state,
+        isLoading: false,
+        list: state.list.push(action.payload),
+        error: ''
+      };
+    case ADD_CLIENTS_REJECTED:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error
+      };
+    case DELETE_CLIENTS_FETCHING:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case DELETE_CLIENTS_FULFILLED:
+      return {
+        ...state,
+        isLoading: false,
+        list: state.list.filter((clients) => clients._id !== action.payload),
+        error: ''
+      };
+    case DELETE_CLIENTS_REJECTED:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error
+      };
+    case UPDATE_CLIENTS_FETCHING:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case UPDATE_CLIENTS_FULFILLED:
+      return {
+        ...state,
+        isLoading: false,
+        list: state.list.filter((clients) => clients._id !== action.payload),
+        error: ''
+      };
+    case UPDATE_CLIENTS_REJECTED:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error
+      };
+    default:
+      return state;
+  }
+};
 
 export default clientsReducer;
