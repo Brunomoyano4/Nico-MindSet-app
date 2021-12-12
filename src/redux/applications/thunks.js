@@ -64,3 +64,32 @@ export const deleteApplications = (id) => {
       });
   };
 };
+
+export const updateApplications = (applicationId, application) => {
+  return (dispatch) => {
+    dispatch(updateApplicationsFetching());
+    (fetch(`${process.env.REACT_APP_API}/applications/${applicationId}`),
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(application)
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ message }) => {
+            throw new Error(message);
+          });
+        }
+        return response.json();
+      })
+      .then((response) => {
+        dispatch(updateApplicationsFulfilled(response.data));
+        return response.data;
+      })
+      .catch((error) => {
+        dispatch(updateApplicationsRejected(error.toString()));
+      });
+  };
+};

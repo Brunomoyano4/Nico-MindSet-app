@@ -1,7 +1,7 @@
 import styles from './applications.module.css';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import ListItem from './ListItem';
+import Application from './Application';
 import DeleteBtn from '../Shared/DeleteBtn/index';
 import Modal from '../Shared/Modal';
 import LoadingSpinner from '../Shared/LoadingSpinner';
@@ -13,7 +13,7 @@ import {
   deleteApplications
 } from '../../redux/applications/thunks';
 
-function Applications({ application }) {
+function Applications() {
   const dispatch = useDispatch();
   const applications = useSelector((store) => store.application.list);
   const loading = useSelector((store) => store.application.isLoading);
@@ -38,7 +38,7 @@ function Applications({ application }) {
       <h2>Applications</h2>
       <table>
         <div className={styles.list}>
-          <ListItem headerItems={tableHeaderItems} />
+          <Application headerItems={tableHeaderItems} />
           {!loading && (
             <tbody className={styles.tableBody}>
               {applications.map((application) => {
@@ -60,7 +60,7 @@ function Applications({ application }) {
                   deleteBtn
                 ];
                 return (
-                  <ListItem
+                  <Application
                     key={application._id}
                     listItems={tableListItems}
                     id={application._id}

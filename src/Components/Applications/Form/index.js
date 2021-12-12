@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import Button from '../../Shared/Button';
 
-function ProfilesForm() {
+function Form() {
   const history = useHistory();
   const params = useQuery();
   const applicationId = params.get('id');
@@ -243,4 +243,4 @@ function ProfilesForm() {
   );
 }
 
-export default ProfilesForm;
+export default Form;

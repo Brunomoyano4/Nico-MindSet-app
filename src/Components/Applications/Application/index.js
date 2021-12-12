@@ -1,6 +1,6 @@
-import styles from './listitem.module.css';
+import styles from './application.module.css';
 
-const ListItem = ({ headerItems, listItems, id, onRowClick }) => {
+const Application = ({ headerItems, listItems, id, onRowClick }) => {
   return (
     <>
       {headerItems && (
@@ -23,4 +23,4 @@ const ListItem = ({ headerItems, listItems, id, onRowClick }) => {
   );
 };
 
-export default ListItem;
+export default Application;
