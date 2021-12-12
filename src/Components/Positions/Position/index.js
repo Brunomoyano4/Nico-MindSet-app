@@ -2,39 +2,27 @@ import { useState } from 'react';
 import DeleteBtn from '../../Shared/DeleteBtn';
 import { useHistory } from 'react-router-dom';
 import Modal from '../../Shared/Modal';
+import { useDispatch } from 'react-redux';
+import { deletePosition } from '../../../redux/positions/thunks';
 
-function Psychologist({ position }) {
+function Position({ position }) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [error, setError] = useState('');
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const openEditForm = () => {
     history.push(`/positions/form?id=${position._id}`);
-  };
-
-  const deletePosition = (event) => {
-    event.stopPropagation();
-    const url = `${process.env.REACT_APP_API}/positions/${position._id}`;
-    fetch(url, {
-      method: 'DELETE'
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        setShowConfirmModal(false);
-        return history.go(0);
-      })
-      .catch((error) => setError(error.toString()));
   };
 
   return (
     <>
       <Modal
         title="Are you sure you want to delete the selected position?"
-        onConfirm={(e) => deletePosition(e)}
+        onConfirm={(e) => {
+          e.stopPropagation();
+          dispatch(deletePosition(position._id));
+        }}
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
         type={'Confirm'}
@@ -64,4 +52,4 @@ function Psychologist({ position }) {
   );
 }
 
-export default Psychologist;
+export default Position;

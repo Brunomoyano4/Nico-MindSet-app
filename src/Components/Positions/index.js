@@ -5,29 +5,20 @@ import Position from './Position';
 import LoadingSpinner from '../Shared/LoadingSpinner';
 import Button from '../Shared/Button';
 import Modal from '../Shared/Modal';
+import { useSelector, useDispatch } from 'react-redux';
+import { getPositions } from '../../redux/positions/thunks';
 
 function Positions() {
-  const [positions, setPositions] = useState([]);
+  const dispatch = useDispatch();
+  const positions = useSelector((store) => store.positions.list);
+  const loading = useSelector((store) => store.positions.isLoading);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`${process.env.REACT_APP_API}/positions`)
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return response.json();
-      })
-      .then((response) => setPositions(response))
-      .catch((error) => setError(error.toString()))
-      .finally(() => setLoading(false));
-  }, [positions.length]);
+    dispatch(getPositions());
+  }, [dispatch]);
 
   const CreateBtn = () => {
     history.push(`/positions/form`);
