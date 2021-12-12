@@ -55,7 +55,7 @@ export const addClient = (client) => {
         return response.json();
       })
       .then((response) => {
-        dispatch(addClientsFulfilled(response.data));
+        dispatch(addClientsFulfilled(response));
       })
       .catch((error) => {
         dispatch(addClientsRejected(error.toString()));
