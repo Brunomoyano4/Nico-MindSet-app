@@ -13,17 +13,16 @@ import {
   deleteApplications
 } from '../../redux/applications/thunks';
 
-function Applications() {
+function Applications({ application }) {
   const dispatch = useDispatch();
   const applications = useSelector((store) => store.application.list);
-  const error = useSelector((store) => store.application.error);
+  const loading = useSelector((store) => store.application.isLoading);
 
   const tableHeaderItems = ['Position', 'Client', 'Postulant', 'Result', ''];
+  const [error, setError] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [modalSubtitle, setModalSubtitle] = useState(['']);
-  const [loading, setLoading] = useState(false);
   const [currentApplication, setCurrentApplication] = useState({});
-
   const history = useHistory();
 
   useEffect(() => {
@@ -33,59 +32,6 @@ function Applications() {
   const toForm = (id) => {
     history.push(id ? `/applications/form?id=${id}` : '/applications/form');
   };
-
-  const deleteApplication = (application) => {
-    dispatch(deleteApplications(application));
-    setShowConfirmModal(false);
-    dispatch(getApplications(applications));
-  };
-
-  // -------------------- Delete Applications ----------------------
-
-  // const deleteApplication = (e, id, position, client, postulant) => {
-  //   e.stopPropagation();
-  //   setModalSubtitle([
-  //     `ID: ${id}`,
-  //     `Position: ${position}`,
-  //     `Client: ${client}`,
-  //     `Postulant: ${postulant}`
-  //   ]);
-  //   fetch(`${process.env.REACT_APP_API}/applications/${id}`, {
-  //     method: 'DELETE'
-  //   })
-  //     .then((response) => {
-  //       if (response.status !== 200) {
-  //         return response.json().then(({ msg }) => {
-  //           throw new Error(msg);
-  //         });
-  //       }
-  //       setShowConfirmModal(false);
-  //       // getApplications();
-  //     })
-  //     .catch((error) => setError(error.toString()));
-  // };
-  // ---------------------------------------------------------------
-
-  // --------------------- GET APPLICATIONS ------------------------
-  // const getApplications = () => {
-  //   setLoading(true);
-  //   fetch(`${process.env.REACT_APP_API}/applications`)
-  //     .then((response) => {
-  //       if (response.status !== 200) {
-  //         return response.json().then(({ msg }) => {
-  //           throw new Error(msg);
-  //         });
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       setApplications(data);
-  //     })
-  //     .catch((error) => setError(error.toString()))
-  //     .finally(() => setLoading(false));
-  // };
-
-  // ---------------------------------------------------------------
 
   return (
     <section className={styles.container}>
@@ -101,7 +47,7 @@ function Applications() {
                     className={styles.button}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setCurrentApplication(applications);
+                      setCurrentApplication(application);
                       setShowConfirmModal(true);
                     }}
                   />
@@ -138,9 +84,13 @@ function Applications() {
 
       <Modal
         title="You are about to delete an application"
-        onConfirm={(e) => deleteApplication(e, applications._id)}
+        onConfirm={(e) => {
+          e.stopPropagation();
+          dispatch(deleteApplications(currentApplication._id));
+          setShowConfirmModal(false);
+        }}
         show={showConfirmModal}
-        closeModal={() => getApplications()}
+        closeModal={() => setShowConfirmModal(false)}
         subtitle={modalSubtitle}
         type={'Confirm'}
       />
@@ -148,7 +98,7 @@ function Applications() {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => error('')}
+        closeModal={() => setError('')}
         type={'Error'}
       />
     </section>

@@ -51,12 +51,16 @@ export const deleteApplications = (id) => {
   return (dispatch) => {
     dispatch(deleteApplicationsFetching());
     fetch(`${process.env.REACT_APP_API}/applications/${id}`, { method: 'DELETE' })
-      .then((data) => data.json())
-      .then((id) => {
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ message }) => {
+            throw new Error(message);
+          });
+        }
         dispatch(deleteApplicationsFulfilled(id));
       })
       .catch((error) => {
-        dispatch(deleteApplicationsRejected(error));
+        dispatch(deleteApplicationsRejected(error.toString()));
       });
   };
 };

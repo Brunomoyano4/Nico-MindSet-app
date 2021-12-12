@@ -45,9 +45,9 @@ export const deleteApplicationsFetching = () => ({
   type: DELETE_APPLICATIONS_FETCHING
 });
 
-export const deleteApplicationsFulfilled = (payload) => ({
+export const deleteApplicationsFulfilled = (id) => ({
   type: DELETE_APPLICATIONS_FULFILLED,
-  payload
+  payload: id
 });
 
 export const deleteApplicationsRejected = (error) => ({
