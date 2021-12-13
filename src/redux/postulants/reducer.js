@@ -1,0 +1,26 @@
+import {
+  GET_POSTULANTS_FETCHING,
+  GET_POSTULANTS_FULFILLED,
+  GET_POSTULANTS_REJECTED,
+  ADD_POSTULANTS_FETCHING,
+  ADD_POSTULANTS_FULFILLED,
+  ADD_POSTULANTS_REJECTED,
+  DELETE_POSTULANTS_FETCHING,
+  DELETE_POSTULANTS_FULFILLED,
+  DELETE_POSTULANTS_REJECTED,
+  UPDATE_POSTULANTS_FETCHING,
+  UPDATE_POSTULANTS_FULFILLED,
+  UPDATE_POSTULANTS_REJECTED,
+  CLEAR_POSTULANTS_ERROR
+} from './constants';
+
+const initialState = {
+  isLoading: false,
+  list: [],
+  error: '',
+  postulant: []
+};
+
+const clientsReducer = (state = initialState, action) => {};
+
+export default clientsReducer;
