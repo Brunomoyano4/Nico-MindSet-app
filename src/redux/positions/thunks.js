@@ -18,7 +18,7 @@ const URL = `${process.env.REACT_APP_API}/positions`;
 export const getPositions = () => {
   return (dispatch) => {
     dispatch(getPositionsFetching());
-    return fetch(`${process.env.REACT_APP_API}/positions`)
+    return fetch(`${URL}`)
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -55,8 +55,8 @@ export const addPosition = (position) => {
         return response.json();
       })
       .then((response) => {
-        dispatch(addPositionsFulfilled(response.data));
-        return response.data;
+        dispatch(addPositionsFulfilled(response));
+        return response;
       })
       .catch((error) => {
         dispatch(addPositionsRejected(error.toString()));
@@ -83,8 +83,7 @@ export const updatePosition = (positionId, position) => {
         return response.json();
       })
       .then((response) => {
-        dispatch(updatePositionsFulfilled(response.data));
-        return response.data;
+        dispatch(updatePositionsFulfilled(response));
       })
       .catch((error) => {
         dispatch(updatePositionsRejected(error.toString()));

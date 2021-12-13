@@ -6,17 +6,18 @@ import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Modal from '../../Shared/Modal';
 import Button from '../../Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPosition, updatePosition } from '../../../redux/positions/thunks';
+import { addPosition, getPositions, updatePosition } from '../../../redux/positions/thunks';
+import { clearPostitionsError } from '../../../redux/positions/actions';
 
 function Form() {
   const [clientIdValue, setClientIdValue] = useState('');
   const [jobValue, setJobValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
   const [createdAtValue, setCreatedAtValue] = useState('');
-  const [error, setError] = useState('');
   const [disableButton, setDisableButton] = useState(false);
   const positions = useSelector((store) => store.positions.list);
   const loading = useSelector((store) => store.positions.isLoading);
+  const error = useSelector((store) => store.positions.error);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -32,7 +33,8 @@ function Form() {
 
   useEffect(() => {
     if (positionId) {
-      positions.forEach((position) => {
+      dispatch(getPositions());
+      positions.map((position) => {
         if (position._id === positionId) setInputValues(position);
       });
     }
@@ -114,7 +116,7 @@ function Form() {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearPostitionsError())}
         type={'Error'}
       />
     </div>

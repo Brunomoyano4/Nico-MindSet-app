@@ -10,7 +10,8 @@ import {
   DELETE_POSITIONS_REJECTED,
   UPDATE_POSITIONS_FETCHING,
   UPDATE_POSITIONS_FULFILLED,
-  UPDATE_POSITIONS_REJECTED
+  UPDATE_POSITIONS_REJECTED,
+  CLEAR_POSITIONS_ERROR
 } from './constants';
 
 export const getPositionsFetching = () => ({
@@ -67,4 +68,8 @@ export const updatePositionsFulfilled = (payload) => ({
 export const updatePositionsRejected = (error) => ({
   type: UPDATE_POSITIONS_REJECTED,
   error
+});
+
+export const clearPostitionsError = () => ({
+  type: CLEAR_POSITIONS_ERROR
 });

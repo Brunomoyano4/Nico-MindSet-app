@@ -10,13 +10,14 @@ import {
   DELETE_POSITIONS_REJECTED,
   UPDATE_POSITIONS_FETCHING,
   UPDATE_POSITIONS_FULFILLED,
-  UPDATE_POSITIONS_REJECTED
+  UPDATE_POSITIONS_REJECTED,
+  CLEAR_POSITIONS_ERROR
 } from './constants';
 
 const initialState = {
   isLoading: false,
   list: [],
-  error: false,
+  error: '',
   position: []
 };
 
@@ -45,9 +46,11 @@ const positionsReducer = (state = initialState, action) => {
         isLoading: true
       };
     case ADD_POSITIONS_FULFILLED:
+      state.list.push(action.payload);
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        list: [...state.list]
       };
     case ADD_POSITIONS_REJECTED:
       return {
@@ -81,13 +84,20 @@ const positionsReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        list: state.list.filter((positions) => positions._id !== action.payload)
+        list: state.list.map((el) => {
+          return el._id === action.payload._id ? action.payload : el;
+        })
       };
     case UPDATE_POSITIONS_REJECTED:
       return {
         ...state,
         isLoading: false,
         error: action.error
+      };
+    case CLEAR_POSITIONS_ERROR:
+      return {
+        ...state,
+        error: ''
       };
     default:
       return state;

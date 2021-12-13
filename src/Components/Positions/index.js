@@ -7,12 +7,13 @@ import Button from '../Shared/Button';
 import Modal from '../Shared/Modal';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPositions } from '../../redux/positions/thunks';
+import { clearPostitionsError } from '../../redux/positions/actions';
 
 function Positions() {
   const dispatch = useDispatch();
   const positions = useSelector((store) => store.positions.list);
   const loading = useSelector((store) => store.positions.isLoading);
-  const [error, setError] = useState('');
+  const error = useSelector((store) => store.positions.error);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const history = useHistory();
 
@@ -60,7 +61,7 @@ function Positions() {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearPostitionsError())}
         type={'Error'}
       />
     </section>
