@@ -36,7 +36,7 @@ export const getPostulants = () => {
   };
 };
 
-export const addClient = (client) => {
+export const addPostulant = (postulant) => {
   return (dispatch) => {
     dispatch(addPostulantsFetching());
     return fetch(URL, {
@@ -44,7 +44,7 @@ export const addClient = (client) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(client)
+      body: JSON.stringify(postulant)
     })
       .then((response) => {
         if (response.status !== 201) {
@@ -63,15 +63,15 @@ export const addClient = (client) => {
   };
 };
 
-export const updateClient = (clientId, client) => {
+export const updatePostulant = (postulantId, postulant) => {
   return (dispatch) => {
     dispatch(updatePostulantsFetching());
-    return fetch(`${URL}/${clientId}`, {
+    return fetch(`${URL}/${postulantId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(client)
+      body: JSON.stringify(postulant)
     })
       .then((response) => {
         if (response.status !== 200) {
@@ -90,7 +90,7 @@ export const updateClient = (clientId, client) => {
   };
 };
 
-export const deleteClient = (id) => {
+export const deletePostulant = (id) => {
   return (dispatch) => {
     dispatch(deletePostulantsFetching());
     fetch(`${URL}/${id}`, { method: 'DELETE' })
