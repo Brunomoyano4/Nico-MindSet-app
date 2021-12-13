@@ -77,7 +77,7 @@ function ProfilesForm() {
             title="Something went wrong!"
             subtitle={error}
             show={error}
-            closeModal={() => clearProfilesError()}
+            closeModal={() => dispatch(clearProfilesError())}
             type={'Error'}
           />
           {loading && (
