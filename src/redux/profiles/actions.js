@@ -34,67 +34,67 @@ export const getProfilesRejected = (error) => {
   };
 };
 
-export const createProfileFetching = () => {
+export const addProfileFetching = () => {
   return {
     type: ADD_PROFILES_FETCHING
   };
 };
 
-export const createProfileFulfilled = (data) => {
+export const addProfileFulfilled = (data) => {
   return {
     type: ADD_PROFILES_FULFILLED,
     payload: data
   };
 };
 
-export const createProfileRejected = (error) => {
+export const addProfileRejected = (error) => {
   return {
     type: ADD_PROFILES_REJECTED,
     payload: error
   };
 };
 
-export const updateProfileFetching = () => {
+export const deleteProfileFetching = () => {
   return {
     type: DELETE_PROFILES_FETCHING
   };
 };
 
-export const updateProfileFulfilled = (data) => {
+export const deleteProfileFulfilled = (data) => {
   return {
     type: DELETE_PROFILES_FULFILLED,
     payload: data
   };
 };
 
-export const updateProfileRejected = (error) => {
+export const deleteProfileRejected = (error) => {
   return {
     type: DELETE_PROFILES_REJECTED,
     payload: error
   };
 };
 
-export const deleteProfileFetching = () => {
+export const updateProfileFetching = () => {
   return {
     type: UPDATE_PROFILES_FETCHING
   };
 };
 
-export const deleteProfileFulfilled = (id) => {
+export const updateProfileFulfilled = (id) => {
   return {
     type: UPDATE_PROFILES_FULFILLED,
     payload: id
   };
 };
 
-export const deleteProfileRejected = (error) => {
+export const updateProfileRejected = (error) => {
   return {
     type: UPDATE_PROFILES_REJECTED,
     payload: error
   };
 };
 
-export const cleanError = () => {
+export const clearProfilesError = () => {
   return {
     type: CLEAR_PROFILES_ERROR
   };
