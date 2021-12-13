@@ -1,49 +1,21 @@
-import styles from './sessions.module.css';
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import styles from './sessions.module.css';
+import Session from './Session';
 import DeleteBtn from '../Shared/DeleteBtn/index';
-import Form from './Form';
 import LoadingSpinner from '../Shared/LoadingSpinner';
 import Button from '../Shared/Button/index';
 import Modal from '../Shared/Modal';
 
-const STATES = {
-  LIST: 1,
-  CREATE: 2,
-  UPDATE: 3
-};
-
 function GetSessions() {
   const [error, setError] = useState('');
   const [sessions, setSessions] = useState([]);
-  const [state, setState] = useState(1);
-  const [sessionToUpdate, setSession] = useState();
-  const [psychologist, setPsychologist] = useState([]);
-  const [postulants, setPostulants] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [sessionToDelete, setSessionToDelete] = useState('');
-  const [loading, setLoading] = useState({
-    psychologistLoading: false,
-    sessionLoading: false,
-    postulantLoading: false
-  });
-
-  function changeState(n, e) {
-    e.preventDefault();
-    setState(n);
-  }
-
-  function updateSession(e, session) {
-    e.preventDefault();
-    setSession(session);
-    setState(STATES.UPDATE);
-  }
+  const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
-    setLoading({
-      psychologistLoading: true,
-      sessionLoading: true,
-      postulantLoading: true
-    });
+    setLoading(true);
     fetch(`${process.env.REACT_APP_API}/sessions`)
       .then((response) => {
         if (response.status !== 200) {
@@ -57,50 +29,8 @@ function GetSessions() {
         if (data !== sessions) setSessions(data);
       })
       .catch((error) => setError(error.toString()))
-      .finally(() =>
-        setLoading((prev) => {
-          return { ...prev, sessionLoading: false };
-        })
-      );
-
-    fetch(`${process.env.REACT_APP_API}/psychologists`)
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data !== psychologist) setPsychologist(data);
-      })
-      .catch((error) => setError(error.toString()))
-      .finally(() =>
-        setLoading((prev) => {
-          return { ...prev, psychologistLoading: false };
-        })
-      );
-
-    fetch(`${process.env.REACT_APP_API}/postulants`)
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return response.json();
-      })
-      .then((response) => {
-        if (response !== postulants) setPostulants(response);
-      })
-      .catch((error) => setError(error.toString()))
-      .finally(() =>
-        setLoading((prev) => {
-          return { ...prev, postulantLoading: false };
-        })
-      );
-  }, [sessions.length]);
+      .finally(() => setLoading(false));
+  }, []);
 
   const deleteSessions = (Id, event) => {
     event.stopPropagation();
@@ -117,85 +47,42 @@ function GetSessions() {
       .catch((error) => setError(error.toString()));
   };
 
+  const CreateBtn = () => {
+    history.push(`/sessions/form`);
+  };
+
   return (
     <section className={styles.container}>
       <h2>Sessions</h2>
       <div className={styles.list}>
-        {state != STATES.LIST ? (
-          <Button content="BACK" onClick={(e) => changeState(STATES.LIST, e)} />
-        ) : (
-          <></>
+        <table className={styles.tableSessions}>
+          <thead>
+            <tr>
+              <th>PSYCHOLOGY</th>
+              <th>POSTULANT</th>
+              <th>TIME</th>
+              <th>DATE</th>
+              <th>STAT</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          {!Object.values(loading).some(Boolean) && (
+            <tbody>
+              {sessions.map((session) => {
+                return <Session key={session._id} session={session} />;
+              })}
+            </tbody>
+          )}
+        </table>
+        {loading && <LoadingSpinner circle={false} />}
+        {!loading && !sessions.length && (
+          <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
         )}
-        {state === STATES.LIST ? (
-          <>
-            <table className={styles.tableSessions}>
-              <thead>
-                <tr>
-                  <th>PSYCHOLOGY</th>
-                  <th>POSTULANT</th>
-                  <th>TIME</th>
-                  <th>DATE</th>
-                  <th>STAT</th>
-                  <th>ACTION</th>
-                </tr>
-              </thead>
-              {!Object.values(loading).some(Boolean) && (
-                <tbody>
-                  {sessions.map((session) => {
-                    return (
-                      <tr key={session._id} onClick={(e) => updateSession(e, session)}>
-                        <td>
-                          {`${session.psychology?.firstName || ''} ${
-                            session.psychology?.lastName || ''
-                          }`}
-                        </td>
-                        <td>
-                          {`${session.postulant?.firstName || ''} ${
-                            session.postulant?.lastName || ''
-                          }`}
-                        </td>
-                        <td>{session.time}</td>
-                        <td>{session.date.slice(0, 10)}</td>
-                        <td>{session.stat}</td>
-                        <td>
-                          <DeleteBtn
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setShowConfirmModal(true);
-                              setSessionToDelete(session._id);
-                            }}
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              )}
-            </table>
-            {Object.values(loading).some(Boolean) && <LoadingSpinner circle={false} />}
-            {!Object.values(loading).some(Boolean) && !sessions.length && (
-              <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
-            )}
-            <Button
-              className={styles.button}
-              onClick={(e) => changeState(STATES.CREATE, e)}
-              content="CREATE SESSION"
-            />
-          </>
-        ) : (
-          <Form
-            session={state === STATES.UPDATE ? sessionToUpdate : {}}
-            postulants={postulants}
-            psychologys={psychologist}
-            allSessions={sessions}
-            stateHook={setState}
-            sessionsHook={setSessions}
-          />
-        )}
+        <Button className={styles.button} onClick={CreateBtn} content={'CREATE SESSION'} />
       </div>
       <Modal
         title="Are you sure you want to delete the selected Session?"
-        onConfirm={(e) => deleteSessions(sessionToDelete, e)}
+        // onConfirm={(e) => deleteSessions(sessionToDelete, e)}
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
         type={'Confirm'}
