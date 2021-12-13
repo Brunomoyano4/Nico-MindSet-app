@@ -35,50 +35,17 @@ const Form = () => {
         if (session._id === sessionId) setInputValues(session);
       });
     }
-
-    // fetch(`${process.env.REACT_APP_API}/postulants`)
-    //   .then((res) => {
-    //     if (res.status !== 200) {
-    //       return res.json().then(({ message }) => {
-    //         throw new Error(message);
-    //       });
-    //     }
-    //     return res.json();
-    //   })
-    //   .then((res) => {
-    //     setPostulantsOption(
-    //       res.map((postulant) => ({
-    //         value: postulant._id,
-    //         label: `${postulant.firstName} ${postulant.lastName}`
-    //       }))
-    //     );
-    //     setPostulantsValue(res[0]._id);
-    //   })
-    //   .catch((error) => setError(error.toString()));
-
-    // fetch(`${process.env.REACT_APP_API}/psychologists`)
-    //   .then((res) => {
-    //     if (res.status !== 200) {
-    //       return res.json().then(({ message }) => {
-    //         throw new Error(message);
-    //       });
-    //     }
-    //     return res.json();
-    //   })
-    //   .then((res) => {
-    //     setPsychologistOption(
-    //       res.map((psychologist) => ({
-    //         value: psychologist._id,
-    //         label: `${psychologist.firstName} ${psychologist.lastName}`
-    //       }))
-    //     );
-    //     setPsychologistValue(res[0]._id);
-    //   })
-    //   .catch((error) => setError(error.toString()));
   }, []);
 
+  const values = {
+    psychology: psychologistValue,
+    postulant: postulantValue,
+    date: dateValue,
+    time: timeValue,
+    stat: statusValue
+  };
+
   const setInputValues = (data) => {
-    console.log(data);
     setPostulantsValue(data.postulant || 'N/A');
     setPsychologistValue(data.psychology || 'N/A');
     setDateValue(data.date || 'N/A');
@@ -92,41 +59,13 @@ const Form = () => {
   }
 
   const onSubmit = (e) => {
-    // e.preventDefault();
-    // setDisableButton(true);
-    // let url;
-    // const options = {
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     psychology: psychologistValue,
-    //     postulant: postulantValue,
-    //     date: dateValue,
-    //     time: timeValue,
-    //     stat: statusValue
-    //   })
-    // };
-    // if (sessionId) {
-    //   options.method = 'PUT';
-    //   console.log(options.body);
-    //   url = `${process.env.REACT_APP_API}/sessions/${sessionId}`;
-    // } else {
-    //   options.method = 'POST';
-    //   url = `${process.env.REACT_APP_API}/sessions`;
-    // }
-    // fetch(url, options)
-    //   .then((response) => {
-    //     if (response.status !== 201) {
-    //       return response.json().then(({ msg }) => {
-    //         throw new Error(msg);
-    //       });
-    //     }
-    //     return response.json();
-    //   })
-    //   .then(() => history.replace('/sessions'))
-    //   .catch((error) => setError(error.toString()));
+    e.preventDefault();
+    setDisableButton(true);
+    if (sessionId) {
+      dispatch(updateSession(sessionId, values));
+    } else {
+      dispatch(addSession(values));
+    }
   };
 
   return (
@@ -153,8 +92,8 @@ const Form = () => {
           className={styles.select}
           value={postulantValue}
           onChange={(e) => setPostulantsValue(e.target.value)}
-          label="Psychologist:"
-          id="psychologist"
+          label="Postulant:"
+          id="postulant"
           options={postulantsOption}
           required
         />
