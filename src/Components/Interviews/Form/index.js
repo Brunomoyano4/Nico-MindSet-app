@@ -1,105 +1,66 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import styles from './form.module.css';
+import Modal from '../../Shared/Modal';
+import React, { useState, useEffect } from 'react';
 import Input from '../../Shared/Input';
-import Select from '../Select';
+import styles from './form.module.css';
+import Select from '../../Shared/Select';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Button from '../../Shared/Button';
-import Modal from '../../Shared/Modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { addInterviews, updateInterviews, getInterviews } from '../../../redux/interviews/thunks';
 
 function Form() {
+  const dispatch = useDispatch();
   const [positionIdValue, setPositionIdValue] = useState('');
   const [postulantIdValue, setPostulantIdValue] = useState('');
   const [dateTimeValue, setDateTimeValue] = useState('');
-  const [statusValue, setStatusValue] = useState([]);
-  const [paramId, setParamId] = useState('');
+  const [statusValue, setStatusValue] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
+  const data = useSelector((store) => store.interviews.list);
+  const loading = useSelector((store) => store.interviews.isLoading);
+
+  const setInputValues = (data) => {
+    setPositionIdValue(data.positionId || '-'),
+      setPostulantIdValue(data.postulantId || '-'),
+      setDateTimeValue(data.dateTime || '-'),
+      setStatusValue(data.status || '-');
+  };
+
   const history = useHistory();
   const params = useQuery();
-  const interviewsId = params.get('id');
+  const interviewId = params.get('id');
 
-  useEffect(() => {
-    if (interviewsId) {
-      setLoading(true);
-      setParamId(interviewsId);
-      fetch(`${process.env.REACT_APP_API}/interviews/${interviewsId}`)
-        .then((response) => {
-          if (response.status !== 200) {
-            return response.json().then(({ msg }) => {
-              throw new Error(msg);
-            });
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setPositionIdValue(data[0].positionId);
-          setPostulantIdValue(data[0].postulantId);
-          setDateTimeValue(data[0].dateTime);
-          setStatusValue(data[0].status);
-        })
-        .catch((error) => setError(error.toString()))
-        .finally(() => setLoading(false));
-    }
-  }, []);
+  const values = {
+    positionId: positionIdValue,
+    postulantId: postulantIdValue,
+    dateTime: dateTimeValue,
+    status: statusValue
+  };
 
   function useQuery() {
     const { search } = useLocation();
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
 
-  const onChangePositionIdInput = (event) => {
-    setPositionIdValue(event.target.value);
-  };
-  const onChangePostulantIdInput = (event) => {
-    setPostulantIdValue(event.target.value);
-  };
-  const onChangeDateTimeInput = (event) => {
-    setDateTimeValue(event.target.value);
-  };
-  const onChangeStatusInput = (event) => {
-    setStatusValue(event.target.value);
-  };
+  useEffect(() => {
+    if (interviewId) {
+      data.forEach((interview) => {
+        if (interview._id === interviewId) setInputValues(interview);
+      });
+    }
+  }, [interviewId]);
 
   const onSubmit = (event) => {
     event.preventDefault();
     setDisableButton(true);
-    let url = '';
-    const options = {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        positionId: positionIdValue,
-        postulantId: postulantIdValue,
-        dateTime: dateTimeValue,
-        status: statusValue
-      })
-    };
-
-    if (paramId) {
-      options.method = 'PUT';
-      url = `${process.env.REACT_APP_API}/interviews/${paramId}`;
+    if (interviewId) {
+      dispatch(updateInterviews(interviewId, values));
     } else {
-      options.method = 'POST';
-      url = `${process.env.REACT_APP_API}/interviews`;
+      dispatch(addInterviews(values));
     }
-
-    fetch(url, options)
-      .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return history.replace('/interviews');
-      })
-      .catch((error) => {
-        setError(error.toString());
-        setDisableButton(false);
-      });
+    history.replace('/interviews');
+    setDisableButton(false);
   };
 
   return (
@@ -107,13 +68,6 @@ function Form() {
       <form className={styles.form} onSubmit={onSubmit}>
         <h2>Form</h2>
         <div className={styles.form}>
-          <Modal
-            title="Something went wrong!"
-            subtitle={error}
-            show={error}
-            closeModal={() => setError('')}
-            type={'Error'}
-          />
           {loading && (
             <div className={styles.spinnerContainer}>
               <LoadingSpinner />
@@ -124,7 +78,9 @@ function Form() {
             name="Position Id"
             placeholder="Position's Id"
             value={positionIdValue}
-            onChange={onChangePositionIdInput}
+            onChange={(event) => {
+              setPositionIdValue(event.target.value);
+            }}
             required
           />
           <Input
@@ -132,7 +88,9 @@ function Form() {
             name="Postulant Id"
             placeholder="Postulant's Id"
             value={postulantIdValue}
-            onChange={onChangePostulantIdInput}
+            onChange={(event) => {
+              setPostulantIdValue(event.target.value);
+            }}
             required
           />
           <Input
@@ -140,15 +98,18 @@ function Form() {
             name="Date time"
             placeholder="DD/MM/YYYY HH:MM"
             value={dateTimeValue}
-            onChange={onChangeDateTimeInput}
+            onChange={(event) => {
+              setDateTimeValue(event.target.value);
+            }}
             required
           />
           <Select
             className={styles.select}
             name="Status"
-            placeholder="Status"
             value={statusValue}
-            onChange={onChangeStatusInput}
+            onChange={(event) => {
+              setStatusValue(event.target.value);
+            }}
             required
             options={[
               { value: 'pending', label: 'Pending' },
@@ -158,8 +119,21 @@ function Form() {
             ]}
           />
         </div>
-        <Button onClick={onSubmit} content={'SAVE'} disabled={loading || disableButton} />
+        <Button content={'SAVE'} disabled={loading || disableButton} />
       </form>
+
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => setError('')}
+        type={'Error'}
+      />
+      {loading && (
+        <div className={styles.spinnerContainer}>
+          <LoadingSpinner />
+        </div>
+      )}
     </div>
   );
 }
