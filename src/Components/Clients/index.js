@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import Client from './Client';
 import Button from '../Shared/Button';
@@ -7,17 +7,18 @@ import styles from './clients.module.css';
 import LoadingSpinner from '../Shared/LoadingSpinner';
 import { useSelector, useDispatch } from 'react-redux';
 import { getClients } from '../../redux/clients/thunks';
+import { clearClientsError } from '../../redux/clients/actions';
 
 function Clients() {
-  const [error, setError] = useState('');
   const history = useHistory();
   const dispatch = useDispatch();
   const clients = useSelector((store) => store.clients.list);
+  const error = useSelector((store) => store.clients.error);
   const loading = useSelector((store) => store.clients.isLoading);
 
   useEffect(() => {
     dispatch(getClients());
-  }, [dispatch]);
+  }, []);
 
   const CreateBtn = () => {
     history.push(`/clients/form`);
@@ -59,7 +60,7 @@ function Clients() {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearClientsError())}
         type={'Error'}
       />
     </>

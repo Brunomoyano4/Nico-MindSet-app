@@ -10,7 +10,8 @@ import {
   DELETE_CLIENTS_REJECTED,
   UPDATE_CLIENTS_FETCHING,
   UPDATE_CLIENTS_FULFILLED,
-  UPDATE_CLIENTS_REJECTED
+  UPDATE_CLIENTS_REJECTED,
+  CLEAR_CLIENTS_ERROR
 } from './constants';
 
 export const getClientsFetching = () => ({
@@ -67,4 +68,8 @@ export const updateClientsFulfilled = (payload) => ({
 export const updateClientsRejected = (error) => ({
   type: UPDATE_CLIENTS_REJECTED,
   error
+});
+
+export const clearClientsError = () => ({
+  type: CLEAR_CLIENTS_ERROR
 });

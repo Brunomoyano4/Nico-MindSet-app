@@ -82,7 +82,7 @@ export const updateClient = (clientId, client) => {
         return response.json();
       })
       .then((response) => {
-        dispatch(updateClientsFulfilled(response.data));
+        dispatch(updateClientsFulfilled(response));
       })
       .catch((error) => {
         dispatch(updateClientsRejected(error.toString()));

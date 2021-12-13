@@ -35,11 +35,11 @@ const Client = ({ client }) => {
         closeModal={() => setError('')}
         type={'Error'}
       />
-      <tr key={client._id} onClick={openEditForm}>
-        <td>{client.customerName}</td>
-        <td>{client.phone}</td>
-        <td>{client.branch}</td>
-        <td>
+      <tr className={styles.tr} key={client._id} onClick={openEditForm}>
+        <td className={styles.td}>{client.customerName}</td>
+        <td className={styles.td}>{client.phone}</td>
+        <td className={styles.td}>{client.branch}</td>
+        <td className={styles.td}>
           <DeleteBtn
             className={styles.button}
             onClick={(e) => {

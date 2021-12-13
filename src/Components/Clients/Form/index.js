@@ -1,110 +1,67 @@
-import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import styles from './form.module.css';
+import Modal from '../../Shared/Modal';
+import React, { useState, useEffect } from 'react';
 import Input from '../../Shared/Input';
+import styles from './form.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Button from '../../Shared/Button';
-import Modal from '../../Shared/Modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { addClient, updateClient } from '../../../redux/clients/thunks';
+import { clearClientsError } from '../../../redux/clients/actions';
 
 function Form() {
+  const dispatch = useDispatch();
   const [nameValue, setNameValue] = useState('');
   const [branchValue, setBranchValue] = useState('');
   const [phoneValue, setPhoneValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
-  const [paramId, setParamId] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
+  const error = useSelector((store) => store.clients.error);
+  const data = useSelector((store) => store.clients.list);
+  const loading = useSelector((store) => store.clients.isLoading);
   const history = useHistory();
   const params = useQuery();
   const clientId = params.get('id');
+  const setInputValues = ({ customerName, branch, phone, email, description }) => {
+    setNameValue(customerName || 'Name');
+    setBranchValue(branch || 'Branch');
+    setPhoneValue(phone || 'Phone');
+    setEmailValue(email || 'Email');
+    setDescriptionValue(description || 'Description');
+  };
 
-  useEffect(() => {
-    if (clientId) {
-      setLoading(true);
-      setParamId(clientId);
-      fetch(`${process.env.REACT_APP_API}/clients/${clientId}`)
-        .then((response) => {
-          if (response.status !== 200) {
-            return response.json().then(({ msg }) => {
-              throw new Error(msg);
-            });
-          }
-          return response.json();
-        })
-        .then((response) => {
-          setNameValue(response.customerName);
-          setBranchValue(response.branch);
-          setPhoneValue(response.phone);
-          setEmailValue(response.email);
-          setDescriptionValue(response.description);
-        })
-        .catch((error) => setError(error.toString()))
-        .finally(() => setLoading(false));
-    }
-  }, []);
+  const values = {
+    customerName: nameValue,
+    branch: branchValue,
+    phone: phoneValue,
+    email: emailValue,
+    description: descriptionValue
+  };
 
   function useQuery() {
     const { search } = useLocation();
-
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
-  const onChangeNameInput = (event) => {
-    setNameValue(event.target.value);
-  };
-  const onChangeBranchInput = (event) => {
-    setBranchValue(event.target.value);
-  };
-  const onChangePhoneInput = (event) => {
-    setPhoneValue(event.target.value);
-  };
-  const onChangeEmailInput = (event) => {
-    setEmailValue(event.target.value);
-  };
-  const onChangeDescriptionInput = (event) => {
-    setDescriptionValue(event.target.value);
-  };
+
+  useEffect(() => {
+    if (clientId) {
+      data.forEach((client) => {
+        if (client._id === clientId) setInputValues(client);
+      });
+    }
+  }, [clientId]);
 
   const onSubmit = (event) => {
     event.preventDefault();
     setDisableButton(true);
-    let url = '';
-    const options = {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        customerName: nameValue,
-        branch: branchValue,
-        phone: phoneValue,
-        email: emailValue,
-        description: descriptionValue
-      })
-    };
-
-    if (paramId) {
-      options.method = 'PUT';
-      url = `${process.env.REACT_APP_API}/clients/${paramId}`;
+    if (clientId) {
+      dispatch(updateClient(clientId, values));
     } else {
-      options.method = 'POST';
-      url = `${process.env.REACT_APP_API}/clients`;
+      dispatch(addClient(values));
     }
-
-    fetch(url, options)
-      .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return response.json();
-      })
-      .then(() => history.replace('/clients'))
-      .catch((error) => {
-        setError(error.toString());
-        setDisableButton(false);
-      });
+    history.replace('/clients');
+    setDisableButton(false);
   };
 
   return (
@@ -112,13 +69,6 @@ function Form() {
       <form className={styles.form} onSubmit={onSubmit}>
         <h2>Form</h2>
         <div className={styles.form}>
-          <Modal
-            title="Something went wrong!"
-            subtitle={error}
-            show={error}
-            closeModal={() => setError('')}
-            type={'Error'}
-          />
           {loading && (
             <div className={styles.spinnerContainer}>
               <LoadingSpinner />
@@ -129,7 +79,9 @@ function Form() {
             name="name"
             placeholder="Customer's Name"
             value={nameValue}
-            onChange={onChangeNameInput}
+            onChange={(e) => {
+              setNameValue(e.target.value);
+            }}
             required
           />
           <Input
@@ -137,23 +89,31 @@ function Form() {
             name="branch"
             placeholder="Branchs's Name"
             value={branchValue}
-            onChange={onChangeBranchInput}
+            onChange={(e) => {
+              setBranchValue(e.target.value);
+            }}
             required
           />
           <Input
             className={styles.input}
             name="phone"
+            type="number"
             placeholder="Customer's Phone"
             value={phoneValue}
-            onChange={onChangePhoneInput}
+            onChange={(e) => {
+              setPhoneValue(e.target.value);
+            }}
             required
           />
           <Input
             className={styles.input}
             name="email"
+            type="email"
             placeholder="Customer's Email"
             value={emailValue}
-            onChange={onChangeEmailInput}
+            onChange={(e) => {
+              setEmailValue(e.target.value);
+            }}
             required
           />
           <Input
@@ -161,17 +121,21 @@ function Form() {
             name="description"
             placeholder="Customer's Description"
             value={descriptionValue}
-            onChange={onChangeDescriptionInput}
+            onChange={(e) => {
+              setDescriptionValue(e.target.value);
+            }}
             required
           />
         </div>
-        <Button
-          className={styles.button}
-          onClick={onSubmit}
-          content={'SAVE'}
-          disabled={loading || disableButton}
-        />
+        <Button className={styles.button} content={'SAVE'} disabled={loading || disableButton} />
       </form>
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => dispatch(clearClientsError())}
+        type={'Error'}
+      />
     </div>
   );
 }
