@@ -46,11 +46,10 @@ const profilesReducer = (state = initialState, action) => {
         isLoading: true
       };
     case ADD_PROFILES_FULFILLED:
-      state.list.push(action.payload);
       return {
         ...state,
         isLoading: false,
-        list: [...state.list]
+        list: [...state.list, action.payload]
       };
     case ADD_PROFILES_REJECTED:
       return {
@@ -84,8 +83,8 @@ const profilesReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        list: state.list.map((el) => {
-          return el._id === action.payload._id ? action.payload : el;
+        list: state.list.map((profile) => {
+          return profile._id === action.payload._id ? action.payload : profile;
         })
       };
     case UPDATE_PROFILES_REJECTED:

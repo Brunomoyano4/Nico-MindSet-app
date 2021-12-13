@@ -2,82 +2,71 @@ import styles from './form.module.css';
 import Input from '../../Shared/Input';
 import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Modal from '../../Shared/Modal';
 import Button from '../../Shared/Button';
+import { updateProfile, addProfile } from '../../../redux/profiles/thunks';
+import { clearProfilesError } from '../../../redux/profiles/actions';
 
 function ProfilesForm() {
+  const dispatch = useDispatch();
+  const profiles = useSelector((store) => store.profiles.list);
+  const error = useSelector((store) => store.profiles.error);
+  const loading = useSelector((store) => store.profiles.isLoading);
   const history = useHistory();
   const params = useQuery();
   const profileId = params.get('id');
-  const [profileName, setProfileName] = useState('');
-  const [branch, setBranch] = useState('');
-  const [description, setDescription] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [profileNameValue, setProfileNameValue] = useState('');
+  const [branchValue, setBranchValue] = useState('');
+  const [descriptionValue, setDescriptionValue] = useState('');
   const [disableButton, setDisableButton] = useState(false);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    setDisableButton(true);
-    let url = `${process.env.REACT_APP_API}/profiles`;
-    const options = {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        profileName: profileName.toLowerCase(),
-        branch: branch.toLowerCase(),
-        description: description.toLowerCase()
-      }),
-      method: 'POST'
-    };
-    if (profileId) {
-      options.method = 'PUT';
-      url = `${process.env.REACT_APP_API}/profiles/${profileId}`;
-    }
-    fetch(url, options)
-      .then((res) => {
-        if (res.status !== 200 && res.status !== 201) {
-          return res.json().then(({ message }) => {
-            throw new Error(message);
-          });
-        }
-        return history.replace('/profiles');
-      })
-      .catch((error) => {
-        setError(error.toString());
-        setDisableButton(false);
-      });
+  const setInputValues = ({ profileName, branch, description }) => {
+    setProfileNameValue(profileName || '');
+    setBranchValue(branch || '');
+    setDescriptionValue(description || '');
+  };
+
+  const values = {
+    profileName: profileNameValue,
+    branch: branchValue,
+    description: descriptionValue
   };
 
   function useQuery() {
     const { search } = useLocation();
-
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
 
   useEffect(() => {
     if (profileId) {
-      setLoading(true);
-      fetch(`${process.env.REACT_APP_API}/profiles/${profileId}`)
-        .then((res) => {
-          if (res.status !== 200) {
-            return res.json().then(({ msg }) => {
-              throw new Error(msg);
-            });
-          }
-          return res.json();
-        })
-        .then((data) => {
-          setProfileName(data[0].profileName);
-          setBranch(data[0].branch);
-          setDescription(data[0].description);
-        })
-        .catch((error) => setError(error.toString()))
-        .finally(() => setLoading(false));
+      profiles.forEach((profile) => {
+        if (profile._id === profileId) setInputValues(profile);
+      });
     }
-  }, []);
+  }, [profileId]);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setDisableButton(true);
+
+    if (profileId) {
+      dispatch(updateProfile(profileId, values)).then((response) => {
+        if (response) {
+          history.replace('/profiles');
+          setDisableButton(false);
+        }
+      });
+    } else {
+      dispatch(addProfile(values)).then((response) => {
+        if (response) {
+          history.replace('/profiles');
+          setDisableButton(false);
+        }
+      });
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -88,7 +77,7 @@ function ProfilesForm() {
             title="Something went wrong!"
             subtitle={error}
             show={error}
-            closeModal={() => setError('')}
+            closeModal={() => clearProfilesError()}
             type={'Error'}
           />
           {loading && (
@@ -99,8 +88,8 @@ function ProfilesForm() {
           <Input
             className={styles.input}
             placeholder="Profile Name"
-            value={profileName}
-            onChange={(e) => setProfileName(e.target.value)}
+            value={profileNameValue}
+            onChange={(e) => setProfileNameValue(e.target.value)}
             label="Profile Name:"
             id="profile-name"
             required
@@ -108,8 +97,8 @@ function ProfilesForm() {
           <Input
             className={styles.input}
             placeholder="Branch"
-            value={branch}
-            onChange={(e) => setBranch(e.target.value)}
+            value={branchValue}
+            onChange={(e) => setBranchValue(e.target.value)}
             label="Branch:"
             id="profile-branch"
             required
@@ -117,8 +106,8 @@ function ProfilesForm() {
           <Input
             className={styles.input}
             placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={descriptionValue}
+            onChange={(e) => setDescriptionValue(e.target.value)}
             label="Description:"
             id="profile-description"
             required
