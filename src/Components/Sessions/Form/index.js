@@ -1,3 +1,6 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { addSession, updateSession } from '../../../redux/postulants/thunks';
+import { clearSessionsError } from '../../../redux/postulants/actions';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import styles from './form.module.css';
@@ -6,6 +9,7 @@ import Select from '../../Shared/Select';
 import Button from '../../Shared/Button/index';
 import Modal from '../../Shared/Modal';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
+import { getSessions } from '../../../redux/sessions/thunks';
 
 const Form = () => {
   const [postulantsOption, setPostulantsOption] = useState([]);
@@ -15,100 +19,72 @@ const Form = () => {
   const [dateValue, setDateValue] = useState([]);
   const [timeValue, setTimeValue] = useState([]);
   const [statusValue, setStatusValue] = useState([]);
-  const [error, setError] = useState('');
   const [disableButton, setDisableButton] = useState(false);
-  const [loading, setLoading] = useState({
-    postulantLoading: false,
-    psychologistLoading: false,
-    sessionIdLoading: false
-  });
-
+  const session = useSelector((store) => store.sessions.list);
+  const error = useSelector((store) => store.sessions.error);
+  const loading = useSelector((store) => store.sessions.isLoading);
+  const dispatch = useDispatch();
   const history = useHistory();
   const params = useQuery();
   const sessionId = params.get('id');
 
   useEffect(() => {
-    console.log(sessionId);
-    setLoading({
-      sessionIdLoading: sessionId ? true : false,
-      postulantLoading: true,
-      psychologistLoading: true
-    });
     if (sessionId) {
-      fetch(`${process.env.REACT_APP_API}/sessions/${sessionId}`)
-        .then((res) => {
-          if (res.status !== 200) {
-            return res.json().then(({ message }) => {
-              throw new Error(message);
-            });
-          }
-          return res.json();
-        })
-        .then((data) => {
-          setPostulantsValue(data?.postulant?.firstName, data?.postulant?.lastName);
-          setPsychologistValue(data?.psychology?.firstName, data?.psychology?.lastName);
-          setDateValue(data?.date);
-          setTimeValue(data?.time);
-          setStatusValue(data.stat);
-        })
-        .catch((error) => setError(error.toString()))
-        .finally(() =>
-          setLoading((prev) => {
-            return { ...prev, sessionIdLoading: false };
-          })
-        );
+      dispatch(getSessions());
+      session.forEach((session) => {
+        if (session._id === sessionId) setInputValues(session);
+      });
     }
 
-    fetch(`${process.env.REACT_APP_API}/postulants`)
-      .then((res) => {
-        if (res.status !== 200) {
-          return res.json().then(({ message }) => {
-            throw new Error(message);
-          });
-        }
-        return res.json();
-      })
-      .then((res) => {
-        setPostulantsOption(
-          res.map((postulant) => ({
-            value: postulant._id,
-            label: `${postulant.firstName} ${postulant.lastName}`
-          }))
-        );
-        setPostulantsValue(res[0]._id);
-      })
-      .catch((error) => setError(error.toString()))
-      .finally(() => {
-        setLoading((prev) => {
-          return { ...prev, postulantLoading: false };
-        });
-      });
+    // fetch(`${process.env.REACT_APP_API}/postulants`)
+    //   .then((res) => {
+    //     if (res.status !== 200) {
+    //       return res.json().then(({ message }) => {
+    //         throw new Error(message);
+    //       });
+    //     }
+    //     return res.json();
+    //   })
+    //   .then((res) => {
+    //     setPostulantsOption(
+    //       res.map((postulant) => ({
+    //         value: postulant._id,
+    //         label: `${postulant.firstName} ${postulant.lastName}`
+    //       }))
+    //     );
+    //     setPostulantsValue(res[0]._id);
+    //   })
+    //   .catch((error) => setError(error.toString()));
 
-    fetch(`${process.env.REACT_APP_API}/psychologists`)
-      .then((res) => {
-        if (res.status !== 200) {
-          return res.json().then(({ message }) => {
-            throw new Error(message);
-          });
-        }
-        return res.json();
-      })
-      .then((res) => {
-        setPsychologistOption(
-          res.map((psychologist) => ({
-            value: psychologist._id,
-            label: `${psychologist.firstName} ${psychologist.lastName}`
-          }))
-        );
-        setPsychologistValue(res[0]._id);
-      })
-      .catch((error) => setError(error.toString()))
-      .finally(() => {
-        setLoading((prev) => {
-          return { ...prev, psychologistLoading: false };
-        });
-      });
+    // fetch(`${process.env.REACT_APP_API}/psychologists`)
+    //   .then((res) => {
+    //     if (res.status !== 200) {
+    //       return res.json().then(({ message }) => {
+    //         throw new Error(message);
+    //       });
+    //     }
+    //     return res.json();
+    //   })
+    //   .then((res) => {
+    //     setPsychologistOption(
+    //       res.map((psychologist) => ({
+    //         value: psychologist._id,
+    //         label: `${psychologist.firstName} ${psychologist.lastName}`
+    //       }))
+    //     );
+    //     setPsychologistValue(res[0]._id);
+    //   })
+    //   .catch((error) => setError(error.toString()));
   }, []);
+
+  const setInputValues = (data) => {
+    console.log(data);
+    setPostulantsValue(data.postulant || 'N/A');
+    setPsychologistValue(data.psychology || 'N/A');
+    setDateValue(data.date || 'N/A');
+    setTimeValue(data.time || 'N/A');
+    setStatusValue(data.stat || 'N/A');
+  };
 
   function useQuery() {
     const { search } = useLocation();
@@ -116,41 +92,41 @@ const Form = () => {
   }
 
   const onSubmit = (e) => {
-    e.preventDefault();
-    setDisableButton(true);
-    let url;
-    const options = {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        psychology: psychologistValue,
-        postulant: postulantValue,
-        date: dateValue,
-        time: timeValue,
-        stat: statusValue
-      })
-    };
-    if (sessionId) {
-      options.method = 'PUT';
-      console.log(options.body);
-      url = `${process.env.REACT_APP_API}/sessions/${sessionId}`;
-    } else {
-      options.method = 'POST';
-      url = `${process.env.REACT_APP_API}/sessions`;
-    }
-    fetch(url, options)
-      .then((response) => {
-        if (response.status !== 201) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return response.json();
-      })
-      .then(() => history.replace('/sessions'))
-      .catch((error) => setError(error.toString()));
+    // e.preventDefault();
+    // setDisableButton(true);
+    // let url;
+    // const options = {
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     psychology: psychologistValue,
+    //     postulant: postulantValue,
+    //     date: dateValue,
+    //     time: timeValue,
+    //     stat: statusValue
+    //   })
+    // };
+    // if (sessionId) {
+    //   options.method = 'PUT';
+    //   console.log(options.body);
+    //   url = `${process.env.REACT_APP_API}/sessions/${sessionId}`;
+    // } else {
+    //   options.method = 'POST';
+    //   url = `${process.env.REACT_APP_API}/sessions`;
+    // }
+    // fetch(url, options)
+    //   .then((response) => {
+    //     if (response.status !== 201) {
+    //       return response.json().then(({ msg }) => {
+    //         throw new Error(msg);
+    //       });
+    //     }
+    //     return response.json();
+    //   })
+    //   .then(() => history.replace('/sessions'))
+    //   .catch((error) => setError(error.toString()));
   };
 
   return (
@@ -222,7 +198,7 @@ const Form = () => {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearSessionsError())}
         type={'Error'}
       />
     </div>
