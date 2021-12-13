@@ -7,7 +7,8 @@ import Select from '../../Shared/Select';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Button from '../../Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addInterviews, updateInterviews, getInterviews } from '../../../redux/interviews/thunks';
+import { addInterviews, updateInterviews } from '../../../redux/interviews/thunks';
+import { clearInterviewsError } from '../../../redux/interviews/actions';
 
 function Form() {
   const dispatch = useDispatch();
@@ -15,10 +16,10 @@ function Form() {
   const [postulantIdValue, setPostulantIdValue] = useState('');
   const [dateTimeValue, setDateTimeValue] = useState('');
   const [statusValue, setStatusValue] = useState('');
-  const [error, setError] = useState('');
   const [disableButton, setDisableButton] = useState(false);
   const data = useSelector((store) => store.interviews.list);
   const loading = useSelector((store) => store.interviews.isLoading);
+  const error = useSelector((store) => store.interviews.error);
 
   const setInputValues = (data) => {
     setPositionIdValue(data.positionId || '-'),
@@ -126,7 +127,7 @@ function Form() {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearInterviewsError())}
         type={'Error'}
       />
       {loading && (

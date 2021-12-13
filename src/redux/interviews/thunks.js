@@ -77,28 +77,27 @@ export const deleteInterviews = (id) => {
 export const updateInterviews = (interviewId, interview) => {
   return (dispatch) => {
     dispatch(updateInterviewsFetching());
-    fetch(`${URL}/${interviewId}`),
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(interview)
-      }
-        .then((response) => {
-          if (response.status !== 200) {
-            return response.json().then(({ message }) => {
-              throw new Error(message);
-            });
-          }
-          return response.json();
-        })
-        .then((response) => {
-          dispatch(updateInterviewsFulfilled(response.data));
-          return response.data;
-        })
-        .catch((error) => {
-          dispatch(updateInterviewsRejected(error.toString()));
-        });
+    return fetch(`${URL}/${interviewId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(interview)
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ message }) => {
+            throw new Error(message);
+          });
+        }
+        return response.json();
+      })
+      .then((response) => {
+        dispatch(updateInterviewsFulfilled(response.data));
+        return response.data;
+      })
+      .catch((error) => {
+        dispatch(updateInterviewsRejected(error.toString()));
+      });
   };
 };

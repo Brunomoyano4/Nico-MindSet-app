@@ -10,13 +10,14 @@ import {
   DELETE_INTERVIEWS_REJECTED,
   UPDATE_INTERVIEWS_FETCHING,
   UPDATE_INTERVIEWS_FULFILLED,
-  UPDATE_INTERVIEWS_REJECTED
+  UPDATE_INTERVIEWS_REJECTED,
+  CLEAR_INTERVIEWS_ERROR
 } from './constants';
 
 const initialState = {
   isLoading: false,
   list: [],
-  error: false,
+  error: '',
   interview: []
 };
 
@@ -37,7 +38,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        error: true
+        error: action.error
       };
     case ADD_INTERVIEWS_FETCHING:
       return {
@@ -70,25 +71,28 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        error: true
+        error: action.error
       };
     case UPDATE_INTERVIEWS_FETCHING:
       return {
         ...state,
-        isLoading: true,
-        selectInterview: initialState.selectInterview
+        isLoading: true
       };
     case UPDATE_INTERVIEWS_FULFILLED:
       return {
         ...state,
-        isLoading: false,
-        selectInterview: action.payload
+        isLoading: false
       };
     case UPDATE_INTERVIEWS_REJECTED:
       return {
         ...state,
         isLoading: false,
-        error: true
+        error: action.error
+      };
+    case CLEAR_INTERVIEWS_ERROR:
+      return {
+        ...state,
+        error: ''
       };
     default:
       return state;

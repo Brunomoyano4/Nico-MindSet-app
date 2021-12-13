@@ -10,7 +10,8 @@ import {
   DELETE_INTERVIEWS_REJECTED,
   UPDATE_INTERVIEWS_FETCHING,
   UPDATE_INTERVIEWS_FULFILLED,
-  UPDATE_INTERVIEWS_REJECTED
+  UPDATE_INTERVIEWS_REJECTED,
+  CLEAR_INTERVIEWS_ERROR
 } from './constants';
 
 export const getInterviewsFetching = () => ({
@@ -68,3 +69,9 @@ export const updateInterviewsRejected = (error) => ({
   type: UPDATE_INTERVIEWS_REJECTED,
   error
 });
+
+export const clearInterviewsError = () => {
+  return {
+    type: CLEAR_INTERVIEWS_ERROR
+  };
+};
