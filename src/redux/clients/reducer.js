@@ -50,7 +50,7 @@ const clientsReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        list: state.list
+        list: [...state.list]
       };
     case ADD_CLIENTS_REJECTED:
       return {
