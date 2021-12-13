@@ -107,7 +107,6 @@ function Form() {
         </div>
         <Button
           className={styles.button}
-          onClick={onSubmit}
           content={positionId ? 'Update Position' : 'Create position'}
           disabled={disableButton}
         />

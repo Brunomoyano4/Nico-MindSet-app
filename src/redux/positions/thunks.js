@@ -18,7 +18,7 @@ const URL = `${process.env.REACT_APP_API}/positions`;
 export const getPositions = () => {
   return (dispatch) => {
     dispatch(getPositionsFetching());
-    return fetch(`${URL}`)
+    return fetch(URL)
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -56,7 +56,6 @@ export const addPosition = (position) => {
       })
       .then((response) => {
         dispatch(addPositionsFulfilled(response));
-        return response;
       })
       .catch((error) => {
         dispatch(addPositionsRejected(error.toString()));
