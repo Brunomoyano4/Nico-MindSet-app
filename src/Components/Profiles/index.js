@@ -78,6 +78,7 @@ function Profiles() {
           e.stopPropagation();
           dispatch(deleteProfile(currentProfile._id));
           history.replace('/profiles');
+          setShowConfirmModal(false);
         }}
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}

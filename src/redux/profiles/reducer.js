@@ -2,15 +2,15 @@ import {
   GET_PROFILES_FETCHING,
   GET_PROFILES_FULFILLED,
   GET_PROFILES_REJECTED,
-  ADD_PROFILES_FETCHING,
-  ADD_PROFILES_FULFILLED,
-  ADD_PROFILES_REJECTED,
-  DELETE_PROFILES_FETCHING,
-  DELETE_PROFILES_FULFILLED,
-  DELETE_PROFILES_REJECTED,
-  UPDATE_PROFILES_FETCHING,
-  UPDATE_PROFILES_FULFILLED,
-  UPDATE_PROFILES_REJECTED,
+  ADD_PROFILE_FETCHING,
+  ADD_PROFILE_FULFILLED,
+  ADD_PROFILE_REJECTED,
+  DELETE_PROFILE_FETCHING,
+  DELETE_PROFILE_FULFILLED,
+  DELETE_PROFILE_REJECTED,
+  UPDATE_PROFILE_FETCHING,
+  UPDATE_PROFILE_FULFILLED,
+  UPDATE_PROFILE_REJECTED,
   CLEAR_PROFILES_ERROR
 } from './constants';
 
@@ -40,46 +40,46 @@ const profilesReducer = (state = initialState, action) => {
         isLoading: false,
         error: action.error
       };
-    case ADD_PROFILES_FETCHING:
+    case ADD_PROFILE_FETCHING:
       return {
         ...state,
         isLoading: true
       };
-    case ADD_PROFILES_FULFILLED:
+    case ADD_PROFILE_FULFILLED:
       return {
         ...state,
         isLoading: false,
         list: [...state.list, action.payload]
       };
-    case ADD_PROFILES_REJECTED:
+    case ADD_PROFILE_REJECTED:
       return {
         ...state,
         isLoading: false,
         error: action.error
       };
-    case DELETE_PROFILES_FETCHING:
+    case DELETE_PROFILE_FETCHING:
       return {
         ...state,
         isLoading: true
       };
-    case DELETE_PROFILES_FULFILLED:
+    case DELETE_PROFILE_FULFILLED:
       return {
         ...state,
         isLoading: false,
         list: state.list.filter((profiles) => profiles._id !== action.payload)
       };
-    case DELETE_PROFILES_REJECTED:
+    case DELETE_PROFILE_REJECTED:
       return {
         ...state,
         isLoading: false,
         error: action.error
       };
-    case UPDATE_PROFILES_FETCHING:
+    case UPDATE_PROFILE_FETCHING:
       return {
         ...state,
         isLoading: true
       };
-    case UPDATE_PROFILES_FULFILLED:
+    case UPDATE_PROFILE_FULFILLED:
       return {
         ...state,
         isLoading: false,
@@ -87,7 +87,7 @@ const profilesReducer = (state = initialState, action) => {
           return profile._id === action.payload._id ? action.payload : profile;
         })
       };
-    case UPDATE_PROFILES_REJECTED:
+    case UPDATE_PROFILE_REJECTED:
       return {
         ...state,
         isLoading: false,

@@ -52,19 +52,17 @@ function ProfilesForm() {
     setDisableButton(true);
 
     if (profileId) {
-      dispatch(updateProfile(profileId, values)).then((response) => {
-        if (response) {
-          history.replace('/profiles');
-          setDisableButton(false);
-        }
-      });
+      let response = dispatch(updateProfile(profileId, values));
+      if (response) {
+        history.push('/profiles');
+        setDisableButton(false);
+      }
     } else {
-      dispatch(addProfile(values)).then((response) => {
-        if (response) {
-          history.replace('/profiles');
-          setDisableButton(false);
-        }
-      });
+      let res = dispatch(addProfile(values));
+      if (res) {
+        history.push('/profiles');
+        setDisableButton(false);
+      }
     }
   };
 

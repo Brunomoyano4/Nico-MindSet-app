@@ -65,7 +65,7 @@ export const addProfile = (profile) => {
 
 export const updateProfile = (profileId, profile) => {
   return (dispatch) => {
-    dispatch(deleteProfileFetching());
+    dispatch(updateProfileFetching());
     return fetch(`${URL}/${profileId}`, {
       method: 'PUT',
       headers: {
@@ -82,17 +82,17 @@ export const updateProfile = (profileId, profile) => {
         return response.json();
       })
       .then((response) => {
-        dispatch(deleteProfileFulfilled(response));
+        dispatch(updateProfileFulfilled(response));
       })
       .catch((error) => {
-        dispatch(deleteProfileRejected(error.toString()));
+        dispatch(updateProfileRejected(error.toString()));
       });
   };
 };
 
 export const deleteProfile = (id) => {
   return (dispatch) => {
-    dispatch(updateProfileFetching());
+    dispatch(deleteProfileFetching());
     fetch(`${URL}/${id}`, { method: 'DELETE' })
       .then((response) => {
         if (response.status !== 200) {
@@ -100,10 +100,10 @@ export const deleteProfile = (id) => {
             throw new Error(message);
           });
         }
-        dispatch(updateProfileFulfilled(id));
+        dispatch(deleteProfileFulfilled(id));
       })
       .catch((error) => {
-        dispatch(updateProfileRejected(error.toString()));
+        dispatch(deleteProfileRejected(error.toString()));
       });
   };
 };
