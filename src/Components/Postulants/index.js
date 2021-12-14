@@ -1,48 +1,70 @@
-import { useEffect, useState } from 'react';
-import styles from './postulants.module.css';
-import List from './List';
+import { useEffect } from 'react';
+import { useHistory } from 'react-router';
+import Postulant from './Postulant';
+import Button from '../Shared/Button';
 import Modal from '../Shared/Modal';
+import styles from './postulants.module.css';
+import LoadingSpinner from '../Shared/LoadingSpinner';
+import { useSelector, useDispatch } from 'react-redux';
+import { getPostulants } from '../../redux/postulants/thunks';
+import { clearPostulantsError } from '../../redux/postulants/actions';
 
 function Postulants() {
-  const [postulants, setPostulants] = useState([]);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const postulants = useSelector((store) => store.postulants.list);
+  const error = useSelector((store) => store.postulants.error);
+  const loading = useSelector((store) => store.postulants.isLoading);
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`${process.env.REACT_APP_API}/postulants`)
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return response.json();
-      })
-      .then((response) => setPostulants(response))
-      .catch((error) => setError(error.toString()))
-      .finally(() => setLoading(false));
+    dispatch(getPostulants());
   }, []);
 
+  const CreateBtn = () => {
+    history.push(`/postulants/form`);
+  };
+
   return (
-    <section className={styles.container}>
-      <h2>Postulants</h2>
-      <div className={styles.list}>
-        <List
-          thName={['Name', 'Mail', 'Phone', 'Location', '']}
-          dataList={postulants}
-          setPostulants={setPostulants}
-          loading={loading}
-        />
-      </div>
+    <>
+      <section className={styles.container}>
+        <h2>Postulants</h2>
+        <div>
+          <table className={styles.list}>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Mail</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th></th>
+              </tr>
+            </thead>
+            {!loading && (
+              <tbody>
+                {postulants.map((postulant) => {
+                  return <Postulant key={postulant._id} postulant={postulant} />;
+                })}
+              </tbody>
+            )}
+          </table>
+          {loading && <LoadingSpinner circle={false} />}
+          {!loading && !postulants.length && (
+            <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+          )}
+          <Button className={styles.button} onClick={CreateBtn} content={'CREATE POSTULANT'} />
+        </div>
+      </section>
+      <section className={styles.createBtnSection}>
+        {error && <div className={styles.error}>{error}</div>}
+      </section>
       <Modal
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearPostulantsError())}
         type={'Error'}
       />
-    </section>
+    </>
   );
 }
 
