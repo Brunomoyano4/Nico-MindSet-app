@@ -1,13 +1,16 @@
-import React from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import styles from './postulantsForm.module.css';
+import Modal from '../../Shared/Modal';
+import React, { useState, useEffect } from 'react';
 import Input from '../../Shared/Input';
+import styles from './form.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Button from '../../Shared/Button';
-import Modal from '../../Shared/Modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPostulantById, addPostulant, updatePostulant } from '../../../redux/postulants/thunks';
+import { clearPostulantsError } from '../../../redux/postulants/actions';
 
 function Form() {
+  const dispatch = useDispatch();
   const [firstNameValue, setFirstNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [userValue, setUserNameValue] = useState('');
@@ -26,66 +29,38 @@ function Form() {
   const [startDateValue, setStartDateValue] = useState('');
   const [endDateValue, setEndDateValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [disableButton, setDisableButton] = useState(false);
-
-  const setInputValues = (data) => {
-    setFirstNameValue(data.firstName || '-');
-    setLastNameValue(data.lastName || '-');
-    setUserNameValue(data.userName || '-');
-    setEmailValue(data.email || '-');
-    setPasswordValue(data.password || '-');
-    setBirthdayValue(data.birthDate || '-');
-    setStreetValue(data.street || '-');
-    setStreetNumberValue(data.streetNumber || '-');
-    setZipCodeValue(data.postalCode || '-');
-    setCityValue(data.city || '-');
-    setProvinceValue(data.province || '-');
-    setCountryValue(data.country || '-');
-    setTelephoneValue(data.telephone || '-');
-    setJobPositionValue(data.experience[0].jobPosition || '-');
-    setEmployerValue(data.experience[0].employer || '-');
-    setStartDateValue(data.experience[0].startDate || '-');
-    setEndDateValue(data.experience[0].endDate || '-');
-    setDescriptionValue(data.experience[0].description || '-');
-  };
-
+  const postulant = useSelector((store) => store.postulants.selectedPostulant);
+  const error = useSelector((store) => store.postulants.error);
+  const loading = useSelector((store) => store.postulants.isLoading);
   const history = useHistory();
   const params = useQuery();
   const postulantId = params.get('id');
 
-  let url = `${process.env.REACT_APP_API}/postulants`;
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      firstName: firstNameValue,
-      lastName: lastNameValue,
-      userName: userValue,
-      email: emailValue,
-      password: passwordValue,
-      birthDate: birthdayValue,
-      street: streetValue,
-      streetNumber: streetNumberValue,
-      city: cityValue,
-      postalCode: zipCodeValue,
-      province: provinceValue,
-      country: countryValue,
-      telephone: telephoneValue,
-      experience: [
-        {
-          jobPosition: jobPositionValue,
-          employer: employerValue,
-          startDate: startDateValue,
-          endDate: endDateValue,
-          description: descriptionValue
-        }
-      ]
-    })
+  const values = {
+    firstName: firstNameValue,
+    lastName: lastNameValue,
+    userName: userValue,
+    email: emailValue,
+    password: passwordValue,
+    birthDate: birthdayValue,
+    street: streetValue,
+    streetNumber: streetNumberValue,
+    city: cityValue,
+    postalCode: zipCodeValue,
+    province: provinceValue,
+    country: countryValue,
+    telephone: telephoneValue,
+    experience: [
+      {
+        jobPosition: jobPositionValue,
+        employer: employerValue,
+        startDate: startDateValue,
+        endDate: endDateValue,
+        description: descriptionValue
+      }
+    ]
   };
+
   function useQuery() {
     const { search } = useLocation();
     return React.useMemo(() => new URLSearchParams(search), [search]);
@@ -93,56 +68,52 @@ function Form() {
 
   useEffect(() => {
     if (postulantId) {
-      setLoading(true);
-      fetch(`${process.env.REACT_APP_API}/postulants/${postulantId}`)
-        .then((response) => {
-          if (response.status !== 200 && response.status !== 201) {
-            return response.json().then(({ msg }) => {
-              throw new Error(msg);
-            });
-          }
-          return response.json();
-        })
-        .then((data) => setInputValues(data))
-        .catch((error) => setError(error.toString()))
-        .finally(() => setLoading(false));
+      dispatch(getPostulantById(postulantId));
     }
   }, []);
 
-  if (postulantId) {
-    options.method = 'PUT';
-    url = `${process.env.REACT_APP_API}/postulants/${postulantId}`;
-  } else {
-    options.method = 'POST';
-    url = `${process.env.REACT_APP_API}/postulants`;
-  }
+  useEffect(() => {
+    if (postulantId) {
+      setFirstNameValue(postulant?.firstName);
+      setLastNameValue(postulant?.lastName);
+      setUserNameValue(postulant?.userName);
+      setEmailValue(postulant?.email);
+      setPasswordValue(postulant?.password);
+      setBirthdayValue(postulant?.birthDate);
+      setStreetValue(postulant?.street);
+      setStreetNumberValue(postulant?.streetNumber);
+      setZipCodeValue(postulant?.postalCode);
+      setCityValue(postulant?.city);
+      setProvinceValue(postulant?.province);
+      setCountryValue(postulant?.country);
+      setTelephoneValue(postulant?.telephone);
+      setJobPositionValue(postulant?.experience?.[0]?.jobPosition);
+      setEmployerValue(postulant?.experience?.[0]?.employer);
+      setStartDateValue(postulant?.experience?.[0]?.startDate);
+      setEndDateValue(postulant?.experience?.[0]?.endDate);
+      setDescriptionValue(postulant?.experience?.[0]?.description);
+    }
+  }, [postulant]);
 
   const onSubmit = (event) => {
     event.preventDefault();
-    setDisableButton(true);
-    fetch(url, options)
-      .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
-          return response.json().then(({ message }) => {
-            throw new Error(message);
-          });
-        }
-        return history.replace('/postulants');
-      })
-      .catch((error) => {
-        setError(error.toString());
-        setDisableButton(false);
-      });
+    if (postulantId) {
+      dispatch(updatePostulant(postulantId, values));
+    } else {
+      dispatch(addPostulant(values));
+    }
+    history.replace('/postulants');
   };
+
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={onSubmit}>
+        <h2>Form</h2>
         {loading && (
           <div className={styles.spinnerContainer}>
             <LoadingSpinner />
           </div>
         )}
-        <h2>Form</h2>
         <Input
           name="firstName"
           value={firstNameValue}
@@ -313,13 +284,13 @@ function Form() {
             required
           />
         </div>
-        <Button onClick={(e) => onSubmit(e)} content={'SAVE'} disabled={loading || disableButton} />
+        <Button className={styles.button} content={'SAVE'} disabled={loading} />
       </form>
       <Modal
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearPostulantsError())}
         type={'Error'}
       />
     </div>
