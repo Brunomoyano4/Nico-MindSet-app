@@ -34,10 +34,10 @@ function Form() {
   });
 
   const setInputValue = (data) => {
-    setPositionsValue(data.position || '');
-    setClientValue(data.client?.customerName || '');
-    setPostulantsValue((data.postulants?.firstName || '') && (data.postulants?.lastName || ''));
-    setResult(result || '');
+    setPositionsValue(data?.positions?._id);
+    setClientValue(data?.client?._id);
+    setPostulantsValue(data?.postulants?._id);
+    setResult(data.result);
   };
 
   const values = {
@@ -73,35 +73,35 @@ function Form() {
   };
 
   useEffect(() => {
-    setLoading({
-      applicationIdLoading: applicationId ? true : false,
-      positionLoading: true,
-      clientLoading: true,
-      postulantLoading: true
-    });
-    if (applicationId) {
-      fetch(`${process.env.REACT_APP_API}/applications/${applicationId}`)
-        .then((res) => {
-          if (res.status !== 200) {
-            return res.json().then(({ message }) => {
-              throw new Error(message);
-            });
-          }
-          return res.json();
-        })
-        .then((data) => {
-          setPositionsValue(data?.positions?._id);
-          setClientValue(data?.client?._id);
-          setPostulantsValue(data?.postulants?._id);
-          setResult(data.result);
-        })
-        .catch((error) => error.toString())
-        .finally(() =>
-          setLoading((prev) => {
-            return { ...prev, applicationIdLoading: false };
-          })
-        );
-    }
+    // setLoading({
+    //   applicationIdLoading: applicationId ? true : false,
+    //   positionLoading: true,
+    //   clientLoading: true,
+    //   postulantLoading: true
+    // });
+    // if (applicationId) {
+    //   fetch(`${process.env.REACT_APP_API}/applications/${applicationId}`)
+    //     .then((res) => {
+    //       if (res.status !== 200) {
+    //         return res.json().then(({ message }) => {
+    //           throw new Error(message);
+    //         });
+    //       }
+    //       return res.json();
+    //     })
+    //     .then((data) => {
+    //       setPositionsValue(data?.positions?._id);
+    //       setClientValue(data?.client?._id);
+    //       setPostulantsValue(data?.postulants?._id);
+    //       setResult(data.result);
+    //     })
+    //     .catch((error) => error.toString())
+    //     .finally(() =>
+    //       setLoading((prev) => {
+    //         return { ...prev, applicationIdLoading: false };
+    //       })
+    //     );
+    // }
 
     fetch(`${process.env.REACT_APP_API}/clients`)
       .then((res) => {
