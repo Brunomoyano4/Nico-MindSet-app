@@ -2,6 +2,9 @@ import {
   GET_CLIENTS_FETCHING,
   GET_CLIENTS_FULFILLED,
   GET_CLIENTS_REJECTED,
+  GET_CLIENT_BY_ID_FETCHING,
+  GET_CLIENT_BY_ID_FULFILLED,
+  GET_CLIENT_BY_ID_REJECTED,
   ADD_CLIENTS_FETCHING,
   ADD_CLIENTS_FULFILLED,
   ADD_CLIENTS_REJECTED,
@@ -27,6 +30,26 @@ export const getClientsRejected = (error) => ({
   type: GET_CLIENTS_REJECTED,
   error
 });
+
+export const getClientByIdFetching = () => {
+  return {
+    type: GET_CLIENT_BY_ID_FETCHING
+  };
+};
+
+export const getClientByIdFulfilled = (payload) => {
+  return {
+    type: GET_CLIENT_BY_ID_FULFILLED,
+    payload
+  };
+};
+
+export const getClientByIdRejected = (error) => {
+  return {
+    type: GET_CLIENT_BY_ID_REJECTED,
+    error
+  };
+};
 
 export const addClientsFetching = () => ({
   type: ADD_CLIENTS_FETCHING

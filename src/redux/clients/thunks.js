@@ -2,6 +2,9 @@ import {
   getClientsFetching,
   getClientsFulfilled,
   getClientsRejected,
+  getClientByIdFetching,
+  getClientByIdFulfilled,
+  getClientByIdRejected,
   addClientsFetching,
   addClientsFulfilled,
   addClientsRejected,
@@ -32,6 +35,27 @@ export const getClients = () => {
       })
       .catch((error) => {
         dispatch(getClientsRejected(error.toString()));
+      });
+  };
+};
+
+export const getClientById = (id) => {
+  return (dispatch) => {
+    dispatch(getClientByIdFetching());
+    return fetch(`${URL}/${id}`)
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .then((response) => {
+        dispatch(getClientByIdFulfilled(response));
+      })
+      .catch((error) => {
+        dispatch(getClientByIdRejected(error.toString()));
       });
   };
 };
