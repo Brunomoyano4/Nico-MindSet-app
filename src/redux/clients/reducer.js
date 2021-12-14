@@ -2,9 +2,9 @@ import {
   GET_CLIENTS_FETCHING,
   GET_CLIENTS_FULFILLED,
   GET_CLIENTS_REJECTED,
-  GET_CLIENT_BY_ID_FETCHING,
-  GET_CLIENT_BY_ID_FULFILLED,
-  GET_CLIENT_BY_ID_REJECTED,
+  GET_CLIENTS_BY_ID_FETCHING,
+  GET_CLIENTS_BY_ID_FULFILLED,
+  GET_CLIENTS_BY_ID_REJECTED,
   ADD_CLIENTS_FETCHING,
   ADD_CLIENTS_FULFILLED,
   ADD_CLIENTS_REJECTED,
@@ -43,19 +43,19 @@ const clientsReducer = (state = initialState, action) => {
         isLoading: false,
         error: action.error
       };
-    case GET_CLIENT_BY_ID_FETCHING:
+    case GET_CLIENTS_BY_ID_FETCHING:
       return {
         ...state,
         isLoading: true,
-        selectedClient: initialState.selectedItem
+        selectedClient: initialState.selectedClient
       };
-    case GET_CLIENT_BY_ID_FULFILLED:
+    case GET_CLIENTS_BY_ID_FULFILLED:
       return {
         ...state,
         isLoading: false,
         selectedClient: action.payload
       };
-    case GET_CLIENT_BY_ID_REJECTED:
+    case GET_CLIENTS_BY_ID_REJECTED:
       return {
         ...state,
         isLoading: false,

@@ -2,9 +2,9 @@ import {
   getClientsFetching,
   getClientsFulfilled,
   getClientsRejected,
-  getClientByIdFetching,
-  getClientByIdFulfilled,
-  getClientByIdRejected,
+  getClientsByIdFetching,
+  getClientsByIdFulfilled,
+  getClientsByIdRejected,
   addClientsFetching,
   addClientsFulfilled,
   addClientsRejected,
@@ -41,7 +41,7 @@ export const getClients = () => {
 
 export const getClientById = (id) => {
   return (dispatch) => {
-    dispatch(getClientByIdFetching());
+    dispatch(getClientsByIdFetching());
     return fetch(`${URL}/${id}`)
       .then((response) => {
         if (response.status !== 200) {
@@ -52,10 +52,10 @@ export const getClientById = (id) => {
         return response.json();
       })
       .then((response) => {
-        dispatch(getClientByIdFulfilled(response));
+        dispatch(getClientsByIdFulfilled(response));
       })
       .catch((error) => {
-        dispatch(getClientByIdRejected(error.toString()));
+        dispatch(getClientsByIdRejected(error.toString()));
       });
   };
 };

@@ -2,9 +2,9 @@ import {
   GET_CLIENTS_FETCHING,
   GET_CLIENTS_FULFILLED,
   GET_CLIENTS_REJECTED,
-  GET_CLIENT_BY_ID_FETCHING,
-  GET_CLIENT_BY_ID_FULFILLED,
-  GET_CLIENT_BY_ID_REJECTED,
+  GET_CLIENTS_BY_ID_FETCHING,
+  GET_CLIENTS_BY_ID_FULFILLED,
+  GET_CLIENTS_BY_ID_REJECTED,
   ADD_CLIENTS_FETCHING,
   ADD_CLIENTS_FULFILLED,
   ADD_CLIENTS_REJECTED,
@@ -31,22 +31,22 @@ export const getClientsRejected = (error) => ({
   error
 });
 
-export const getClientByIdFetching = () => {
+export const getClientsByIdFetching = () => {
   return {
-    type: GET_CLIENT_BY_ID_FETCHING
+    type: GET_CLIENTS_BY_ID_FETCHING
   };
 };
 
-export const getClientByIdFulfilled = (payload) => {
+export const getClientsByIdFulfilled = (payload) => {
   return {
-    type: GET_CLIENT_BY_ID_FULFILLED,
+    type: GET_CLIENTS_BY_ID_FULFILLED,
     payload
   };
 };
 
-export const getClientByIdRejected = (error) => {
+export const getClientsByIdRejected = (error) => {
   return {
-    type: GET_CLIENT_BY_ID_REJECTED,
+    type: GET_CLIENTS_BY_ID_REJECTED,
     error
   };
 };
