@@ -1,9 +1,11 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
-import psychologistsReducer from '../redux/psychologists/reducer';
 import thunk from 'redux-thunk';
+import psychologistsReducer from '../redux/psychologists/reducer';
 import postulantsReducer from './postulants/reducer';
+import clientsReducer from './clients/reducer';
 
 const rootReducer = combineReducers({
+  clients: clientsReducer,
   postulants: postulantsReducer,
   psychologists: psychologistsReducer
 });
