@@ -6,7 +6,7 @@ import styles from './form.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Button from '../../Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addClient, updateClient } from '../../../redux/clients/thunks';
+import { getClientById, addClient, updateClient } from '../../../redux/clients/thunks';
 import { clearClientsError } from '../../../redux/clients/actions';
 
 function Form() {
@@ -16,20 +16,12 @@ function Form() {
   const [phoneValue, setPhoneValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
-  const [disableButton, setDisableButton] = useState(false);
+  const client = useSelector((store) => store.clients.selectedClient);
   const error = useSelector((store) => store.clients.error);
-  const data = useSelector((store) => store.clients.list);
   const loading = useSelector((store) => store.clients.isLoading);
   const history = useHistory();
   const params = useQuery();
   const clientId = params.get('id');
-  const setInputValues = ({ customerName, branch, phone, email, description }) => {
-    setNameValue(customerName || 'Name');
-    setBranchValue(branch || 'Branch');
-    setPhoneValue(phone || 'Phone');
-    setEmailValue(email || 'Email');
-    setDescriptionValue(description || 'Description');
-  };
 
   const values = {
     customerName: nameValue,
@@ -46,22 +38,28 @@ function Form() {
 
   useEffect(() => {
     if (clientId) {
-      data.forEach((client) => {
-        if (client._id === clientId) setInputValues(client);
-      });
+      dispatch(getClientById(clientId));
     }
-  }, [clientId]);
+  }, []);
+
+  useEffect(() => {
+    if (clientId) {
+      setNameValue(client?.customerName);
+      setBranchValue(client?.branch);
+      setPhoneValue(client?.phone);
+      setEmailValue(client?.email);
+      setDescriptionValue(client?.description);
+    }
+  }, [client]);
 
   const onSubmit = (event) => {
     event.preventDefault();
-    setDisableButton(true);
     if (clientId) {
       dispatch(updateClient(clientId, values));
     } else {
       dispatch(addClient(values));
     }
     history.replace('/clients');
-    setDisableButton(false);
   };
 
   return (
@@ -127,7 +125,7 @@ function Form() {
             required
           />
         </div>
-        <Button className={styles.button} content={'SAVE'} disabled={loading || disableButton} />
+        <Button className={styles.button} content={'SAVE'} disabled={loading} />
       </form>
       <Modal
         title="Something went wrong!"

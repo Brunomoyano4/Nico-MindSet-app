@@ -21,7 +21,7 @@ const initialState = {
   isLoading: false,
   list: [],
   error: '',
-  selectedClient: []
+  selectedClient: {}
 };
 
 const clientsReducer = (state = initialState, action) => {
@@ -67,7 +67,7 @@ const clientsReducer = (state = initialState, action) => {
         isLoading: true
       };
     case ADD_CLIENTS_FULFILLED:
-      state.list.push(action.payload);
+      if (!state.list.some((el) => el._id === action.payload._id)) state.list.push(action.payload);
       return {
         ...state,
         isLoading: false,
