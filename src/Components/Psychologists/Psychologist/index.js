@@ -8,7 +8,6 @@ import { clearPsychologistsError } from '../../../redux/psychologists/actions';
 
 function Psychologist({ psychologist }) {
   const dispatch = useDispatch();
-  const psychologists = useSelector((store) => store.psychologists.list);
   const error = useSelector((store) => store.psychologists.error);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const history = useHistory();
