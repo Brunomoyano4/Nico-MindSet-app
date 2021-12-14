@@ -60,14 +60,14 @@ function Form() {
     if (psychologistId) {
       let response = dispatch(updatePsychologist(psychologistId, values));
       if (response) {
-        history.push('/psychologists');
         setDisableButton(false);
+        history.replace('/psychologists');
       }
     } else {
       let res = dispatch(addPsychologist(values));
       if (res) {
-        history.push('/psychologists');
         setDisableButton(false);
+        history.replace('/psychologists');
       }
     }
   };
