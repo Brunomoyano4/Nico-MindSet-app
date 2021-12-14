@@ -22,10 +22,10 @@ function Form() {
   const error = useSelector((store) => store.interviews.error);
 
   const setInputValues = (data) => {
-    setPositionIdValue(data.positionId || '-'),
-      setPostulantIdValue(data.postulantId || '-'),
-      setDateTimeValue(data.dateTime || '-'),
-      setStatusValue(data.status || '-');
+    setPositionIdValue(data.positionId || ''),
+      setPostulantIdValue(data.postulantId || ''),
+      setDateTimeValue(data.dateTime || ''),
+      setStatusValue(data.status || '');
   };
 
   const history = useHistory();
@@ -122,7 +122,6 @@ function Form() {
         </div>
         <Button content={'SAVE'} disabled={loading || disableButton} />
       </form>
-
       <Modal
         title="Something went wrong!"
         subtitle={error}
