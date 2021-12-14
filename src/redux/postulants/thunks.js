@@ -2,6 +2,9 @@ import {
   getPostulantsFetching,
   getPostulantsFulfilled,
   getPostulantsRejected,
+  getPostulantsByIdFetching,
+  getPostulantsByIdFulfilled,
+  getPostulantsByIdRejected,
   addPostulantsFetching,
   addPostulantsFulfilled,
   addPostulantsRejected,
@@ -32,6 +35,27 @@ export const getPostulants = () => {
       })
       .catch((error) => {
         dispatch(getPostulantsRejected(error.toString()));
+      });
+  };
+};
+
+export const getPostulantsById = (id) => {
+  return (dispatch) => {
+    dispatch(getPostulantsByIdFetching());
+    return fetch(`${URL}/${id}`)
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .then((response) => {
+        dispatch(getPostulantsByIdFulfilled(response));
+      })
+      .catch((error) => {
+        dispatch(getPostulantsByIdRejected(error.toString()));
       });
   };
 };

@@ -2,6 +2,9 @@ import {
   GET_POSTULANTS_FETCHING,
   GET_POSTULANTS_FULFILLED,
   GET_POSTULANTS_REJECTED,
+  GET_POSTULANTS_BY_ID_FETCHING,
+  GET_POSTULANTS_BY_ID_FULFILLED,
+  GET_POSTULANTS_BY_ID_REJECTED,
   ADD_POSTULANTS_FETCHING,
   ADD_POSTULANTS_FULFILLED,
   ADD_POSTULANTS_REJECTED,
@@ -18,7 +21,7 @@ const initialState = {
   isLoading: false,
   list: [],
   error: '',
-  postulant: []
+  selectedPostulant: {}
 };
 
 const postulantsReducer = (state = initialState, action) => {
@@ -35,6 +38,24 @@ const postulantsReducer = (state = initialState, action) => {
         list: action.payload
       };
     case GET_POSTULANTS_REJECTED:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error
+      };
+    case GET_POSTULANTS_BY_ID_FETCHING:
+      return {
+        ...state,
+        isLoading: true,
+        selectedPostulant: initialState.selectedPostulant
+      };
+    case GET_POSTULANTS_BY_ID_FULFILLED:
+      return {
+        ...state,
+        isLoading: false,
+        selectedPostulant: action.payload
+      };
+    case GET_POSTULANTS_BY_ID_REJECTED:
       return {
         ...state,
         isLoading: false,

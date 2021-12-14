@@ -2,6 +2,9 @@ import {
   GET_POSTULANTS_FETCHING,
   GET_POSTULANTS_FULFILLED,
   GET_POSTULANTS_REJECTED,
+  GET_POSTULANTS_BY_ID_FETCHING,
+  GET_POSTULANTS_BY_ID_FULFILLED,
+  GET_POSTULANTS_BY_ID_REJECTED,
   ADD_POSTULANTS_FETCHING,
   ADD_POSTULANTS_FULFILLED,
   ADD_POSTULANTS_REJECTED,
@@ -27,6 +30,26 @@ export const getPostulantsRejected = (error) => ({
   type: GET_POSTULANTS_REJECTED,
   error
 });
+
+export const getPostulantsByIdFetching = () => {
+  return {
+    type: GET_POSTULANTS_BY_ID_FETCHING
+  };
+};
+
+export const getPostulantsByIdFulfilled = (payload) => {
+  return {
+    type: GET_POSTULANTS_BY_ID_FULFILLED,
+    payload
+  };
+};
+
+export const getPostulantsByIdRejected = (error) => {
+  return {
+    type: GET_POSTULANTS_BY_ID_REJECTED,
+    error
+  };
+};
 
 export const addPostulantsFetching = () => ({
   type: ADD_POSTULANTS_FETCHING
