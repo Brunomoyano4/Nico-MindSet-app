@@ -3,13 +3,14 @@ import { useState } from 'react';
 import DeleteBtn from '../../Shared/DeleteBtn/index';
 import Modal from '../../Shared/Modal';
 import styles from '../Postulant/postulant.module.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deletePostulant } from '../../../redux/postulants/thunks';
+import { clearPostulantsError } from '../../../redux/postulants/actions';
 
 const Postulant = ({ postulant }) => {
   const dispatch = useDispatch();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [error, setError] = useState('');
+  const error = useSelector((store) => store.postulants.error);
   const history = useHistory();
 
   const openEditForm = () => {
@@ -32,7 +33,7 @@ const Postulant = ({ postulant }) => {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearPostulantsError())}
         type={'Error'}
       />
       <tr className={styles.tr} key={postulant._id} onClick={openEditForm}>

@@ -6,7 +6,7 @@ import styles from './form.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Button from '../../Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPostulant, updatePostulant } from '../../../redux/postulants/thunks';
+import { getPostulantById, addPostulant, updatePostulant } from '../../../redux/postulants/thunks';
 import { clearPostulantsError } from '../../../redux/postulants/actions';
 
 function Form() {
@@ -29,34 +29,12 @@ function Form() {
   const [startDateValue, setStartDateValue] = useState('');
   const [endDateValue, setEndDateValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
-  const [disableButton, setDisableButton] = useState(false);
+  const postulant = useSelector((store) => store.postulants.selectedPostulant);
   const error = useSelector((store) => store.postulants.error);
-  const data = useSelector((store) => store.postulants.list);
   const loading = useSelector((store) => store.postulants.isLoading);
   const history = useHistory();
   const params = useQuery();
   const postulantId = params.get('id');
-
-  const setInputValues = (data) => {
-    setFirstNameValue(data.firstName || '-');
-    setLastNameValue(data.lastName || '-');
-    setUserNameValue(data.userName || '-');
-    setEmailValue(data.email || '-');
-    setPasswordValue(data.password || '-');
-    setBirthdayValue(data.birthDate || '-');
-    setStreetValue(data.street || '-');
-    setStreetNumberValue(data.streetNumber || '-');
-    setZipCodeValue(data.postalCode || '-');
-    setCityValue(data.city || '-');
-    setProvinceValue(data.province || '-');
-    setCountryValue(data.country || '-');
-    setTelephoneValue(data.telephone || '-');
-    setJobPositionValue(data.experience[0].jobPosition || '-');
-    setEmployerValue(data.experience[0].employer || '-');
-    setStartDateValue(data.experience[0].startDate || '-');
-    setEndDateValue(data.experience[0].endDate || '-');
-    setDescriptionValue(data.experience[0].description || '-');
-  };
 
   const values = {
     firstName: firstNameValue,
@@ -90,22 +68,41 @@ function Form() {
 
   useEffect(() => {
     if (postulantId) {
-      data.forEach((postulant) => {
-        if (postulant._id === postulantId) setInputValues(postulant);
-      });
+      dispatch(getPostulantById(postulantId));
     }
-  }, [postulantId]);
+  }, []);
+
+  useEffect(() => {
+    if (postulantId) {
+      setFirstNameValue(postulant?.firstName);
+      setLastNameValue(postulant?.lastName);
+      setUserNameValue(postulant?.userName);
+      setEmailValue(postulant?.email);
+      setPasswordValue(postulant?.password);
+      setBirthdayValue(postulant?.birthDate);
+      setStreetValue(postulant?.street);
+      setStreetNumberValue(postulant?.streetNumber);
+      setZipCodeValue(postulant?.postalCode);
+      setCityValue(postulant?.city);
+      setProvinceValue(postulant?.province);
+      setCountryValue(postulant?.country);
+      setTelephoneValue(postulant?.telephone);
+      setJobPositionValue(postulant?.experience[0]?.jobPosition);
+      setEmployerValue(postulant?.experience[0]?.employer);
+      setStartDateValue(postulant?.experience[0]?.startDate);
+      setEndDateValue(postulant?.experience[0]?.endDate);
+      setDescriptionValue(postulant?.experience[0]?.description);
+    }
+  }, [postulant]);
 
   const onSubmit = (event) => {
     event.preventDefault();
-    setDisableButton(true);
     if (postulantId) {
       dispatch(updatePostulant(postulantId, values));
     } else {
       dispatch(addPostulant(values));
     }
     history.replace('/postulants');
-    setDisableButton(false);
   };
 
   return (
@@ -287,7 +284,7 @@ function Form() {
             required
           />
         </div>
-        <Button className={styles.button} content={'SAVE'} disabled={loading || disableButton} />
+        <Button className={styles.button} content={'SAVE'} disabled={loading} />
       </form>
       <Modal
         title="Something went wrong!"
