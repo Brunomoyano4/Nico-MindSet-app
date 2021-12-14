@@ -87,11 +87,11 @@ function Form() {
       setProvinceValue(postulant?.province);
       setCountryValue(postulant?.country);
       setTelephoneValue(postulant?.telephone);
-      setJobPositionValue(postulant?.experience[0]?.jobPosition);
-      setEmployerValue(postulant?.experience[0]?.employer);
-      setStartDateValue(postulant?.experience[0]?.startDate);
-      setEndDateValue(postulant?.experience[0]?.endDate);
-      setDescriptionValue(postulant?.experience[0]?.description);
+      setJobPositionValue(postulant?.experience?.[0]?.jobPosition);
+      setEmployerValue(postulant?.experience?.[0]?.employer);
+      setStartDateValue(postulant?.experience?.[0]?.startDate);
+      setEndDateValue(postulant?.experience?.[0]?.endDate);
+      setDescriptionValue(postulant?.experience?.[0]?.description);
     }
   }, [postulant]);
 

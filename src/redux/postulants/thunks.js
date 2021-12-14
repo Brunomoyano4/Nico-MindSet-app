@@ -39,7 +39,7 @@ export const getPostulants = () => {
   };
 };
 
-export const getPostulantsById = (id) => {
+export const getPostulantById = (id) => {
   return (dispatch) => {
     dispatch(getPostulantsByIdFetching());
     return fetch(`${URL}/${id}`)
