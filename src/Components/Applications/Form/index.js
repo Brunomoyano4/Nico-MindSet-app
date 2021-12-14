@@ -5,21 +5,34 @@ import Select from '../../Shared/Select';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../Shared/Button';
+import { addApplications, updateApplications } from '../../../redux/applications/thunks';
+import { clearApplicationsError } from '../../../redux/applications/actions';
 
 function Form() {
   const history = useHistory();
   const params = useQuery();
   const applicationId = params.get('id');
-  const [positionsOption, setPositionsOption] = useState([]);
+  const dispatch = useDispatch();
+
   const [positionsValue, setPositionsValue] = useState('');
-  const [clientOption, setClientOption] = useState([]);
   const [clientValue, setClientValue] = useState('');
-  const [postulantsOption, setPostulantsOption] = useState([]);
   const [postulantsValue, setPostulantsValue] = useState('');
   const [result, setResult] = useState('');
-  const [error, setError] = useState('');
+
+  const [jobValue, setJobValue] = useState('');
+  const [customerNameValue, setCustomerNameValue] = useState('');
+  const [firstNameValue, setFirstNameValue] = useState('');
+  const [lastNameValue, setLastNameValue] = useState('');
+  const [resultValue, setResultValue] = useState('');
+
+  const [positionsOption, setPositionsOption] = useState([]);
+  const [clientOption, setClientOption] = useState([]);
+  const [postulantsOption, setPostulantsOption] = useState([]);
   const [disableButton, setDisableButton] = useState(false);
+  const application = useSelector((store) => store.application.list);
+  const error = useSelector((store) => store.application.error);
   const [loading, setLoading] = useState({
     positionLoading: false,
     clientLoading: false,
@@ -27,45 +40,92 @@ function Form() {
     applicationIdLoading: false
   });
 
+  const setInputValue = ({ job, customerName, firstName, lastName, result }) => {
+    setJobValue(job || '');
+    setCustomerNameValue(customerName || '');
+    setFirstNameValue(firstName || '');
+    setLastNameValue(lastName || '');
+    setResultValue(result || '');
+  };
+
+  useEffect(() => {
+    if (applicationId) {
+      if (Object.keys(application).length) {
+        setPositionsValue(application.job);
+        setClientValue(application.customerName);
+        setPostulantsValue(application.firstName);
+        setResult(application.description);
+      }
+    }
+  }, [application]);
+
+  const values = {
+    job: jobValue,
+    customerName: customerNameValue,
+    firstName: firstNameValue,
+    lastName: lastNameValue,
+    result: resultValue
+  };
+
   function useQuery() {
     const { search } = useLocation();
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  // useEffect(() => {
+  //   if (applicationId) {
+  //     application.forEach((application) => {
+  //       if (application._id === applicationId) setInputValue(application);
+  //     });
+  //   }
+  // }, [applicationId]);
+
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
+  //   setDisableButton(true);
+  //   let url = `${process.env.REACT_APP_API}/applications`;
+  //   const options = {
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({
+  //       positions: positionsValue,
+  //       postulants: postulantsValue,
+  //       client: clientValue,
+  //       result: result
+  //     }),
+  //     method: 'POST'
+  //   };
+  //   if (applicationId) {
+  //     options.method = 'PUT';
+  //     url = `${process.env.REACT_APP_API}/applications/${applicationId}`;
+  //   }
+  //   fetch(url, options)
+  //     .then((res) => {
+  //       if (res.status !== 200 && res.status !== 201) {
+  //         return res.json().then(({ message }) => {
+  //           throw new Error(message);
+  //         });
+  //       }
+  //       return res.json();
+  //     })
+  //     .then(() => history.replace('/applications'))
+  //     .catch((error) => {
+  //       setError(error.toString());
+  //       setDisableButton(false);
+  //     });
+  // };.
+
+  const onSubmit = (event) => {
+    event.preventDefault();
     setDisableButton(true);
-    let url = `${process.env.REACT_APP_API}/applications`;
-    const options = {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        positions: positionsValue,
-        postulants: postulantsValue,
-        client: clientValue,
-        result: result
-      }),
-      method: 'POST'
-    };
     if (applicationId) {
-      options.method = 'PUT';
-      url = `${process.env.REACT_APP_API}/applications/${applicationId}`;
+      dispatch(updateApplications(values));
+    } else {
+      dispatch(addApplications(applicationId, values));
     }
-    fetch(url, options)
-      .then((res) => {
-        if (res.status !== 200 && res.status !== 201) {
-          return res.json().then(({ message }) => {
-            throw new Error(message);
-          });
-        }
-        return res.json();
-      })
-      .then(() => history.replace('/applications'))
-      .catch((error) => {
-        setError(error.toString());
-        setDisableButton(false);
-      });
+    history.replace('/applications');
+    setDisableButton(false);
   };
 
   useEffect(() => {
@@ -91,7 +151,7 @@ function Form() {
           setPostulantsValue(data?.postulants?._id);
           setResult(data.result);
         })
-        .catch((error) => setError(error.toString()))
+        .catch((error) => error.toString())
         .finally(() =>
           setLoading((prev) => {
             return { ...prev, applicationIdLoading: false };
@@ -117,7 +177,7 @@ function Form() {
         );
         setClientValue(res[0]._id);
       })
-      .catch((error) => setError(error.toString()))
+      .catch((error) => error.toString())
       .finally(() => {
         setLoading((prev) => {
           return { ...prev, clientLoading: false };
@@ -142,7 +202,7 @@ function Form() {
         );
         setPostulantsValue(res[0]._id);
       })
-      .catch((error) => setError(error.toString()))
+      .catch((error) => error.toString())
       .finally(() => {
         setLoading((prev) => {
           return { ...prev, postulantLoading: false };
@@ -167,7 +227,7 @@ function Form() {
         );
         setPositionsValue(res[0]._id);
       })
-      .catch((error) => setError(error.toString()))
+      .catch((error) => error.toString())
       .finally(() => {
         setLoading((prev) => {
           return { ...prev, positionLoading: false };
@@ -185,7 +245,7 @@ function Form() {
               title="Something went wrong!"
               subtitle={error}
               show={error}
-              closeModal={() => setError('')}
+              closeModal={() => error}
               type={'Error'}
             />
             <h3 className={error ? styles.error : ''}>{error}</h3>
@@ -233,9 +293,8 @@ function Form() {
           </div>
           <Button
             className={styles.button}
-            type="submit"
-            disabled={Object.values(loading).some(Boolean) || disableButton}
-            content={applicationId ? 'SAVE' : 'CREATE APPLICATION'}
+            content={applicationId ? 'Update Application' : 'Create Application'}
+            disabled={disableButton}
           />
         </form>
       </div>

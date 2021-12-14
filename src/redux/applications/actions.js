@@ -10,7 +10,8 @@ import {
   DELETE_APPLICATIONS_REJECTED,
   UPDATE_APPLICATIONS_FETCHING,
   UPDATE_APPLICATIONS_FULFILLED,
-  UPDATE_APPLICATIONS_REJECTED
+  UPDATE_APPLICATIONS_REJECTED,
+  CLEAR_APPLICATIONS_ERROR
 } from './constants';
 
 export const getApplicationsFetching = () => ({
@@ -67,4 +68,8 @@ export const updateApplicationsFulfilled = (payload) => ({
 export const updateApplicationsRejected = (error) => ({
   type: UPDATE_APPLICATIONS_REJECTED,
   error
+});
+
+export const clearApplicationsError = () => ({
+  type: CLEAR_APPLICATIONS_ERROR
 });

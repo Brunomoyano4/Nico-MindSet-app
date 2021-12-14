@@ -10,14 +10,15 @@ import {
   DELETE_APPLICATIONS_REJECTED,
   UPDATE_APPLICATIONS_FETCHING,
   UPDATE_APPLICATIONS_FULFILLED,
-  UPDATE_APPLICATIONS_REJECTED
+  UPDATE_APPLICATIONS_REJECTED,
+  CLEAR_APPLICATIONS_ERROR
 } from './constants';
 
 const initialState = {
   isLoading: false,
   list: [],
-  error: false,
-  selectApplication: {}
+  error: '',
+  application: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -37,7 +38,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        error: true
+        error: action.error
       };
     case ADD_APPLICATIONS_FETCHING:
       return {
@@ -48,13 +49,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        list: [...state.list, action.payload]
+        list: [...state.list]
       };
     case ADD_APPLICATIONS_REJECTED:
       return {
         ...state,
         isLoading: false,
-        error: true
+        error: action.error
       };
     case DELETE_APPLICATIONS_FETCHING:
       return {
@@ -71,25 +72,31 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        error: true
+        error: action.error
       };
     case UPDATE_APPLICATIONS_FETCHING:
       return {
         ...state,
-        isLoading: true,
-        selectApplication: initialState.selectApplication
+        isLoading: true
       };
     case UPDATE_APPLICATIONS_FULFILLED:
       return {
         ...state,
         isLoading: false,
-        selectApplication: action.payload
+        list: state.list.map((el) => {
+          return el._id === action.payload._id ? action.payload : el;
+        })
       };
     case UPDATE_APPLICATIONS_REJECTED:
       return {
         ...state,
         isLoading: false,
-        error: true
+        error: action.error
+      };
+    case CLEAR_APPLICATIONS_ERROR:
+      return {
+        ...state,
+        error: ''
       };
     default:
       return state;
