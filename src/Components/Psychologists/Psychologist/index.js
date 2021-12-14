@@ -1,40 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DeleteBtn from '../../Shared/DeleteBtn';
 import { useHistory } from 'react-router-dom';
 import Modal from '../../Shared/Modal';
+import { useSelector, useDispatch } from 'react-redux';
+import { deletePsychologist, getPsychologists } from '../../../redux/psychologists/thunks';
+import { clearPsychologistsError } from '../../../redux/psychologists/actions';
 
 function Psychologist({ psychologist }) {
+  const dispatch = useDispatch();
+  const error = useSelector((store) => store.psychologists.error);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [error, setError] = useState('');
   const history = useHistory();
 
   const openEditForm = () => {
     history.push(`/psychologists/form?id=${psychologist._id}`);
   };
 
-  const deletePsychologist = (event) => {
-    event.stopPropagation();
-    const url = `${process.env.REACT_APP_API}/psychologists/${psychologist._id}`;
-    fetch(url, {
-      method: 'DELETE'
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        setShowConfirmModal(false);
-        return history.go(0);
-      })
-      .catch((error) => setError(error.toString()));
-  };
+  useEffect(() => {
+    dispatch(getPsychologists());
+  }, []);
 
   return (
     <>
       <Modal
         title="Are you sure you want to delete the selected psychologist?"
-        onConfirm={(e) => deletePsychologist(e)}
+        onConfirm={(e) => {
+          e.stopPropagation();
+          dispatch(deletePsychologist(psychologist._id));
+          setShowConfirmModal(false);
+          history.go(0);
+        }}
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
         type={'Confirm'}
@@ -43,7 +38,7 @@ function Psychologist({ psychologist }) {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearPsychologistsError())}
         type={'Error'}
       />
       <tr key={psychologist._id} onClick={openEditForm}>

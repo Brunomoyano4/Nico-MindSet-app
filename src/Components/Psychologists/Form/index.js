@@ -1,94 +1,75 @@
 import { useLocation, useHistory } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Input from '../../Shared/Input';
 import styles from './form.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Modal from '../../Shared/Modal';
 import Button from '../../Shared/Button';
+import { updatePsychologist, addPsychologist } from '../../../redux/psychologists/thunks';
+import { clearPsychologistsError } from '../../../redux/psychologists/actions';
 
 function Form() {
+  const dispatch = useDispatch();
+  const psychologists = useSelector((store) => store.psychologists.list);
+  const error = useSelector((store) => store.psychologists.error);
+  const loading = useSelector((store) => store.psychologists.isLoading);
+  const history = useHistory();
+  const params = useQuery();
+  const psychologistId = params.get('id');
   const [firstNameValue, setFirstNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [userNameValue, setUserNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
 
   const setInputValues = ({ firstName, lastName, userName, email, password }) => {
-    setFirstNameValue(firstName || 'N/A');
-    setLastNameValue(lastName || 'N/A');
-    setUserNameValue(userName || 'N/A');
-    setEmailValue(email || 'N/A');
-    setPasswordValue(password || 'N/A');
+    setFirstNameValue(firstName || '');
+    setLastNameValue(lastName || '');
+    setUserNameValue(userName || '');
+    setEmailValue(email || '');
+    setPasswordValue(password || '');
   };
 
-  let url;
-  const history = useHistory();
-  const params = useQuery();
-  const psychologistId = params.get('id');
-
-  const options = {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      firstName: firstNameValue,
-      lastName: lastNameValue,
-      email: emailValue,
-      userName: userNameValue,
-      password: passwordValue
-    })
+  const values = {
+    firstName: firstNameValue,
+    lastName: lastNameValue,
+    email: emailValue,
+    userName: userNameValue,
+    password: passwordValue
   };
-
-  if (psychologistId) {
-    useEffect(() => {
-      setLoading(true);
-      fetch(`${process.env.REACT_APP_API}/psychologists/${psychologistId}`)
-        .then((response) => {
-          if (response.status !== 200) {
-            return response.json().then(({ msg }) => {
-              throw new Error(msg);
-            });
-          }
-          return response.json();
-        })
-        .then((data) => setInputValues(data))
-        .catch((error) => setError(error.toString()))
-        .finally(() => setLoading(false));
-    }, []);
-  }
 
   function useQuery() {
     const { search } = useLocation();
-
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
 
-  const onSubmit = (event) => {
-    event.preventDefault();
-    setDisableButton(true);
+  useEffect(() => {
     if (psychologistId) {
-      options.method = 'PUT';
-      url = `${process.env.REACT_APP_API}/psychologists/${psychologistId}`;
-    } else {
-      options.method = 'POST';
-      url = `${process.env.REACT_APP_API}/psychologists`;
-    }
-    fetch(url, options)
-      .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return history.replace('/psychologists');
-      })
-      .catch((error) => {
-        setError(error.toString());
-        setDisableButton(false);
+      psychologists.forEach((psychologist) => {
+        if (psychologist._id === psychologistId) setInputValues(psychologist);
       });
+    }
+  }, [psychologistId]);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setDisableButton(true);
+
+    if (psychologistId) {
+      let response = dispatch(updatePsychologist(psychologistId, values));
+      if (response) {
+        setDisableButton(false);
+        history.replace('/psychologists');
+      }
+    } else {
+      let res = dispatch(addPsychologist(values));
+      if (res) {
+        setDisableButton(false);
+        history.replace('/psychologists');
+      }
+    }
   };
 
   return (
@@ -162,7 +143,7 @@ function Form() {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearPsychologistsError())}
         type={'Error'}
       />
     </div>
