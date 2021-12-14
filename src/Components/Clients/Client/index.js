@@ -3,13 +3,14 @@ import { useState } from 'react';
 import DeleteBtn from '../../Shared/DeleteBtn/index';
 import Modal from '../../Shared/Modal';
 import styles from '../Client/client.module.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteClient } from '../../../redux/clients/thunks';
+import { clearClientsError } from '../../../redux/clients/actions';
 
 const Client = ({ client }) => {
   const dispatch = useDispatch();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [error, setError] = useState('');
+  const error = useSelector((store) => store.clients.error);
   const history = useHistory();
 
   const openEditForm = () => {
@@ -32,7 +33,7 @@ const Client = ({ client }) => {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearClientsError())}
         type={'Error'}
       />
       <tr className={styles.tr} key={client._id} onClick={openEditForm}>
