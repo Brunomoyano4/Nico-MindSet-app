@@ -2,12 +2,13 @@ import { useState } from 'react';
 import DeleteBtn from '../../Shared/DeleteBtn';
 import { useHistory } from 'react-router-dom';
 import Modal from '../../Shared/Modal';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deletePosition } from '../../../redux/positions/thunks';
+import { clearPostitionsError } from '../../../redux/positions/actions';
 
 function Position({ position }) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [error, setError] = useState('');
+  const error = useSelector((store) => store.positions.error);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -31,7 +32,7 @@ function Position({ position }) {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearPostitionsError())}
         type={'Error'}
       />
       <tr key={position._id} onClick={openEditForm}>

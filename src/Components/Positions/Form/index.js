@@ -13,20 +13,12 @@ function Form() {
   const [clientIdValue, setClientIdValue] = useState('');
   const [jobValue, setJobValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
-  const [createdAtValue, setCreatedAtValue] = useState('');
   const [disableButton, setDisableButton] = useState(false);
   const selectedItem = useSelector((store) => store.positions.selectedItem);
   const loading = useSelector((store) => store.positions.isLoading);
   const error = useSelector((store) => store.positions.error);
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const setInputValues = (data) => {
-    setClientIdValue(data.clientId || '');
-    setJobValue(data.job || '');
-    setDescriptionValue(data.description || '');
-    setCreatedAtValue(data.createdAt || '');
-  };
 
   const params = useQuery();
   const positionId = params.get('id');
@@ -38,18 +30,19 @@ function Form() {
   }, []);
 
   useEffect(() => {
-    if (Object.keys(selectedItem).length) {
-      setClientIdValue(selectedItem.clientId);
-      setJobValue(selectedItem.job);
-      setDescriptionValue(selectedItem.description);
+    if (positionId) {
+      if (Object.keys(selectedItem).length) {
+        setClientIdValue(selectedItem.clientId);
+        setJobValue(selectedItem.job);
+        setDescriptionValue(selectedItem.description);
+      }
     }
   }, [selectedItem]);
 
   const values = {
     clientId: clientIdValue,
     job: jobValue,
-    description: descriptionValue,
-    createdAt: createdAtValue
+    description: descriptionValue
   };
 
   function useQuery() {
