@@ -82,10 +82,10 @@ const reducer = (state = initialState, action) => {
     case UPDATE_APPLICATIONS_FULFILLED:
       return {
         ...state,
-        isLoading: false,
-        list: state.list.map((el) => {
-          return el._id === action.payload._id ? action.payload : el;
-        })
+        isLoading: false
+        // list: state.list.map((el) => {
+        //   return el._id === action.payload._id ? action.payload : el;
+        // })
       };
     case UPDATE_APPLICATIONS_REJECTED:
       return {

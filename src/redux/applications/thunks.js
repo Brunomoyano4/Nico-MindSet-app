@@ -39,7 +39,7 @@ export const getApplications = () => {
 export const addApplications = (application) => {
   return (dispatch) => {
     dispatch(addApplicationsFetching());
-    return fetch(URL, {
+    return fetch(`${process.env.REACT_APP_API}/applications`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

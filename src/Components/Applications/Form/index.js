@@ -8,7 +8,6 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../Shared/Button';
 import { addApplications, updateApplications } from '../../../redux/applications/thunks';
-import { clearApplicationsError } from '../../../redux/applications/actions';
 
 function Form() {
   const history = useHistory();
@@ -20,12 +19,6 @@ function Form() {
   const [clientValue, setClientValue] = useState('');
   const [postulantsValue, setPostulantsValue] = useState('');
   const [result, setResult] = useState('');
-
-  const [jobValue, setJobValue] = useState('');
-  const [customerNameValue, setCustomerNameValue] = useState('');
-  const [firstNameValue, setFirstNameValue] = useState('');
-  const [lastNameValue, setLastNameValue] = useState('');
-  const [resultValue, setResultValue] = useState('');
 
   const [positionsOption, setPositionsOption] = useState([]);
   const [clientOption, setClientOption] = useState([]);
@@ -40,31 +33,18 @@ function Form() {
     applicationIdLoading: false
   });
 
-  const setInputValue = ({ job, customerName, firstName, lastName, result }) => {
-    setJobValue(job || '');
-    setCustomerNameValue(customerName || '');
-    setFirstNameValue(firstName || '');
-    setLastNameValue(lastName || '');
-    setResultValue(result || '');
+  const setInputValue = (data) => {
+    setPositionsValue(data.position || '');
+    setClientValue(data.client?.customerName || '');
+    setPostulantsValue((data.postulants?.firstName || '') && (data.postulants?.lastName || ''));
+    setResult(result || '');
   };
 
-  useEffect(() => {
-    if (applicationId) {
-      if (Object.keys(application).length) {
-        setPositionsValue(application.job);
-        setClientValue(application.customerName);
-        setPostulantsValue(application.firstName);
-        setResult(application.description);
-      }
-    }
-  }, [application]);
-
   const values = {
-    job: jobValue,
-    customerName: customerNameValue,
-    firstName: firstNameValue,
-    lastName: lastNameValue,
-    result: resultValue
+    positions: positionsValue,
+    client: clientValue,
+    postulants: postulantsValue,
+    result: result
   };
 
   function useQuery() {
@@ -72,57 +52,21 @@ function Form() {
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
 
-  // useEffect(() => {
-  //   if (applicationId) {
-  //     application.forEach((application) => {
-  //       if (application._id === applicationId) setInputValue(application);
-  //     });
-  //   }
-  // }, [applicationId]);
-
-  // const onSubmit = (e) => {
-  //   e.preventDefault();
-  //   setDisableButton(true);
-  //   let url = `${process.env.REACT_APP_API}/applications`;
-  //   const options = {
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       positions: positionsValue,
-  //       postulants: postulantsValue,
-  //       client: clientValue,
-  //       result: result
-  //     }),
-  //     method: 'POST'
-  //   };
-  //   if (applicationId) {
-  //     options.method = 'PUT';
-  //     url = `${process.env.REACT_APP_API}/applications/${applicationId}`;
-  //   }
-  //   fetch(url, options)
-  //     .then((res) => {
-  //       if (res.status !== 200 && res.status !== 201) {
-  //         return res.json().then(({ message }) => {
-  //           throw new Error(message);
-  //         });
-  //       }
-  //       return res.json();
-  //     })
-  //     .then(() => history.replace('/applications'))
-  //     .catch((error) => {
-  //       setError(error.toString());
-  //       setDisableButton(false);
-  //     });
-  // };.
+  useEffect(() => {
+    if (applicationId) {
+      application.forEach((application) => {
+        if (application._id === applicationId) setInputValue(application);
+      });
+    }
+  }, [applicationId]);
 
   const onSubmit = (event) => {
     event.preventDefault();
     setDisableButton(true);
     if (applicationId) {
-      dispatch(updateApplications(values));
+      dispatch(updateApplications(applicationId, values));
     } else {
-      dispatch(addApplications(applicationId, values));
+      dispatch(addApplications(values));
     }
     history.replace('/applications');
     setDisableButton(false);
