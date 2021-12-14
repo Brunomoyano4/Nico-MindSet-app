@@ -40,61 +40,61 @@ export const addPsychologistFetching = () => {
   };
 };
 
-export const addPsychologistsFulfilled = (data) => {
+export const addPsychologistFulfilled = (data) => {
   return {
     type: ADD_PSYCHOLOGIST_FULFILLED,
     payload: data
   };
 };
 
-export const addProfileRejected = (error) => {
+export const addPsychologistRejected = (error) => {
   return {
     type: ADD_PSYCHOLOGIST_REJECTED,
     payload: error
   };
 };
 
-export const deleteProfileFetching = () => {
+export const deletePsychologistFetching = () => {
   return {
     type: DELETE_PSYCHOLOGIST_FETCHING
   };
 };
 
-export const deleteProfileFulfilled = (data) => {
+export const deletePsychologistFulfilled = (data) => {
   return {
     type: DELETE_PSYCHOLOGIST_FULFILLED,
     payload: data
   };
 };
 
-export const deleteProfileRejected = (error) => {
+export const deletePsychologistRejected = (error) => {
   return {
     type: DELETE_PSYCHOLOGIST_REJECTED,
     payload: error
   };
 };
 
-export const updateProfileFetching = () => {
+export const updatePsychologistFetching = () => {
   return {
     type: UPDATE_PSYCHOLOGIST_FETCHING
   };
 };
 
-export const updateProfileFulfilled = (id) => {
+export const updatePsychologistFulfilled = (id) => {
   return {
     type: UPDATE_PSYCHOLOGIST_FULFILLED,
     payload: id
   };
 };
 
-export const updateProfileRejected = (error) => {
+export const updatePsychologistRejected = (error) => {
   return {
     type: UPDATE_PSYCHOLOGIST_REJECTED,
     payload: error
   };
 };
 
-export const clearProfilesError = () => {
+export const clearPsychologistsError = () => {
   return {
     type: CLEAR_PSYCHOLOGIST_ERROR
   };

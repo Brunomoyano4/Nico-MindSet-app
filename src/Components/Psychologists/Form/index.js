@@ -14,6 +14,9 @@ function Form() {
   const psychologists = useSelector((store) => store.psychologists.list);
   const error = useSelector((store) => store.psychologists.error);
   const loading = useSelector((store) => store.psychologists.isLoading);
+  const history = useHistory();
+  const params = useQuery();
+  const psychologistId = params.get('id');
   const [firstNameValue, setFirstNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [userNameValue, setUserNameValue] = useState('');
@@ -22,21 +25,12 @@ function Form() {
   const [disableButton, setDisableButton] = useState(false);
 
   const setInputValues = ({ firstName, lastName, userName, email, password }) => {
-    setFirstNameValue(firstName || 'N/A');
-    setLastNameValue(lastName || 'N/A');
-    setUserNameValue(userName || 'N/A');
-    setEmailValue(email || 'N/A');
-    setPasswordValue(password || 'N/A');
+    setFirstNameValue(firstName || '');
+    setLastNameValue(lastName || '');
+    setUserNameValue(userName || '');
+    setEmailValue(email || '');
+    setPasswordValue(password || '');
   };
-
-  const history = useHistory();
-  const params = useQuery();
-  const psychologistId = params.get('id');
-
-  function useQuery() {
-    const { search } = useLocation();
-    return React.useMemo(() => new URLSearchParams(search), [search]);
-  }
 
   const values = {
     firstName: firstNameValue,
@@ -46,6 +40,11 @@ function Form() {
     password: passwordValue
   };
 
+  function useQuery() {
+    const { search } = useLocation();
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
+
   useEffect(() => {
     if (psychologistId) {
       psychologists.forEach((psychologist) => {
@@ -54,49 +53,6 @@ function Form() {
     }
   }, [psychologistId]);
 
-  /* if (psychologistId) {
-    useEffect(() => {
-      setLoading(true);
-      fetch(`${process.env.REACT_APP_API}/psychologists/${psychologistId}`)
-        .then((response) => {
-          if (response.status !== 200) {
-            return response.json().then(({ msg }) => {
-              throw new Error(msg);
-            });
-          }
-          return response.json();
-        })
-        .then((data) => setInputValues(data))
-        .catch((error) => setError(error.toString()))
-        .finally(() => setLoading(false));
-    }, []);
-  } */
-
-  /* const onSubmit = (event) => {
-    event.preventDefault();
-    setDisableButton(true);
-    if (psychologistId) {
-      options.method = 'PUT';
-      url = `${process.env.REACT_APP_API}/psychologists/${psychologistId}`;
-    } else {
-      options.method = 'POST';
-      url = `${process.env.REACT_APP_API}/psychologists`;
-    }
-    fetch(url, options)
-      .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return history.replace('/psychologists');
-      })
-      .catch((error) => {
-        setError(error.toString());
-        setDisableButton(false);
-      });
-  }; */
-
   const onSubmit = (e) => {
     e.preventDefault();
     setDisableButton(true);
@@ -104,13 +60,13 @@ function Form() {
     if (psychologistId) {
       let response = dispatch(updatePsychologist(psychologistId, values));
       if (response) {
-        history.push('/psychologist');
+        history.push('/psychologists');
         setDisableButton(false);
       }
     } else {
       let res = dispatch(addPsychologist(values));
       if (res) {
-        history.push('/psychologist');
+        history.push('/psychologists');
         setDisableButton(false);
       }
     }
