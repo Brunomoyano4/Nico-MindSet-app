@@ -6,7 +6,7 @@ import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Modal from '../../Shared/Modal';
 import Button from '../../Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPosition, getPositions, updatePosition } from '../../../redux/positions/thunks';
+import { addPosition, getPositionById, updatePosition } from '../../../redux/positions/thunks';
 import { clearPostitionsError } from '../../../redux/positions/actions';
 
 function Form() {
@@ -15,17 +15,17 @@ function Form() {
   const [descriptionValue, setDescriptionValue] = useState('');
   const [createdAtValue, setCreatedAtValue] = useState('');
   const [disableButton, setDisableButton] = useState(false);
-  const positions = useSelector((store) => store.positions.list);
+  const selectedItem = useSelector((store) => store.positions.selectedItem);
   const loading = useSelector((store) => store.positions.isLoading);
   const error = useSelector((store) => store.positions.error);
   const dispatch = useDispatch();
   const history = useHistory();
 
   const setInputValues = (data) => {
-    setClientIdValue(data.clientId || 'N/A');
-    setJobValue(data.job || 'N/A');
-    setDescriptionValue(data.description || 'N/A');
-    setCreatedAtValue(data.createdAt || 'N/A');
+    setClientIdValue(data.clientId || '');
+    setJobValue(data.job || '');
+    setDescriptionValue(data.description || '');
+    setCreatedAtValue(data.createdAt || '');
   };
 
   const params = useQuery();
@@ -33,12 +33,17 @@ function Form() {
 
   useEffect(() => {
     if (positionId) {
-      dispatch(getPositions());
-      positions.map((position) => {
-        if (position._id === positionId) setInputValues(position);
-      });
+      dispatch(getPositionById(positionId));
     }
   }, []);
+
+  useEffect(() => {
+    if (Object.keys(selectedItem).length) {
+      setClientIdValue(selectedItem.clientId);
+      setJobValue(selectedItem.job);
+      setDescriptionValue(selectedItem.description);
+    }
+  }, [selectedItem]);
 
   const values = {
     clientId: clientIdValue,

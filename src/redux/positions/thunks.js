@@ -2,6 +2,9 @@ import {
   getPositionsFetching,
   getPositionsFulfilled,
   getPositionsRejected,
+  getPositionByIdFetching,
+  getPositionByIdFulfilled,
+  getPositionByIdRejected,
   addPositionsFetching,
   addPositionsFulfilled,
   addPositionsRejected,
@@ -32,6 +35,28 @@ export const getPositions = () => {
       })
       .catch((error) => {
         dispatch(getPositionsRejected(error.toString()));
+      });
+  };
+};
+
+export const getPositionById = (id) => {
+  return (dispatch) => {
+    dispatch(getPositionByIdFetching());
+    return fetch(`${URL}/${id}`)
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .then((response) => {
+        dispatch(getPositionByIdFulfilled(response));
+        return response;
+      })
+      .catch((error) => {
+        dispatch(getPositionByIdRejected(error.toString()));
       });
   };
 };
