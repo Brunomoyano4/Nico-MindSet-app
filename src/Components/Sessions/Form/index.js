@@ -86,6 +86,7 @@ const Form = () => {
     } else {
       dispatch(addSession(values));
     }
+    history.replace('/sessions');
     setDisableButton(false);
   };
 
