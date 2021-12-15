@@ -3,12 +3,14 @@ import thunk from 'redux-thunk';
 import psychologistsReducer from '../redux/psychologists/reducer';
 import postulantsReducer from './postulants/reducer';
 import clientsReducer from './clients/reducer';
+import positionsReducer from './positions/reducer';
 import sessionsReducer from './sessions/reducer';
 
 const rootReducer = combineReducers({
   clients: clientsReducer,
   postulants: postulantsReducer,
   psychologists: psychologistsReducer,
+  positions: positionsReducer,
   sessions: sessionsReducer
 });
 
