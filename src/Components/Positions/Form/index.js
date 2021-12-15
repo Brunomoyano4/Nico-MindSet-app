@@ -1,88 +1,85 @@
-import { useState } from 'react';
-import styles from './form.module.css';
-import Modal from '../../Shared/Modal';
+import React, { useState, useEffect } from 'react';
+import { useHistory, useLocation } from 'react-router';
 import Input from '../../Shared/Input';
+import styles from './form.module.css';
+import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Modal from '../../Shared/Modal';
 import Button from '../../Shared/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { addPosition, getPositionById, updatePosition } from '../../../redux/positions/thunks';
+import { clearPostitionsError } from '../../../redux/positions/actions';
 
-function Form(params) {
-  const initialState = params.position._id
-    ? params.position
-    : {
-        clientId: '',
-        job: '',
-        description: ''
-      };
-
-  const [position, setPosition] = useState(initialState);
-  const [created, setCreated] = useState(false);
-  const [error, setError] = useState();
+function Form() {
+  const [clientIdValue, setClientIdValue] = useState('');
+  const [jobValue, setJobValue] = useState('');
+  const [descriptionValue, setDescriptionValue] = useState('');
   const [disableButton, setDisableButton] = useState(false);
+  const selectedItem = useSelector((store) => store.positions.selectedItem);
+  const loading = useSelector((store) => store.positions.isLoading);
+  const error = useSelector((store) => store.positions.error);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  function savePositions(e) {
-    e.stopPropagation();
+  const params = useQuery();
+  const positionId = params.get('id');
+
+  useEffect(() => {
+    if (positionId) {
+      dispatch(getPositionById(positionId));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (positionId) {
+      if (Object.keys(selectedItem).length) {
+        setClientIdValue(selectedItem.clientId);
+        setJobValue(selectedItem.job);
+        setDescriptionValue(selectedItem.description);
+      }
+    }
+  }, [selectedItem]);
+
+  const values = {
+    clientId: clientIdValue,
+    job: jobValue,
+    description: descriptionValue
+  };
+
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
+
+  const onSubmit = (event) => {
+    event.preventDefault();
     setDisableButton(true);
-    fetch(`${process.env.REACT_APP_API}/positions`, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify(position)
-    })
-      .then((response) => {
-        if (response.status === 201) {
-          setCreated(true);
-        } else
-          return response.json().then((error) => {
-            throw new Error(error);
-          });
-        params.positionsHook([]);
-        params.stateHook(1);
-      })
-      .catch((error) => setError(error.toString()));
-  }
-  function updatePosition(e) {
-    e.stopPropagation();
-    setDisableButton(true);
-    fetch(`${process.env.REACT_APP_API}/positions/${position._id}`, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: 'PUT',
-      body: JSON.stringify(position)
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        params.positionsHook([]);
-        params.stateHook(1);
-      })
-      .catch((error) => setError(error.toString()));
-  }
-
-  function handleInputChange(e) {
-    const { name, value } = e.target;
-    setPosition({ ...position, [name]: value });
-  }
-
+    if (positionId) {
+      dispatch(updatePosition(positionId, values));
+    } else {
+      dispatch(addPosition(values));
+    }
+    history.replace('/positions');
+    setDisableButton(false);
+  };
   return (
-    <div>
-      {created ? (
-        <div>position created</div>
-      ) : (
-        <form className={styles.form}>
+    <div className={styles.container}>
+      <form className={styles.form} onSubmit={onSubmit}>
+        <h2>Form</h2>
+        <div className={styles.form}>
+          {loading && (
+            <div className={styles.spinnerContainer}>
+              <LoadingSpinner />
+            </div>
+          )}
           <Input
             className={styles.input}
             label="Id"
             name="clientId"
             id="id"
             type="text"
-            value={position.clientId}
-            onChange={handleInputChange}
+            value={clientIdValue}
+            onChange={(e) => setClientIdValue(e.target.value)}
             required
           />
           <Input
@@ -91,8 +88,8 @@ function Form(params) {
             name="job"
             id="job"
             type="text"
-            value={position.job}
-            onChange={handleInputChange}
+            value={jobValue}
+            onChange={(e) => setJobValue(e.target.value)}
             required
           />
           <Input
@@ -101,25 +98,22 @@ function Form(params) {
             name="description"
             id="description"
             type="text"
-            value={position.description}
-            onChange={handleInputChange}
+            value={descriptionValue}
+            onChange={(e) => setDescriptionValue(e.target.value)}
             required
           />
-          <Button
-            className={styles.button}
-            onClick={(e) => {
-              params.position._id ? updatePosition(e) : savePositions(e);
-            }}
-            content={params.position._id ? 'Update Position' : 'Create position'}
-            disabled={disableButton}
-          />
-        </form>
-      )}
+        </div>
+        <Button
+          className={styles.button}
+          content={positionId ? 'Update Position' : 'Create position'}
+          disabled={disableButton}
+        />
+      </form>
       <Modal
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearPostitionsError())}
         type={'Error'}
       />
     </div>

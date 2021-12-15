@@ -83,7 +83,6 @@ export const updateAdmin = (adminId, admin) => {
       })
       .then((response) => {
         dispatch(updateAdminsFulfilled(response.data));
-        return response.data;
       })
       .catch((error) => {
         dispatch(updateAdminsRejected(error.toString()));

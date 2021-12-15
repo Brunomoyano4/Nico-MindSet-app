@@ -1,9 +1,17 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import psychologistsReducer from '../redux/psychologists/reducer';
+import postulantsReducer from './postulants/reducer';
+import clientsReducer from './clients/reducer';
+import positionsReducer from './positions/reducer';
 import adminsReducer from './admins/reducer';
 
 const rootReducer = combineReducers({
-  admins: adminsReducer
+  admins: adminsReducer,
+  clients: clientsReducer,
+  postulants: postulantsReducer,
+  psychologists: psychologistsReducer,
+  positions: positionsReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

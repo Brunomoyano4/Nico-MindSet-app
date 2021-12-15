@@ -47,7 +47,8 @@ const adminsReducer = (state = initialState, action) => {
     case ADD_ADMINS_FULFILLED:
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        list: [...state.list, action.payload]
       };
     case ADD_ADMINS_REJECTED:
       return {
