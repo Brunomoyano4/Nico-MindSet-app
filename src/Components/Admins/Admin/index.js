@@ -3,14 +3,14 @@ import { useState } from 'react';
 import DeleteBtn from '../../Shared/DeleteBtn';
 import Modal from '../../Shared/Modal';
 import styles from './admin.module.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteAdmin } from '../../../redux/admins/thunks';
+import { cleanError } from '../../../redux/admins/actions';
 
 function Admin({ admin }) {
   const dispatch = useDispatch();
-  const [error, setError] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
+  const error = useSelector((store) => store.admins.error);
   const history = useHistory();
 
   const openEditForm = () => {
@@ -33,7 +33,7 @@ function Admin({ admin }) {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => cleanError()}
         type={'Error'}
       />
       <tr className={styles.tr} key={admin._id} onClick={openEditForm}>

@@ -16,7 +16,7 @@ import {
 const initialState = {
   isLoading: false,
   list: [],
-  error: false,
+  error: '',
   admin: []
 };
 
@@ -80,8 +80,7 @@ const adminsReducer = (state = initialState, action) => {
     case UPDATE_ADMINS_FULFILLED:
       return {
         ...state,
-        isLoading: false,
-        list: state.list.filter((admins) => admins._id !== action.payload)
+        isLoading: false
       };
     case UPDATE_ADMINS_REJECTED:
       return {

@@ -54,9 +54,8 @@ export const addAdmin = (admin) => {
         }
         return response.json();
       })
-      .then((response) => {
-        dispatch(addAdminsFulfilled(response.data));
-        return response.data;
+      .then(() => {
+        dispatch(addAdminsFulfilled());
       })
       .catch((error) => {
         dispatch(addAdminsRejected(error.toString()));

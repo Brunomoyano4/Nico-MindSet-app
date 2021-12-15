@@ -6,7 +6,8 @@ import styles from './adminsForm.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Button from '../../Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAdmin, updateAdmin, getAdmins } from '../../../redux/admins/thunks';
+import { addAdmin, updateAdmin } from '../../../redux/admins/thunks';
+import { cleanError } from '../../../redux/admins/actions';
 
 function Form() {
   const dispatch = useDispatch();
@@ -15,17 +16,17 @@ function Form() {
   const [usernameValue, setUsernameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
-  const [error, setError] = useState('');
   const [disableButton, setDisableButton] = useState(false);
   const data = useSelector((store) => store.admins.list);
   const loading = useSelector((store) => store.admins.isLoading);
+  const error = useSelector((store) => store.admins.error);
 
   const setInputValues = ({ firstName, lastName, username, email, password }) => {
-    setFirstNameValue(firstName || 'First name');
-    setLastNameValue(lastName || 'Last name');
-    setUsernameValue(username || 'Username');
-    setEmailValue(email || 'Email');
-    setPasswordValue(password || 'Password');
+    setFirstNameValue(firstName || '');
+    setLastNameValue(lastName || '');
+    setUsernameValue(username || '');
+    setEmailValue(email || '');
+    setPasswordValue(password || '');
   };
 
   const history = useHistory();
@@ -61,8 +62,7 @@ function Form() {
     } else {
       dispatch(addAdmin(values));
     }
-    dispatch(getAdmins());
-    history.replace('/admins');
+    history.push('/admins');
     setDisableButton(false);
   };
 
@@ -132,7 +132,7 @@ function Form() {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => cleanError()}
         type={'Error'}
       />
     </div>
