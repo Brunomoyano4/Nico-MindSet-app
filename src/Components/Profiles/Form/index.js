@@ -20,7 +20,6 @@ function ProfilesForm() {
   const [profileNameValue, setProfileNameValue] = useState('');
   const [branchValue, setBranchValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
-  const [disableButton, setDisableButton] = useState(false);
 
   const setInputValues = ({ profileName, branch, description }) => {
     setProfileNameValue(profileName || '');
@@ -49,19 +48,16 @@ function ProfilesForm() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setDisableButton(true);
 
     if (profileId) {
       let response = dispatch(updateProfile(profileId, values));
       if (response) {
         history.push('/profiles');
-        setDisableButton(false);
       }
     } else {
       let res = dispatch(addProfile(values));
       if (res) {
         history.push('/profiles');
-        setDisableButton(false);
       }
     }
   };
@@ -114,7 +110,7 @@ function ProfilesForm() {
         <Button
           className={styles.button}
           type="submit"
-          disabled={loading || disableButton}
+          disabled={loading}
           content={profileId ? 'SAVE' : 'CREATE PROFILE'}
         />
       </form>
