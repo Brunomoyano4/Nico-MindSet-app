@@ -19,20 +19,6 @@ function GetSessions() {
 
   useEffect(() => {
     dispatch(getSessions());
-    // fetch(`${process.env.REACT_APP_API}/sessions`)
-    //   .then((response) => {
-    //     if (response.status !== 200) {
-    //       return response.json().then(({ msg }) => {
-    //         throw new Error(msg);
-    //       });
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     if (data !== sessions) setSessions(data);
-    //   })
-    //   .catch((error) => setError(error.toString()))
-    //   .finally(() => setLoading(false));
   }, []);
 
   const CreateBtn = () => {
@@ -70,7 +56,6 @@ function GetSessions() {
       </div>
       <Modal
         title="Are you sure you want to delete the selected Session?"
-        // onConfirm={(e) => deleteSessions(sessionToDelete, e)}
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
         type={'Confirm'}

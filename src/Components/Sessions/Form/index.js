@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addSession, updateSession } from '../../../redux/postulants/thunks';
-import { clearSessionsError } from '../../../redux/postulants/actions';
+import { addSession, updateSession, getSessionById } from '../../../redux/sessions/thunks';
+import { clearSessionsError } from '../../../redux/sessions/actions';
+import { getPsychologists } from '../../../redux/psychologists/thunks';
+import { getPostulants } from '../../../redux/postulants/thunks';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import styles from './form.module.css';
@@ -9,7 +11,6 @@ import Select from '../../Shared/Select';
 import Button from '../../Shared/Button/index';
 import Modal from '../../Shared/Modal';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
-import { getSessions } from '../../../redux/sessions/thunks';
 
 const Form = () => {
   const [postulantsOption, setPostulantsOption] = useState([]);
@@ -20,9 +21,12 @@ const Form = () => {
   const [timeValue, setTimeValue] = useState([]);
   const [statusValue, setStatusValue] = useState([]);
   const [disableButton, setDisableButton] = useState(false);
-  const session = useSelector((store) => store.sessions.list);
+  const selectedItem = useSelector((store) => store.sessions.selectedItem);
   const error = useSelector((store) => store.sessions.error);
   const loading = useSelector((store) => store.sessions.isLoading);
+  const psychologists = useSelector((store) => store.psychologists.list);
+  const postulants = useSelector((store) => store.postulants.list);
+
   const dispatch = useDispatch();
   const history = useHistory();
   const params = useQuery();
@@ -30,12 +34,36 @@ const Form = () => {
 
   useEffect(() => {
     if (sessionId) {
-      dispatch(getSessions());
-      session.forEach((session) => {
-        if (session._id === sessionId) setInputValues(session);
-      });
+      dispatch(getSessionById(sessionId));
     }
+    dispatch(getPsychologists());
+    setPsychologistOption(
+      psychologists.map((psychologist) => ({
+        value: psychologist._id,
+        label: `${psychologist.firstName} ${psychologist.lastName}`
+      }))
+    );
+
+    dispatch(getPostulants());
+    setPostulantsOption(
+      postulants.map((postulant) => ({
+        value: postulant._id,
+        label: `${postulant.firstName} ${postulant.lastName}`
+      }))
+    );
   }, []);
+
+  useEffect(() => {
+    if (sessionId) {
+      if (Object.keys(selectedItem).length) {
+        setPostulantsValue(selectedItem.postulant.firstName);
+        setPsychologistValue(selectedItem.psychology);
+        setDateValue(selectedItem.date);
+        setTimeValue(selectedItem.time);
+        setStatusValue(selectedItem.stat);
+      }
+    }
+  }, [selectedItem]);
 
   const values = {
     psychology: psychologistValue,
@@ -43,14 +71,6 @@ const Form = () => {
     date: dateValue,
     time: timeValue,
     stat: statusValue
-  };
-
-  const setInputValues = (data) => {
-    setPostulantsValue(data.postulant || 'N/A');
-    setPsychologistValue(data.psychology || 'N/A');
-    setDateValue(data.date || 'N/A');
-    setTimeValue(data.time || 'N/A');
-    setStatusValue(data.stat || 'N/A');
   };
 
   function useQuery() {
@@ -66,6 +86,7 @@ const Form = () => {
     } else {
       dispatch(addSession(values));
     }
+    setDisableButton(false);
   };
 
   return (

@@ -2,6 +2,9 @@ import {
   GET_SESSIONS_FETCHING,
   GET_SESSIONS_FULFILLED,
   GET_SESSIONS_REJECTED,
+  GET_SESSION_BY_ID_FETCHING,
+  GET_SESSION_BY_ID_FULFILLED,
+  GET_SESSION_BY_ID_REJECTED,
   ADD_SESSIONS_FETCHING,
   ADD_SESSIONS_FULFILLED,
   ADD_SESSIONS_REJECTED,
@@ -11,7 +14,8 @@ import {
   UPDATE_SESSIONS_FETCHING,
   UPDATE_SESSIONS_FULFILLED,
   UPDATE_SESSIONS_REJECTED,
-  CLEAR_SESSIONS_ERROR
+  CLEAR_SESSIONS_ERROR,
+  CLEAR_SELECTED_SESSION
 } from './constants';
 
 export const getSessionsFetching = () => ({
@@ -27,6 +31,26 @@ export const getSessionsRejected = (error) => ({
   type: GET_SESSIONS_REJECTED,
   error
 });
+
+export const getSessionByIdFetching = () => {
+  return {
+    type: GET_SESSION_BY_ID_FETCHING
+  };
+};
+
+export const getSessionByIdFulfilled = (data) => {
+  return {
+    type: GET_SESSION_BY_ID_FULFILLED,
+    payload: data
+  };
+};
+
+export const getSessionByIdRejected = (error) => {
+  return {
+    type: GET_SESSION_BY_ID_REJECTED,
+    payload: error
+  };
+};
 
 export const addSessionsFetching = () => ({
   type: ADD_SESSIONS_FETCHING
@@ -73,3 +97,9 @@ export const updateSessionsRejected = (error) => ({
 export const clearSessionsError = () => ({
   type: CLEAR_SESSIONS_ERROR
 });
+
+export const cleanSelectedSession = () => {
+  return {
+    type: CLEAR_SELECTED_SESSION
+  };
+};

@@ -2,6 +2,9 @@ import {
   getSessionsFetching,
   getSessionsFulfilled,
   getSessionsRejected,
+  getSessionByIdFetching,
+  getSessionByIdFulfilled,
+  getSessionByIdRejected,
   addSessionsFetching,
   addSessionsFulfilled,
   addSessionsRejected,
@@ -32,6 +35,28 @@ export const getSessions = () => {
       })
       .catch((error) => {
         dispatch(getSessionsRejected(error.toString()));
+      });
+  };
+};
+
+export const getSessionById = (id) => {
+  return (dispatch) => {
+    dispatch(getSessionByIdFetching());
+    return fetch(`${URL}/${id}`)
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .then((response) => {
+        dispatch(getSessionByIdFulfilled(response));
+        return response;
+      })
+      .catch((error) => {
+        dispatch(getSessionByIdRejected(error.toString()));
       });
   };
 };

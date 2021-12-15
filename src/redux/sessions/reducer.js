@@ -2,6 +2,9 @@ import {
   GET_SESSIONS_FETCHING,
   GET_SESSIONS_FULFILLED,
   GET_SESSIONS_REJECTED,
+  GET_SESSION_BY_ID_FETCHING,
+  GET_SESSION_BY_ID_FULFILLED,
+  GET_SESSION_BY_ID_REJECTED,
   ADD_SESSIONS_FETCHING,
   ADD_SESSIONS_FULFILLED,
   ADD_SESSIONS_REJECTED,
@@ -11,14 +14,16 @@ import {
   UPDATE_SESSIONS_FETCHING,
   UPDATE_SESSIONS_FULFILLED,
   UPDATE_SESSIONS_REJECTED,
-  CLEAR_SESSIONS_ERROR
+  CLEAR_SESSIONS_ERROR,
+  CLEAR_SELECTED_SESSION
 } from './constants';
 
 const initialState = {
   isLoading: false,
   list: [],
   error: '',
-  session: []
+  session: [],
+  selectedItem: {}
 };
 
 const sessionsReducer = (state = initialState, action) => {
@@ -35,6 +40,24 @@ const sessionsReducer = (state = initialState, action) => {
         list: action.payload
       };
     case GET_SESSIONS_REJECTED:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error
+      };
+    case GET_SESSION_BY_ID_FETCHING:
+      return {
+        ...state,
+        isLoading: true,
+        selectedItem: initialState.selectedItem
+      };
+    case GET_SESSION_BY_ID_FULFILLED:
+      return {
+        ...state,
+        isLoading: false,
+        selectedItem: action.payload
+      };
+    case GET_SESSION_BY_ID_REJECTED:
       return {
         ...state,
         isLoading: false,
@@ -99,6 +122,12 @@ const sessionsReducer = (state = initialState, action) => {
         ...state,
         error: ''
       };
+    case CLEAR_SELECTED_SESSION: {
+      return {
+        ...state,
+        selectedItem: initialState.selectedItem
+      };
+    }
     default:
       return state;
   }
