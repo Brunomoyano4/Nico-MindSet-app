@@ -9,12 +9,12 @@ import sessionsReducer from './sessions/reducer';
 
 const rootReducer = combineReducers({
   //here the reducers
+  sessions: sessionsReducer,
   profiles: profilesReducer,
   clients: clientsReducer,
   postulants: postulantsReducer,
   psychologists: psychologistsReducer,
-  positions: positionsReducer,
-  sessions: sessionsReducer
+  positions: positionsReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
