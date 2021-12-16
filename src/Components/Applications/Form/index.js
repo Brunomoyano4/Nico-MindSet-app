@@ -51,13 +51,6 @@ function Form() {
     }
   }, [selectedItem]);
 
-  const values = {
-    positions: positionsValue,
-    client: clientValue,
-    postulants: postulantsValue,
-    result: resultValue
-  };
-
   function useQuery() {
     const { search } = useLocation();
     return React.useMemo(() => new URLSearchParams(search), [search]);
@@ -66,6 +59,12 @@ function Form() {
   const onSubmit = (event) => {
     event.preventDefault();
     setDisableButton(true);
+    const values = {
+      positions: positionsValue,
+      client: clientValue,
+      postulants: postulantsValue,
+      result: resultValue
+    };
     if (applicationId) {
       dispatch(updateApplications(applicationId, values));
     } else {
