@@ -36,8 +36,8 @@ function Session({ session }) {
         type={'Error'}
       />
       <tr key={session._id} onClick={openEditForm}>
-        <td>{`${session.psychology.firstName} ${session.psychology.lastName}`}</td>
-        <td>{`${session.postulant.firstName} ${session.postulant.lastName}`}</td>
+        <td>{`${session?.psychology?.firstName} ${session?.psychology?.lastName}`}</td>
+        <td>{`${session?.postulant?.firstName} ${session?.postulant?.lastName}`}</td>
         <td>{session.time}</td>
         <td>{session.date}</td>
         <td>{session.stat}</td>
