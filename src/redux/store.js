@@ -1,4 +1,5 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
+import profilesReducer from '../redux/profiles/reducer';
 import thunk from 'redux-thunk';
 import psychologistsReducer from '../redux/psychologists/reducer';
 import postulantsReducer from './postulants/reducer';
@@ -7,6 +8,8 @@ import positionsReducer from './positions/reducer';
 import sessionsReducer from './sessions/reducer';
 
 const rootReducer = combineReducers({
+  //here the reducers
+  profiles: profilesReducer,
   clients: clientsReducer,
   postulants: postulantsReducer,
   psychologists: psychologistsReducer,
