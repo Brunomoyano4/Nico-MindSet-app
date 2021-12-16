@@ -2,6 +2,9 @@ import {
   GET_APPLICATIONS_FETCHING,
   GET_APPLICATIONS_FULFILLED,
   GET_APPLICATIONS_REJECTED,
+  GET_APPLICATIONS_BY_ID_FETCHING,
+  GET_APPLICATIONS_BY_ID_FULFILLED,
+  GET_APPLICATIONS_BY_ID_REJECTED,
   ADD_APPLICATIONS_FETCHING,
   ADD_APPLICATIONS_FULFILLED,
   ADD_APPLICATIONS_REJECTED,
@@ -11,7 +14,8 @@ import {
   UPDATE_APPLICATIONS_FETCHING,
   UPDATE_APPLICATIONS_FULFILLED,
   UPDATE_APPLICATIONS_REJECTED,
-  CLEAR_APPLICATIONS_ERROR
+  CLEAR_APPLICATIONS_ERROR,
+  CLEAR_SELECTED_APPLICATIONS
 } from './constants';
 
 export const getApplicationsFetching = () => ({
@@ -27,6 +31,26 @@ export const getApplicationsRejected = (error) => ({
   type: GET_APPLICATIONS_REJECTED,
   error
 });
+
+export const getApplicationsByIdFetching = () => {
+  return {
+    type: GET_APPLICATIONS_BY_ID_FETCHING
+  };
+};
+
+export const getApplicationsByIdFulfilled = (data) => {
+  return {
+    type: GET_APPLICATIONS_BY_ID_FULFILLED,
+    payload: data
+  };
+};
+
+export const getApplicationsByIdRejected = (error) => {
+  return {
+    type: GET_APPLICATIONS_BY_ID_REJECTED,
+    payload: error
+  };
+};
 
 export const addApplicationsFetching = () => ({
   type: ADD_APPLICATIONS_FETCHING
@@ -73,3 +97,9 @@ export const updateApplicationsRejected = (error) => ({
 export const clearApplicationsError = () => ({
   type: CLEAR_APPLICATIONS_ERROR
 });
+
+export const cleanSelectedApplications = () => {
+  return {
+    type: CLEAR_SELECTED_APPLICATIONS
+  };
+};

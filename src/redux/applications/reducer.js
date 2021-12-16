@@ -2,6 +2,9 @@ import {
   GET_APPLICATIONS_FETCHING,
   GET_APPLICATIONS_FULFILLED,
   GET_APPLICATIONS_REJECTED,
+  GET_APPLICATIONS_BY_ID_FETCHING,
+  GET_APPLICATIONS_BY_ID_FULFILLED,
+  GET_APPLICATIONS_BY_ID_REJECTED,
   ADD_APPLICATIONS_FETCHING,
   ADD_APPLICATIONS_FULFILLED,
   ADD_APPLICATIONS_REJECTED,
@@ -11,14 +14,16 @@ import {
   UPDATE_APPLICATIONS_FETCHING,
   UPDATE_APPLICATIONS_FULFILLED,
   UPDATE_APPLICATIONS_REJECTED,
-  CLEAR_APPLICATIONS_ERROR
+  CLEAR_APPLICATIONS_ERROR,
+  CLEAR_SELECTED_APPLICATIONS
 } from './constants';
 
 const initialState = {
   isLoading: false,
   list: [],
   error: '',
-  application: []
+  application: [],
+  selectedItem: {}
 };
 
 const reducer = (state = initialState, action) => {
@@ -35,6 +40,24 @@ const reducer = (state = initialState, action) => {
         list: action.payload
       };
     case GET_APPLICATIONS_REJECTED:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error
+      };
+    case GET_APPLICATIONS_BY_ID_FETCHING:
+      return {
+        ...state,
+        isLoading: true,
+        selectedItem: initialState.selectedItem
+      };
+    case GET_APPLICATIONS_BY_ID_FULFILLED:
+      return {
+        ...state,
+        isLoading: false,
+        selectedItem: action.payload
+      };
+    case GET_APPLICATIONS_BY_ID_REJECTED:
       return {
         ...state,
         isLoading: false,
@@ -82,10 +105,10 @@ const reducer = (state = initialState, action) => {
     case UPDATE_APPLICATIONS_FULFILLED:
       return {
         ...state,
-        isLoading: false
-        // list: state.list.map((el) => {
-        //   return el._id === action.payload._id ? action.payload : el;
-        // })
+        isLoading: false,
+        list: state.list.map((el) => {
+          return el._id === action.payload._id ? action.payload : el;
+        })
       };
     case UPDATE_APPLICATIONS_REJECTED:
       return {
@@ -98,6 +121,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         error: ''
       };
+    case CLEAR_SELECTED_APPLICATIONS: {
+      return {
+        ...state,
+        selectedItem: initialState.selectedItem
+      };
+    }
     default:
       return state;
   }
