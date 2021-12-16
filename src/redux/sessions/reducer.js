@@ -5,6 +5,9 @@ import {
   GET_SESSION_BY_ID_FETCHING,
   GET_SESSION_BY_ID_FULFILLED,
   GET_SESSION_BY_ID_REJECTED,
+  GET_SESSIONS_OPTIONS_FETCHING,
+  GET_SESSIONS_OPTIONS_FULFILLED,
+  GET_SESSIONS_OPTIONS_REJECTED,
   ADD_SESSIONS_FETCHING,
   ADD_SESSIONS_FULFILLED,
   ADD_SESSIONS_REJECTED,
@@ -23,6 +26,7 @@ const initialState = {
   list: [],
   error: '',
   session: [],
+  options: { postulants: [], psychologists: [] },
   selectedItem: {}
 };
 
@@ -62,6 +66,32 @@ const sessionsReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: action.error
+      };
+    case GET_SESSIONS_OPTIONS_FETCHING:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case GET_SESSIONS_OPTIONS_FULFILLED: {
+      const addedOptions = action.payload.map((option) => {
+        return {
+          value: option._id,
+          label: `${option.firstName} ${option.lastName}`
+        };
+      });
+      const options = { ...state.options };
+      options[action.resource] = addedOptions;
+      return {
+        ...state,
+        options,
+        isLoading: false
+      };
+    }
+    case GET_SESSIONS_OPTIONS_REJECTED:
+      return {
+        ...state,
+        error: action.error,
+        isLoading: false
       };
     case ADD_SESSIONS_FETCHING:
       return {

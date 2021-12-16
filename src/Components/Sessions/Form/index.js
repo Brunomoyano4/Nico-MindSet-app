@@ -1,8 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addSession, updateSession, getSessionById } from '../../../redux/sessions/thunks';
+import {
+  addSession,
+  updateSession,
+  getSessionById,
+  getSessionsOptions
+} from '../../../redux/sessions/thunks';
 import { clearSessionsError } from '../../../redux/sessions/actions';
-import { getPsychologists } from '../../../redux/psychologists/thunks';
-import { getPostulants } from '../../../redux/postulants/thunks';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import styles from './form.module.css';
@@ -13,19 +16,20 @@ import Modal from '../../Shared/Modal';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 
 const Form = () => {
-  const [postulantsOption, setPostulantsOption] = useState([]);
   const [postulantValue, setPostulantsValue] = useState('');
-  const [psychologistsOption, setPsychologistOption] = useState([]);
   const [psychologistValue, setPsychologistValue] = useState('');
-  const [dateValue, setDateValue] = useState([]);
-  const [timeValue, setTimeValue] = useState([]);
-  const [statusValue, setStatusValue] = useState([]);
+  const [dateValue, setDateValue] = useState('');
+  const [timeValue, setTimeValue] = useState('');
+  const [statusValue, setStatusValue] = useState('');
   const [disableButton, setDisableButton] = useState(false);
   const selectedItem = useSelector((store) => store.sessions.selectedItem);
   const error = useSelector((store) => store.sessions.error);
-  const loading = useSelector((store) => store.sessions.isLoading);
-  const psychologists = useSelector((store) => store.psychologists.list);
-  const postulants = useSelector((store) => store.postulants.list);
+  const loading = {
+    sessionsLoading: useSelector((store) => store.sessions.isLoading),
+    psychologistsLoading: useSelector((store) => store.psychologists.isLoading),
+    postulantsLoading: useSelector((store) => store.postulants.isLoading)
+  };
+  const options = useSelector((store) => store.sessions.options);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -36,28 +40,15 @@ const Form = () => {
     if (sessionId) {
       dispatch(getSessionById(sessionId));
     }
-    dispatch(getPsychologists());
-    setPsychologistOption(
-      psychologists.map((psychologist) => ({
-        value: psychologist._id,
-        label: `${psychologist.firstName} ${psychologist.lastName}`
-      }))
-    );
-
-    dispatch(getPostulants());
-    setPostulantsOption(
-      postulants.map((postulant) => ({
-        value: postulant._id,
-        label: `${postulant.firstName} ${postulant.lastName}`
-      }))
-    );
-  }, []);
+    dispatch(getSessionsOptions('postulants'));
+    dispatch(getSessionsOptions('psychologists'));
+  }, [dispatch]);
 
   useEffect(() => {
     if (sessionId) {
       if (Object.keys(selectedItem).length) {
-        setPostulantsValue(selectedItem.postulant.firstName);
-        setPsychologistValue(selectedItem.psychology);
+        setPostulantsValue(`${selectedItem?.postulant?._id}`);
+        setPsychologistValue(selectedItem.psychology_id);
         setDateValue(selectedItem.date);
         setTimeValue(selectedItem.time);
         setStatusValue(selectedItem.stat);
@@ -102,21 +93,22 @@ const Form = () => {
           className={styles.select}
           value={psychologistValue}
           onChange={(e) => {
-            console.log(e.target.id);
             setPsychologistValue(e.target.value);
           }}
           label="Psychologist:"
           id="psychologist"
-          options={psychologistsOption}
+          options={options.psychologists}
           required
         />
         <Select
           className={styles.select}
           value={postulantValue}
-          onChange={(e) => setPostulantsValue(e.target.value)}
+          onChange={(e) => {
+            setPostulantsValue(e.target.value);
+          }}
           label="Postulant:"
           id="postulant"
-          options={postulantsOption}
+          options={options.postulants}
           required
         />
         <Input

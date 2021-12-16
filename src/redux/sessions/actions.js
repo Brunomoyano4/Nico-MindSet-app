@@ -5,6 +5,9 @@ import {
   GET_SESSION_BY_ID_FETCHING,
   GET_SESSION_BY_ID_FULFILLED,
   GET_SESSION_BY_ID_REJECTED,
+  GET_SESSIONS_OPTIONS_FETCHING,
+  GET_SESSIONS_OPTIONS_FULFILLED,
+  GET_SESSIONS_OPTIONS_REJECTED,
   ADD_SESSIONS_FETCHING,
   ADD_SESSIONS_FULFILLED,
   ADD_SESSIONS_REJECTED,
@@ -49,6 +52,24 @@ export const getSessionByIdRejected = (error) => {
   return {
     type: GET_SESSION_BY_ID_REJECTED,
     payload: error
+  };
+};
+
+export const getSessionsOptionsFetching = () => {
+  return {
+    type: GET_SESSIONS_OPTIONS_FETCHING
+  };
+};
+export const getSessionsOptionsFulfilled = (resource, payload) => {
+  return {
+    type: GET_SESSIONS_OPTIONS_FULFILLED,
+    resource,
+    payload
+  };
+};
+export const getSessionsOptionsRejected = () => {
+  return {
+    type: GET_SESSIONS_OPTIONS_REJECTED
   };
 };
 

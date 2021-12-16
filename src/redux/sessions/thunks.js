@@ -5,6 +5,9 @@ import {
   getSessionByIdFetching,
   getSessionByIdFulfilled,
   getSessionByIdRejected,
+  getSessionsOptionsFulfilled,
+  getSessionsOptionsRejected,
+  getSessionsOptionsFetching,
   addSessionsFetching,
   addSessionsFulfilled,
   addSessionsRejected,
@@ -57,6 +60,24 @@ export const getSessionById = (id) => {
       })
       .catch((error) => {
         dispatch(getSessionByIdRejected(error.toString()));
+      });
+  };
+};
+
+export const getSessionsOptions = (resource) => {
+  return (dispatch) => {
+    dispatch(getSessionsOptionsFetching());
+    fetch(`${process.env.REACT_APP_API}/${resource}`)
+      .then(async (res) => {
+        if (res.status === 200) {
+          const data = await res.json();
+          dispatch(getSessionsOptionsFulfilled(resource, data));
+        }
+        const data = await res.json();
+        dispatch(getSessionsOptionsRejected(data));
+      })
+      .catch((error) => {
+        dispatch(getSessionsOptionsRejected(error.toString()));
       });
   };
 };
