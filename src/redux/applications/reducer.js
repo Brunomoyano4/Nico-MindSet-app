@@ -15,7 +15,10 @@ import {
   UPDATE_APPLICATIONS_FULFILLED,
   UPDATE_APPLICATIONS_REJECTED,
   CLEAR_APPLICATIONS_ERROR,
-  CLEAR_SELECTED_APPLICATIONS
+  CLEAR_SELECTED_APPLICATIONS,
+  GET_APPLICATIONS_OPTIONS_FETCHING,
+  GET_APPLICATIONS_OPTIONS_FULFILLED,
+  GET_APPLICATIONS_OPTIONS_REJECTED
 } from './constants';
 
 const initialState = {
@@ -23,6 +26,7 @@ const initialState = {
   list: [],
   error: '',
   application: [],
+  options: { positions: [], postulants: [], clients: [] },
   selectedItem: {}
 };
 
@@ -127,6 +131,42 @@ const reducer = (state = initialState, action) => {
         selectedItem: initialState.selectedItem
       };
     }
+    case GET_APPLICATIONS_OPTIONS_FETCHING:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case GET_APPLICATIONS_OPTIONS_FULFILLED: {
+      const addedOptions = action.payload.map((option) => {
+        let lebelValue = '';
+        if (option.firstName !== undefined) {
+          lebelValue = `${option.firstName} ${option.lastName}`;
+        }
+        if (option.job !== undefined) {
+          lebelValue = `${option.job}`;
+        }
+        if (option.customerName !== undefined) {
+          lebelValue = `${option.customerName}`;
+        }
+        return {
+          value: option._id,
+          label: lebelValue
+        };
+      });
+      const options = { ...state.options };
+      options[action.resource] = addedOptions;
+      return {
+        ...state,
+        options,
+        isLoading: false
+      };
+    }
+    case GET_APPLICATIONS_OPTIONS_REJECTED:
+      return {
+        ...state,
+        error: action.error,
+        isLoading: false
+      };
     default:
       return state;
   }

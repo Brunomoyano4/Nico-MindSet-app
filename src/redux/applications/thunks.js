@@ -13,7 +13,10 @@ import {
   updateApplicationsRejected,
   deleteApplicationsFetching,
   deleteApplicationsFulfilled,
-  deleteApplicationsRejected
+  deleteApplicationsRejected,
+  getApplicationsOptionsFetching,
+  getApplicationsOptionsFulfilled,
+  getApplicationsOptionsRejected
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/applications`;
@@ -129,6 +132,24 @@ export const deleteApplications = (id) => {
       })
       .catch((error) => {
         dispatch(deleteApplicationsRejected(error.toString()));
+      });
+  };
+};
+
+export const getApplicationsOptions = (resource) => {
+  return (dispatch) => {
+    dispatch(getApplicationsOptionsFetching());
+    fetch(`${process.env.REACT_APP_API}/${resource}`)
+      .then(async (res) => {
+        if (res.status === 200) {
+          const data = await res.json();
+          dispatch(getApplicationsOptionsFulfilled(resource, data));
+        }
+        const data = await res.json();
+        dispatch(getApplicationsOptionsRejected(data));
+      })
+      .catch((error) => {
+        dispatch(getApplicationsOptionsRejected(error.toString()));
       });
   };
 };

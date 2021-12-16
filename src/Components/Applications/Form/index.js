@@ -7,7 +7,12 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../Shared/Button';
-import { addApplications, updateApplications } from '../../../redux/applications/thunks';
+import {
+  addApplications,
+  updateApplications,
+  getApplicationsById,
+  getApplicationsOptions
+} from '../../../redux/applications/thunks';
 
 function Form() {
   const history = useHistory();
@@ -18,47 +23,45 @@ function Form() {
   const [positionsValue, setPositionsValue] = useState('');
   const [clientValue, setClientValue] = useState('');
   const [postulantsValue, setPostulantsValue] = useState('');
-  const [result, setResult] = useState('');
+  const [resultValue, setResultValue] = useState('');
 
-  const [positionsOption, setPositionsOption] = useState([]);
-  const [clientOption, setClientOption] = useState([]);
-  const [postulantsOption, setPostulantsOption] = useState([]);
   const [disableButton, setDisableButton] = useState(false);
-  const application = useSelector((store) => store.application.list);
-  const error = useSelector((store) => store.application.error);
-  const [loading, setLoading] = useState({
-    positionLoading: false,
-    clientLoading: false,
-    postulantLoading: false,
-    applicationIdLoading: false
-  });
+  const error = useSelector((store) => store.applications.error);
+  const isLoading = useSelector((store) => store.applications.isLoading);
+  const selectedItem = useSelector((store) => store.applications.selectedItem);
+  const options = useSelector((store) => store.applications.options);
 
-  const setInputValue = (data) => {
-    setPositionsValue(data?.positions?._id);
-    setClientValue(data?.client?._id);
-    setPostulantsValue(data?.postulants?._id);
-    setResult(data.result);
-  };
+  useEffect(() => {
+    if (applicationId) {
+      dispatch(getApplicationsById(applicationId));
+    }
+    dispatch(getApplicationsOptions('positions'));
+    dispatch(getApplicationsOptions('postulants'));
+    dispatch(getApplicationsOptions('clients'));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (applicationId) {
+      if (Object.keys(selectedItem).length) {
+        setPositionsValue(selectedItem.positions._id);
+        setPostulantsValue(`${selectedItem?.postulants?._id}`);
+        setClientValue(selectedItem.client._id);
+        setResultValue(selectedItem.result);
+      }
+    }
+  }, [selectedItem]);
 
   const values = {
     positions: positionsValue,
     client: clientValue,
     postulants: postulantsValue,
-    result: result
+    result: resultValue
   };
 
   function useQuery() {
     const { search } = useLocation();
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
-
-  useEffect(() => {
-    if (applicationId) {
-      application.forEach((application) => {
-        if (application._id === applicationId) setInputValue(application);
-      });
-    }
-  }, [applicationId]);
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -71,113 +74,6 @@ function Form() {
     history.replace('/applications');
     setDisableButton(false);
   };
-
-  useEffect(() => {
-    // setLoading({
-    //   applicationIdLoading: applicationId ? true : false,
-    //   positionLoading: true,
-    //   clientLoading: true,
-    //   postulantLoading: true
-    // });
-    // if (applicationId) {
-    //   fetch(`${process.env.REACT_APP_API}/applications/${applicationId}`)
-    //     .then((res) => {
-    //       if (res.status !== 200) {
-    //         return res.json().then(({ message }) => {
-    //           throw new Error(message);
-    //         });
-    //       }
-    //       return res.json();
-    //     })
-    //     .then((data) => {
-    //       setPositionsValue(data?.positions?._id);
-    //       setClientValue(data?.client?._id);
-    //       setPostulantsValue(data?.postulants?._id);
-    //       setResult(data.result);
-    //     })
-    //     .catch((error) => error.toString())
-    //     .finally(() =>
-    //       setLoading((prev) => {
-    //         return { ...prev, applicationIdLoading: false };
-    //       })
-    //     );
-    // }
-
-    fetch(`${process.env.REACT_APP_API}/clients`)
-      .then((res) => {
-        if (res.status !== 200) {
-          return res.json().then(({ message }) => {
-            throw new Error(message);
-          });
-        }
-        return res.json();
-      })
-      .then((res) => {
-        setClientOption(
-          res.map((client) => ({
-            value: client._id,
-            label: client.customerName
-          }))
-        );
-        setClientValue(res[0]._id);
-      })
-      .catch((error) => error.toString())
-      .finally(() => {
-        setLoading((prev) => {
-          return { ...prev, clientLoading: false };
-        });
-      });
-
-    fetch(`${process.env.REACT_APP_API}/postulants`)
-      .then((res) => {
-        if (res.status !== 200) {
-          return res.json().then(({ message }) => {
-            throw new Error(message);
-          });
-        }
-        return res.json();
-      })
-      .then((res) => {
-        setPostulantsOption(
-          res.map((postulant) => ({
-            value: postulant._id,
-            label: `${postulant.firstName} ${postulant.lastName}`
-          }))
-        );
-        setPostulantsValue(res[0]._id);
-      })
-      .catch((error) => error.toString())
-      .finally(() => {
-        setLoading((prev) => {
-          return { ...prev, postulantLoading: false };
-        });
-      });
-
-    fetch(`${process.env.REACT_APP_API}/positions`)
-      .then((res) => {
-        if (res.status !== 200) {
-          return res.json().then(({ message }) => {
-            throw new Error(message);
-          });
-        }
-        return res.json();
-      })
-      .then((res) => {
-        setPositionsOption(
-          res.map((position) => ({
-            value: position._id,
-            label: position.job
-          }))
-        );
-        setPositionsValue(res[0]._id);
-      })
-      .catch((error) => error.toString())
-      .finally(() => {
-        setLoading((prev) => {
-          return { ...prev, positionLoading: false };
-        });
-      });
-  }, []);
 
   return (
     <>
@@ -193,7 +89,7 @@ function Form() {
               type={'Error'}
             />
             <h3 className={error ? styles.error : ''}>{error}</h3>
-            {Object.values(loading).some(Boolean) && (
+            {Object.values(isLoading).some(Boolean) && (
               <div className={styles.spinnerContainer}>
                 <LoadingSpinner />
               </div>
@@ -204,7 +100,7 @@ function Form() {
               onChange={(e) => setPositionsValue(e.target.value)}
               label="Position:"
               id="positions-select"
-              options={positionsOption}
+              options={options.positions}
               required
             />
             <Select
@@ -213,7 +109,7 @@ function Form() {
               onChange={(e) => setClientValue(e.target.value)}
               label="Client:"
               id="client-select"
-              options={clientOption}
+              options={options.clients}
               required
             />
             <Select
@@ -222,14 +118,14 @@ function Form() {
               onChange={(e) => setPostulantsValue(e.target.value)}
               label="Postulant:"
               id="postulants-select"
-              options={postulantsOption}
+              options={options.postulants}
               required
             />
             <Input
               className={styles.input}
               placeholder="Result"
-              value={result}
-              onChange={(e) => setResult(e.target.value)}
+              value={resultValue}
+              onChange={(e) => setResultValue(e.target.value)}
               label="Result:"
               id="result-input"
               required

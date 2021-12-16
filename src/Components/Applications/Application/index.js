@@ -10,7 +10,7 @@ function Application({ application }) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
-  const error = useSelector((store) => store.application.error);
+  const error = useSelector((store) => store.applications.error);
 
   const openEditForm = () => {
     history.push(`/applications/form?id=${application._id}`);

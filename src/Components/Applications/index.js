@@ -11,9 +11,9 @@ import { clearApplicationsError } from '../../redux/applications/actions';
 
 function Applications() {
   const dispatch = useDispatch();
-  const applications = useSelector((store) => store.application.list);
-  const loading = useSelector((store) => store.application.isLoading);
-  const error = useSelector((store) => store.application.error);
+  const applications = useSelector((store) => store.applications.list);
+  const loading = useSelector((store) => store.applications.isLoading);
+  const error = useSelector((store) => store.applications.error);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const history = useHistory();
 

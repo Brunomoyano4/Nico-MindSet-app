@@ -5,7 +5,7 @@ import psychologistsReducer from '../redux/psychologists/reducer';
 import postulantsReducer from './postulants/reducer';
 import clientsReducer from './clients/reducer';
 import positionsReducer from './positions/reducer';
-import applicationReducer from './applications/reducer';
+import applicationsReducer from './applications/reducer';
 
 const rootReducer = combineReducers({
   //here the reducers
@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
   postulants: postulantsReducer,
   psychologists: psychologistsReducer,
   positions: positionsReducer,
-  application: applicationReducer
+  applications: applicationsReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

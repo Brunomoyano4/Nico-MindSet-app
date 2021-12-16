@@ -14,6 +14,9 @@ import {
   UPDATE_APPLICATIONS_FETCHING,
   UPDATE_APPLICATIONS_FULFILLED,
   UPDATE_APPLICATIONS_REJECTED,
+  GET_APPLICATIONS_OPTIONS_FETCHING,
+  GET_APPLICATIONS_OPTIONS_FULFILLED,
+  GET_APPLICATIONS_OPTIONS_REJECTED,
   CLEAR_APPLICATIONS_ERROR,
   CLEAR_SELECTED_APPLICATIONS
 } from './constants';
@@ -65,6 +68,26 @@ export const addApplicationsRejected = (error) => ({
   type: ADD_APPLICATIONS_REJECTED,
   error
 });
+
+export const getApplicationsOptionsFetching = () => {
+  return {
+    type: GET_APPLICATIONS_OPTIONS_FETCHING
+  };
+};
+
+export const getApplicationsOptionsFulfilled = (resource, payload) => {
+  return {
+    type: GET_APPLICATIONS_OPTIONS_FULFILLED,
+    resource,
+    payload
+  };
+};
+
+export const getApplicationsOptionsRejected = () => {
+  return {
+    type: GET_APPLICATIONS_OPTIONS_REJECTED
+  };
+};
 
 export const deleteApplicationsFetching = () => ({
   type: DELETE_APPLICATIONS_FETCHING
