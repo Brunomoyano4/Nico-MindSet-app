@@ -53,16 +53,11 @@ const Form = () => {
         setTimeValue(selectedItem.time);
         setStatusValue(selectedItem.stat);
       }
+    } else {
+      setPostulantsValue(`${options?.postulants[0]?.value}`);
+      setPsychologistValue(options?.psychologists[0]?.value);
     }
   }, [selectedItem]);
-
-  const values = {
-    psychology: psychologistValue,
-    postulant: postulantValue,
-    date: dateValue,
-    time: timeValue,
-    stat: statusValue
-  };
 
   function useQuery() {
     const { search } = useLocation();
@@ -70,6 +65,13 @@ const Form = () => {
   }
 
   const onSubmit = (e) => {
+    const values = {
+      psychology: psychologistValue,
+      postulant: postulantValue,
+      date: dateValue,
+      time: timeValue,
+      stat: statusValue
+    };
     e.preventDefault();
     setDisableButton(true);
     if (sessionId) {
