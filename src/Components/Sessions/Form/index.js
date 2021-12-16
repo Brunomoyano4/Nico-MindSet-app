@@ -48,7 +48,7 @@ const Form = () => {
     if (sessionId) {
       if (Object.keys(selectedItem).length) {
         setPostulantsValue(`${selectedItem?.postulant?._id}`);
-        setPsychologistValue(selectedItem.psychology_id);
+        setPsychologistValue(selectedItem?.psychology?._id);
         setDateValue(selectedItem.date);
         setTimeValue(selectedItem.time);
         setStatusValue(selectedItem.stat);
