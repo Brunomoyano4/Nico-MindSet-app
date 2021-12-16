@@ -4,8 +4,10 @@ import profilesReducer from '../redux/profiles/reducer';
 import psychologistsReducer from '../redux/psychologists/reducer';
 import postulantsReducer from './postulants/reducer';
 import clientsReducer from './clients/reducer';
+import interviewsReducer from './interviews/reducer';
 import positionsReducer from './positions/reducer';
 import applicationsReducer from './applications/reducer';
+import sessionsReducer from './sessions/reducer';
 
 const rootReducer = combineReducers({
   //here the reducers
@@ -14,7 +16,9 @@ const rootReducer = combineReducers({
   postulants: postulantsReducer,
   psychologists: psychologistsReducer,
   positions: positionsReducer,
-  applications: applicationsReducer
+  applications: applicationsReducer,
+  interviews: interviewsReducer,
+  sessions: sessionsReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
