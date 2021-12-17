@@ -10,7 +10,10 @@ import {
   deleteAdminsRejected,
   updateAdminsFetching,
   updateAdminsFulfilled,
-  updateAdminsRejected
+  updateAdminsRejected,
+  getAdminByIdFetching,
+  getAdminByIdFulfilled,
+  getAdminByIdRejected
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/admins`;
@@ -32,6 +35,28 @@ export const getAdmins = () => {
       })
       .catch((error) => {
         dispatch(getAdminsRejected(error.toString()));
+      });
+  };
+};
+
+export const getAdminById = (id) => {
+  return (dispatch) => {
+    dispatch(getAdminByIdFetching());
+    return fetch(`${URL}/${id}`)
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .then((response) => {
+        dispatch(getAdminByIdFulfilled(response));
+        return response;
+      })
+      .catch((error) => {
+        dispatch(getAdminByIdRejected(error.toString()));
       });
   };
 };

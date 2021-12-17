@@ -2,6 +2,9 @@ import {
   GET_ADMINS_FETCHING,
   GET_ADMINS_FULFILLED,
   GET_ADMINS_REJECTED,
+  GET_ADMIN_BY_ID_FETCHING,
+  GET_ADMIN_BY_ID_FULFILLED,
+  GET_ADMIN_BY_ID_REJECTED,
   ADD_ADMINS_FETCHING,
   ADD_ADMINS_FULFILLED,
   ADD_ADMINS_REJECTED,
@@ -27,6 +30,26 @@ export const getAdminsRejected = (error) => ({
   type: GET_ADMINS_REJECTED,
   payload: error
 });
+
+export const getAdminByIdFetching = () => {
+  return {
+    type: GET_ADMIN_BY_ID_FETCHING
+  };
+};
+
+export const getAdminByIdFulfilled = (data) => {
+  return {
+    type: GET_ADMIN_BY_ID_FULFILLED,
+    payload: data
+  };
+};
+
+export const getAdminByIdRejected = (error) => {
+  return {
+    type: GET_ADMIN_BY_ID_REJECTED,
+    payload: error
+  };
+};
 
 export const addAdminsFetching = () => ({
   type: ADD_ADMINS_FETCHING

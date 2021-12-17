@@ -6,7 +6,7 @@ import styles from './adminsForm.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Button from '../../Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAdmin, updateAdmin } from '../../../redux/admins/thunks';
+import { addAdmin, updateAdmin, getAdminById } from '../../../redux/admins/thunks';
 import { cleanError } from '../../../redux/admins/actions';
 
 function Form() {
@@ -17,21 +17,31 @@ function Form() {
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
   const [disableButton, setDisableButton] = useState(false);
-  const data = useSelector((store) => store.admins.list);
+  const selectedItem = useSelector((store) => store.admins.selectedItem);
   const loading = useSelector((store) => store.admins.isLoading);
   const error = useSelector((store) => store.admins.error);
-
-  const setInputValues = ({ firstName, lastName, username, email, password }) => {
-    setFirstNameValue(firstName || '');
-    setLastNameValue(lastName || '');
-    setUsernameValue(username || '');
-    setEmailValue(email || '');
-    setPasswordValue(password || '');
-  };
 
   const history = useHistory();
   const params = useQuery();
   const adminId = params.get('id');
+
+  useEffect(() => {
+    if (adminId) {
+      dispatch(getAdminById(adminId));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (adminId) {
+      if (Object.keys(selectedItem).length) {
+        setFirstNameValue(selectedItem.firstName);
+        setLastNameValue(selectedItem.lastName);
+        setUsernameValue(selectedItem.username);
+        setEmailValue(selectedItem.email);
+        setPasswordValue(selectedItem.password);
+      }
+    }
+  }, [selectedItem]);
 
   const values = {
     firstName: firstNameValue,
@@ -45,13 +55,6 @@ function Form() {
     const { search } = useLocation();
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
-  useEffect(() => {
-    if (adminId) {
-      data.forEach((admin) => {
-        if (admin._id === adminId) setInputValues(admin);
-      });
-    }
-  }, [adminId]);
 
   const onSubmit = (event) => {
     event.preventDefault();

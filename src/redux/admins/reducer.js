@@ -2,6 +2,9 @@ import {
   GET_ADMINS_FETCHING,
   GET_ADMINS_FULFILLED,
   GET_ADMINS_REJECTED,
+  GET_ADMIN_BY_ID_FETCHING,
+  GET_ADMIN_BY_ID_FULFILLED,
+  GET_ADMIN_BY_ID_REJECTED,
   ADD_ADMINS_FETCHING,
   ADD_ADMINS_FULFILLED,
   ADD_ADMINS_REJECTED,
@@ -16,8 +19,8 @@ import {
 const initialState = {
   isLoading: false,
   list: [],
-  error: '',
-  admin: []
+  selectedItem: {},
+  error: ''
 };
 
 const adminsReducer = (state = initialState, action) => {
@@ -38,6 +41,25 @@ const adminsReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: action.error
+      };
+    case GET_ADMIN_BY_ID_FETCHING:
+      return {
+        ...state,
+        isLoading: true,
+        error: initialState.error,
+        selectedItem: initialState.selectedItem
+      };
+    case GET_ADMIN_BY_ID_FULFILLED:
+      return {
+        ...state,
+        isLoading: false,
+        selectedItem: action.payload
+      };
+    case GET_ADMIN_BY_ID_REJECTED:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload
       };
     case ADD_ADMINS_FETCHING:
       return {
