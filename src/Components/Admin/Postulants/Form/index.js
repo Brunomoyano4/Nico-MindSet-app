@@ -102,7 +102,7 @@ function Form() {
     } else {
       dispatch(addPostulant(values));
     }
-    history.replace('admin/postulants');
+    history.replace('/admin/postulants/list');
   };
 
   return (

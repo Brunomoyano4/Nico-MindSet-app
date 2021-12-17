@@ -70,7 +70,7 @@ function Form() {
     } else {
       dispatch(addApplications(values));
     }
-    history.replace('admin/applications');
+    history.push('/admin/applications/list');
     setDisableButton(false);
   };
 

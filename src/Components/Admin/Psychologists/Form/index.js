@@ -61,13 +61,13 @@ function Form() {
       let response = dispatch(updatePsychologist(psychologistId, values));
       if (response) {
         setDisableButton(false);
-        history.replace('admin/psychologists');
+        history.replace('/admin/psychologists/list');
       }
     } else {
       let res = dispatch(addPsychologist(values));
       if (res) {
         setDisableButton(false);
-        history.replace('admin/psychologists');
+        history.replace('/admin/psychologists/list');
       }
     }
   };

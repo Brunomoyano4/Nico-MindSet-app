@@ -1,12 +1,12 @@
 import styles from './profiles.module.css';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import ListItem from './ListItem';
 import DeleteBtn from 'Components/Shared/DeleteBtn/index';
 import Modal from 'Components/Shared/Modal';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Button from 'Components/Shared/Button';
+import { useSelector, useDispatch } from 'react-redux';
 import { deleteProfile, getProfiles } from 'redux/profiles/thunks';
 import { clearProfilesError } from 'redux/profiles/actions';
 
@@ -22,7 +22,7 @@ function Profiles() {
   const history = useHistory();
 
   const toForm = (id) => {
-    history.push(id ? `admin/profiles/form?id=${id}` : '/profiles/form');
+    history.push(id ? `/admin/profiles/form?id=${id}` : '/admin/profiles/form');
   };
 
   useEffect(() => {
@@ -77,7 +77,7 @@ function Profiles() {
         onConfirm={(e) => {
           e.stopPropagation();
           dispatch(deleteProfile(currentProfile._id));
-          history.replace('admin/profiles');
+          history.replace('/admin/profiles/list');
           setShowConfirmModal(false);
         }}
         show={showConfirmModal}

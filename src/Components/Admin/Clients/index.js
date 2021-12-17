@@ -21,7 +21,7 @@ function Clients() {
   }, []);
 
   const CreateBtn = () => {
-    history.push(`admin/clients/form`);
+    history.push(`/admin/clients/form`);
   };
 
   return (

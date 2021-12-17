@@ -21,7 +21,7 @@ function Interviews() {
   }, [dispatch]);
 
   const CreateBtn = () => {
-    history.push(`admin/interviews/form`);
+    history.push(`/admin/interviews/form`);
   };
 
   return (

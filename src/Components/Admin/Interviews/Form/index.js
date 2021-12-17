@@ -60,7 +60,7 @@ function Form() {
     } else {
       dispatch(addInterviews(values));
     }
-    history.replace('admin/interviews');
+    history.replace('/admin/interviews/list');
     setDisableButton(false);
   };
 

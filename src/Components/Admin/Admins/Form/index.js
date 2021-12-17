@@ -64,7 +64,7 @@ function Form() {
     } else {
       dispatch(addAdmin(values));
     }
-    history.push('/admin/admins');
+    history.push('/admin/admins/list');
     setDisableButton(false);
   };
 

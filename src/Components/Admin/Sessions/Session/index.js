@@ -13,7 +13,7 @@ function Session({ session }) {
   const history = useHistory();
 
   const openEditForm = () => {
-    history.push(`admin/sessions/form?id=${session._id}`);
+    history.push(`/admin/sessions/form?id=${session._id}`);
   };
 
   return (

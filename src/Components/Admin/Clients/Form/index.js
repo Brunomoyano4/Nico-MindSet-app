@@ -59,7 +59,7 @@ function Form() {
     } else {
       dispatch(addClient(values));
     }
-    history.replace('admin/clients');
+    history.replace('/admin/clients/list');
   };
 
   return (

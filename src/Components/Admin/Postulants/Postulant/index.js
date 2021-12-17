@@ -14,7 +14,7 @@ const Postulant = ({ postulant }) => {
   const history = useHistory();
 
   const openEditForm = () => {
-    history.push(`admin/postulants/form?id=${postulant._id}`);
+    history.push(`/admin/postulants/form?id=${postulant._id}`);
   };
 
   return (

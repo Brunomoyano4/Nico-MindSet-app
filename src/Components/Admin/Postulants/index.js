@@ -21,7 +21,7 @@ function Postulants() {
   }, []);
 
   const CreateBtn = () => {
-    history.push(`admin/postulants/form`);
+    history.push(`/admin/postulants/form`);
   };
 
   return (

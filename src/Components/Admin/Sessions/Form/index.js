@@ -79,7 +79,7 @@ const Form = () => {
     } else {
       dispatch(addSession(values));
     }
-    history.replace('admin/sessions');
+    history.replace('/admin/sessions/list');
     setDisableButton(false);
   };
 

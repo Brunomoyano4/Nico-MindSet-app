@@ -13,7 +13,7 @@ function Psychologist({ psychologist }) {
   const history = useHistory();
 
   const openEditForm = () => {
-    history.push(`admin/psychologists/form?id=${psychologist._id}`);
+    history.push(`/admin/psychologists/form?id=${psychologist._id}`);
   };
 
   useEffect(() => {

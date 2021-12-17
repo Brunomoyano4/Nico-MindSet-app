@@ -52,12 +52,12 @@ function ProfilesForm() {
     if (profileId) {
       let response = dispatch(updateProfile(profileId, values));
       if (response) {
-        history.push('admin/profiles');
+        history.push('/admin/profiles/list');
       }
     } else {
       let res = dispatch(addProfile(values));
       if (res) {
-        history.push('admin/profiles');
+        history.push('/admin/profiles/list');
       }
     }
   };

@@ -14,7 +14,7 @@ const Client = ({ client }) => {
   const history = useHistory();
 
   const openEditForm = () => {
-    history.push(`admin/clients/form?id=${client._id}`);
+    history.push(`/admin/clients/form?id=${client._id}`);
   };
 
   return (

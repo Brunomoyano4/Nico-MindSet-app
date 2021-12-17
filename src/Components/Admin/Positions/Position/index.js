@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import DeleteBtn from 'Components/Shared/DeleteBtn';
 import Modal from 'Components/Shared/Modal';
 import { deletePosition } from 'redux/positions/thunks';
-import { clearPostitionsError } from 'redux/positions/actions';
+import { clearPositionsError } from 'redux/positions/actions';
 
 function Position({ position }) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -13,7 +13,7 @@ function Position({ position }) {
   const dispatch = useDispatch();
 
   const openEditForm = () => {
-    history.push(`admin/positions/form?id=${position._id}`);
+    history.push(`/admin/positions/form?id=${position._id}`);
   };
 
   return (
@@ -32,7 +32,7 @@ function Position({ position }) {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => dispatch(clearPostitionsError())}
+        closeModal={() => dispatch(clearPositionsError())}
         type={'Error'}
       />
       <tr key={position._id} onClick={openEditForm}>

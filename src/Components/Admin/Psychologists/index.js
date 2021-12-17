@@ -1,18 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import Psychologist from './Psychologist';
 import Button from 'Components/Shared/Button';
 import styles from './psychologists.module.css';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Modal from 'Components/Shared/Modal';
+import { useSelector, useDispatch } from 'react-redux';
+import { getPsychologists } from 'redux/psychologists/thunks';
+import { clearPsychologistsError } from 'redux/psychologists/actions';
 
 function Psychologists() {
-  const [psychologists, setPsychologists] = useState([]);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const psychologists = useSelector((store) => store.psychologists.list);
+  const error = useSelector((store) => store.psychologists.error);
+  const loading = useSelector((store) => store.psychologists.isLoading);
   const history = useHistory();
 
-  useEffect(() => {
+  /* useEffect(() => {
     setLoading(true);
     fetch(`${process.env.REACT_APP_API}/psychologists`)
       .then((response) => {
@@ -28,10 +32,14 @@ function Psychologists() {
       })
       .catch((error) => setError(error.toString()))
       .finally(() => setLoading(false));
+  }, []); */
+
+  useEffect(() => {
+    dispatch(getPsychologists());
   }, []);
 
   const CreateBtn = () => {
-    history.push(`admin/psychologists/form`);
+    history.push(`/admin/psychologists/form`);
   };
 
   return (
@@ -70,7 +78,7 @@ function Psychologists() {
           title="Something went wrong!"
           subtitle={error}
           show={error}
-          closeModal={() => setError('')}
+          closeModal={() => dispatch(clearPsychologistsError())}
           type={'Error'}
         />
       </section>

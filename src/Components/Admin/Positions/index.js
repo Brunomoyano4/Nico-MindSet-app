@@ -7,7 +7,7 @@ import Button from 'Components/Shared/Button';
 import Modal from 'Components/Shared/Modal';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPositions } from 'redux/positions/thunks';
-import { clearPostitionsError } from 'redux/positions/actions';
+import { clearPositionsError } from 'redux/positions/actions';
 
 function Positions() {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ function Positions() {
   }, [dispatch]);
 
   const CreateBtn = () => {
-    history.push(`admin/positions/form`);
+    history.push(`/admin/positions/form`);
   };
 
   return (
@@ -61,7 +61,7 @@ function Positions() {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => dispatch(clearPostitionsError())}
+        closeModal={() => dispatch(clearPositionsError())}
         type={'Error'}
       />
     </section>

@@ -7,7 +7,7 @@ import Modal from 'Components/Shared/Modal';
 import Button from 'Components/Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { addPosition, getPositionById, updatePosition } from 'redux/positions/thunks';
-import { clearPostitionsError } from 'redux/positions/actions';
+import { clearPositionsError } from 'redux/positions/actions';
 
 function Form() {
   const [clientIdValue, setClientIdValue] = useState('');
@@ -59,7 +59,7 @@ function Form() {
     } else {
       dispatch(addPosition(values));
     }
-    history.replace('admin/positions');
+    history.replace('/admin/positions/list');
     setDisableButton(false);
   };
   return (
@@ -113,7 +113,7 @@ function Form() {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => dispatch(clearPostitionsError())}
+        closeModal={() => dispatch(clearPositionsError())}
         type={'Error'}
       />
     </div>

@@ -22,7 +22,7 @@ function GetSessions() {
   }, []);
 
   const CreateBtn = () => {
-    history.push(`admin/sessions/form`);
+    history.push(`/admin/sessions/form`);
   };
 
   return (

@@ -14,7 +14,7 @@ const Interview = ({ interview }) => {
   const history = useHistory();
 
   const openEditForm = () => {
-    history.push(`admin/interviews/form?id=${interview._id}`);
+    history.push(`/admin/interviews/form?id=${interview._id}`);
   };
 
   return (
