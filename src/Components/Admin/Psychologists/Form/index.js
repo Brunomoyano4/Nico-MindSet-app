@@ -1,12 +1,16 @@
 import { useLocation, useHistory } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import styles from './form.module.css';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
-import Modal from 'Components/Shared/Modal';
 import Button from 'Components/Shared/Button';
-import { updatePsychologist, addPsychologist } from 'redux/psychologists/thunks';
+import {
+  getPsychologistById,
+  updatePsychologist,
+  addPsychologist
+} from 'redux/psychologists/thunks';
 import { clearPsychologistsError } from 'redux/psychologists/actions';
 
 function Form() {
@@ -25,6 +29,7 @@ function Form() {
   const [disableButton, setDisableButton] = useState(false);
 
   const setInputValues = ({ firstName, lastName, userName, email, password }) => {
+    console.log('setInputValues');
     setFirstNameValue(firstName || '');
     setLastNameValue(lastName || '');
     setUserNameValue(userName || '');
@@ -47,6 +52,7 @@ function Form() {
 
   useEffect(() => {
     if (psychologistId) {
+      console.log('useEffect - if psychologistId ');
       psychologists.forEach((psychologist) => {
         if (psychologist._id === psychologistId) setInputValues(psychologist);
       });

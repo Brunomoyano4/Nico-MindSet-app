@@ -1,11 +1,11 @@
 import { useLocation, useHistory } from 'react-router-dom';
-import Modal from 'Components/Shared/Modal';
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import styles from './form.module.css';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Button from 'Components/Shared/Button';
-import { useDispatch, useSelector } from 'react-redux';
 import { getClientById, addClient, updateClient } from 'redux/clients/thunks';
 import { clearClientsError } from 'redux/clients/actions';
 

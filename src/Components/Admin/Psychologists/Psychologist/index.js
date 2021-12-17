@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import DeleteBtn from 'Components/Shared/DeleteBtn';
 import Modal from 'Components/Shared/Modal';
 import { useSelector, useDispatch } from 'react-redux';
-import { deletePsychologist, getPsychologists } from 'redux/psychologists/thunks';
+import { deletePsychologist } from 'redux/psychologists/thunks';
 import { clearPsychologistsError } from 'redux/psychologists/actions';
 
 function Psychologist({ psychologist }) {
@@ -15,10 +15,6 @@ function Psychologist({ psychologist }) {
   const openEditForm = () => {
     history.push(`/admin/psychologists/form?id=${psychologist._id}`);
   };
-
-  useEffect(() => {
-    dispatch(getPsychologists());
-  }, []);
 
   return (
     <>

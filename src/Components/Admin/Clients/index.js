@@ -53,9 +53,6 @@ function Clients() {
           <Button className={styles.button} onClick={CreateBtn} content={'CREATE CLIENT'} />
         </div>
       </section>
-      <section className={styles.createBtnSection}>
-        {error && <div className={styles.error}>{error}</div>}
-      </section>
       <Modal
         title="Something went wrong!"
         subtitle={error}
