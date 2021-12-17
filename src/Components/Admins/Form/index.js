@@ -45,7 +45,6 @@ function Form() {
     const { search } = useLocation();
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
-
   useEffect(() => {
     if (adminId) {
       data.forEach((admin) => {
