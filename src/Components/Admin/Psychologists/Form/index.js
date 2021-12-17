@@ -6,11 +6,7 @@ import Input from 'Components/Shared/Input';
 import styles from './form.module.css';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Button from 'Components/Shared/Button';
-import {
-  getPsychologistById,
-  updatePsychologist,
-  addPsychologist
-} from 'redux/psychologists/thunks';
+import { updatePsychologist, addPsychologist } from 'redux/psychologists/thunks';
 import { clearPsychologistsError } from 'redux/psychologists/actions';
 
 function Form() {
