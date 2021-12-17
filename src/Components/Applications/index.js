@@ -1,132 +1,66 @@
 import styles from './applications.module.css';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import ListItem from './ListItem';
-import DeleteBtn from '../Shared/DeleteBtn/index';
+import Application from './Application';
 import Modal from '../Shared/Modal';
 import LoadingSpinner from '../Shared/LoadingSpinner';
 import Button from '../Shared/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { getApplications } from '../../redux/applications/thunks';
+import { clearApplicationsError } from '../../redux/applications/actions';
 
 function Applications() {
-  const tableHeaderItems = ['Position', 'Client', 'Postulant', 'Result', ''];
-  const [applications, setApplications] = useState([]);
+  const dispatch = useDispatch();
+  const applications = useSelector((store) => store.applications.list);
+  const loading = useSelector((store) => store.applications.isLoading);
+  const error = useSelector((store) => store.applications.error);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [modalSubtitle, setModalSubtitle] = useState(['']);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [currentApplication, setCurrentApplication] = useState({});
-
   const history = useHistory();
 
-  const deleteApplication = (e, id, position, client, postulant) => {
-    e.stopPropagation();
-    setModalSubtitle([
-      `ID: ${id}`,
-      `Position: ${position}`,
-      `Client: ${client}`,
-      `Postulant: ${postulant}`
-    ]);
-    fetch(`${process.env.REACT_APP_API}/applications/${id}`, {
-      method: 'DELETE'
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        setShowConfirmModal(false);
-        getApplications();
-      })
-      .catch((error) => setError(error.toString()));
+  useEffect(() => {
+    dispatch(getApplications());
+  }, [dispatch]);
+
+  const CreateBtn = () => {
+    history.push(`/applications/form`);
   };
-
-  const toForm = (id) => {
-    history.push(id ? `/applications/form?id=${id}` : '/applications/form');
-  };
-
-  const getApplications = () => {
-    setLoading(true);
-    fetch(`${process.env.REACT_APP_API}/applications`)
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setApplications(data);
-      })
-      .catch((error) => setError(error.toString()))
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(getApplications, []);
-
   return (
     <section className={styles.container}>
       <h2>Applications</h2>
-      <table>
-        <div className={styles.list}>
-          <ListItem headerItems={tableHeaderItems} />
-          {!loading && (
-            <tbody className={styles.tableBody}>
-              {applications.map((application) => {
-                const deleteBtn = (
-                  <DeleteBtn
-                    className={styles.button}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setCurrentApplication(application);
-                      setShowConfirmModal(true);
-                    }}
-                  />
-                );
-                const tableListItems = [
-                  application.positions?.job,
-                  application.client?.customerName,
-                  `${application.postulants?.firstName} ${application.postulants?.lastName}`,
-                  application.result,
-                  deleteBtn
-                ];
-                return (
-                  <ListItem
-                    key={application._id}
-                    listItems={tableListItems}
-                    id={application._id}
-                    onRowClick={() => toForm(application._id)}
-                  />
-                );
-              })}
-            </tbody>
-          )}
-          {loading && <LoadingSpinner circle={false} />}
-          {!loading && !applications.length && (
-            <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
-          )}
-        </div>
-        <Button
-          className={styles.button}
-          onClick={() => toForm()}
-          content={'CREATE APPLICATIONS'}
-        />
-      </table>
-
+      <div className={styles.list}>
+        <table className={styles.list}>
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Client</th>
+              <th>Postulant</th>
+              <th>Result</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {applications.map((application) => {
+              return <Application key={application._id} application={application} />;
+            })}
+          </tbody>
+        </table>
+        {loading && <LoadingSpinner circle={false} />}
+        {!loading && !applications.length && (
+          <h3 className={styles.nothingHere}>Oops... Nothing Here</h3>
+        )}
+        <Button className={styles.button} onClick={CreateBtn} content={'CREATE APPLICATION'} />
+      </div>
       <Modal
-        title="You are about to delete an application"
-        onConfirm={(e) => deleteApplication(e, currentApplication._id)}
+        title="Are you sure you want to delete the selected Application?"
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
-        subtitle={modalSubtitle}
         type={'Confirm'}
       />
       <Modal
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => dispatch(clearApplicationsError())}
         type={'Error'}
       />
     </section>
