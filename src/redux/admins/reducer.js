@@ -45,10 +45,11 @@ const adminsReducer = (state = initialState, action) => {
         isLoading: true
       };
     case ADD_ADMINS_FULFILLED:
+      if (!state.list.some((el) => el._id === action.payload._id)) state.list.push(action.payload);
       return {
         ...state,
         isLoading: false,
-        list: [...state.list, action.payload]
+        list: [...state.list]
       };
     case ADD_ADMINS_REJECTED:
       return {
@@ -81,7 +82,10 @@ const adminsReducer = (state = initialState, action) => {
     case UPDATE_ADMINS_FULFILLED:
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        list: state.list.map((admins) => {
+          return admins._id === action.payload._id ? action.payload : admins;
+        })
       };
     case UPDATE_ADMINS_REJECTED:
       return {
