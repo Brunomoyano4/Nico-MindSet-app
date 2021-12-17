@@ -2,12 +2,12 @@ import styles from './positions.module.css';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import Position from './Position';
-import LoadingSpinner from '../Shared/LoadingSpinner';
-import Button from '../Shared/Button';
-import Modal from '../Shared/Modal';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
+import Button from 'Components/Shared/Button';
+import Modal from 'Components/Shared/Modal';
 import { useSelector, useDispatch } from 'react-redux';
-import { getPositions } from '../../redux/positions/thunks';
-import { clearPostitionsError } from '../../redux/positions/actions';
+import { getPositions } from 'redux/positions/thunks';
+import { clearPostitionsError } from 'redux/positions/actions';
 
 function Positions() {
   const dispatch = useDispatch();

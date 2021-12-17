@@ -1,13 +1,13 @@
 import styles from './form.module.css';
-import Input from '../../Shared/Input';
 import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import LoadingSpinner from '../../Shared/LoadingSpinner';
-import Modal from '../../Shared/Modal';
-import Button from '../../Shared/Button';
-import { updateProfile, addProfile } from '../../../redux/profiles/thunks';
-import { clearProfilesError } from '../../../redux/profiles/actions';
+import Input from 'Components/Shared/Input';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
+import Modal from 'Components/Shared/Modal';
+import Button from 'Components/Shared/Button';
+import { updateProfile, addProfile } from 'redux/profiles/thunks';
+import { clearProfilesError } from 'redux/profiles/actions';
 
 function ProfilesForm() {
   const dispatch = useDispatch();

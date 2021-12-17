@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import DeleteBtn from '../../Shared/DeleteBtn';
 import { useHistory } from 'react-router-dom';
-import Modal from '../../Shared/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { deletePosition } from '../../../redux/positions/thunks';
-import { clearPostitionsError } from '../../../redux/positions/actions';
+import DeleteBtn from 'Components/Shared/DeleteBtn';
+import Modal from 'Components/Shared/Modal';
+import { deletePosition } from 'redux/positions/thunks';
+import { clearPostitionsError } from 'redux/positions/actions';
 
 function Position({ position }) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);

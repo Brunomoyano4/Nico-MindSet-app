@@ -1,11 +1,11 @@
 import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
-import DeleteBtn from '../../Shared/DeleteBtn/index';
-import Modal from '../../Shared/Modal';
-import styles from '../Client/client.module.css';
+import DeleteBtn from 'Components/Shared/DeleteBtn/index';
+import Modal from 'Components/Shared/Modal';
+import styles from './client.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteClient } from '../../../redux/clients/thunks';
-import { clearClientsError } from '../../../redux/clients/actions';
+import { deleteClient } from 'redux/clients/thunks';
+import { clearClientsError } from 'redux/clients/actions';
 
 const Client = ({ client }) => {
   const dispatch = useDispatch();

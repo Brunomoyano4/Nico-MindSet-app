@@ -1,13 +1,13 @@
 import { useLocation, useHistory } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Input from '../../Shared/Input';
+import Input from 'Components/Shared/Input';
 import styles from './form.module.css';
-import LoadingSpinner from '../../Shared/LoadingSpinner';
-import Modal from '../../Shared/Modal';
-import Button from '../../Shared/Button';
-import { updatePsychologist, addPsychologist } from '../../../redux/psychologists/thunks';
-import { clearPsychologistsError } from '../../../redux/psychologists/actions';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
+import Modal from 'Components/Shared/Modal';
+import Button from 'Components/Shared/Button';
+import { updatePsychologist, addPsychologist } from 'redux/psychologists/thunks';
+import { clearPsychologistsError } from 'redux/psychologists/actions';
 
 function Form() {
   const dispatch = useDispatch();

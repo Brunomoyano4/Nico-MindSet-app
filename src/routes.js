@@ -1,25 +1,25 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import Layout from './Components/Layout';
-import Home from './Components/Home';
-import Admins from './Components/Admins';
-import AdminsForm from './Components/Admins/Form';
-import Applications from './Components/Applications';
-import ApplicationsForm from './Components/Applications/Form';
-import Clients from './Components/Clients';
-import ClientsForm from './Components/Clients/Form';
-import Interviews from './Components/Interviews';
-import InterviewsForm from './Components/Interviews/Form';
-import Positions from './Components/Positions';
-import PositionsForm from './Components/Positions/Form';
-import Postulants from './Components/Postulants';
-import PostulantsForm from './Components/Postulants/Form';
-import Profiles from './Components/Profiles';
-import ProfilesForm from './Components/Profiles/Form';
-import Psychologists from './Components/Psychologists';
-import PsychologistsForm from './Components/Psychologists/Form';
-import Sessions from './Components/Sessions';
-import SessionsForm from './Components/Sessions/Form';
+import Layout from 'Components/Layout';
+import Home from 'Components/Home';
+import Admins from 'Components/Admins';
+import AdminsForm from 'Components/Admins/Form';
+import Applications from 'Components/Applications';
+import ApplicationsForm from 'Components/Applications/Form';
+import Clients from 'Components/Clients';
+import ClientsForm from 'Components/Clients/Form';
+import Interviews from 'Components/Interviews';
+import InterviewsForm from 'Components/Interviews/Form';
+import Positions from 'Components/Positions';
+import PositionsForm from 'Components/Positions/Form';
+import Postulants from 'Components/Postulants';
+import PostulantsForm from 'Components/Postulants/Form';
+import Profiles from 'Components/Profiles';
+import ProfilesForm from 'Components/Profiles/Form';
+import Psychologists from 'Components/Psychologists';
+import PsychologistsForm from 'Components/Psychologists/Form';
+import Sessions from 'Components/Sessions';
+import SessionsForm from 'Components/Sessions/Form';
 
 const Routes = () => {
   return (

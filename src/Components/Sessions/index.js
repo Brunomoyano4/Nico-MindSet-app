@@ -3,11 +3,11 @@ import { useHistory } from 'react-router-dom';
 import styles from './sessions.module.css';
 import Session from './Session';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSessions } from '../../redux/sessions/thunks';
-import { clearSessionsError } from '../../redux/sessions/actions';
-import LoadingSpinner from '../Shared/LoadingSpinner';
-import Button from '../Shared/Button/index';
-import Modal from '../Shared/Modal';
+import { getSessions } from 'redux/sessions/thunks';
+import { clearSessionsError } from 'redux/sessions/actions';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
+import Button from 'Components/Shared/Button/index';
+import Modal from 'Components/Shared/Modal';
 
 function GetSessions() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);

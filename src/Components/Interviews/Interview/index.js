@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import styles from '../Interview/interview.module.css';
-import DeleteBtn from '../../Shared/DeleteBtn/index';
-import Modal from '../../Shared/Modal';
+import styles from './interview.module.css';
+import DeleteBtn from 'Components/Shared/DeleteBtn/index';
+import Modal from 'Components/Shared/Modal';
 import { useDispatch } from 'react-redux';
-import { deleteInterviews } from '../../../redux/interviews/thunks';
+import { deleteInterviews } from 'redux/interviews/thunks';
 
 const Interview = ({ interview }) => {
   const dispatch = useDispatch();

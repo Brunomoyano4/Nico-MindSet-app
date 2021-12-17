@@ -3,12 +3,12 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import ListItem from './ListItem';
-import DeleteBtn from '../Shared/DeleteBtn/index';
-import Modal from '../Shared/Modal';
-import LoadingSpinner from '../Shared/LoadingSpinner';
-import Button from '../Shared/Button';
-import { deleteProfile, getProfiles } from '../../redux/profiles/thunks';
-import { clearProfilesError } from '../../redux/profiles/actions';
+import DeleteBtn from 'Components/Shared/DeleteBtn/index';
+import Modal from 'Components/Shared/Modal';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
+import Button from 'Components/Shared/Button';
+import { deleteProfile, getProfiles } from 'redux/profiles/thunks';
+import { clearProfilesError } from 'redux/profiles/actions';
 
 function Profiles() {
   const dispatch = useDispatch();

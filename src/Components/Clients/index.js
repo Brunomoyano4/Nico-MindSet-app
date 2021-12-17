@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import Client from './Client';
-import Button from '../Shared/Button';
-import Modal from '../Shared/Modal';
+import Button from 'Components/Shared/Button';
+import Modal from 'Components/Shared/Modal';
 import styles from './clients.module.css';
-import LoadingSpinner from '../Shared/LoadingSpinner';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import { useSelector, useDispatch } from 'react-redux';
-import { getClients } from '../../redux/clients/thunks';
-import { clearClientsError } from '../../redux/clients/actions';
+import { getClients } from 'redux/clients/thunks';
+import { clearClientsError } from 'redux/clients/actions';
 
 function Clients() {
   const history = useHistory();

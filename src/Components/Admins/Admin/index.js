@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
-import DeleteBtn from '../../Shared/DeleteBtn';
-import Modal from '../../Shared/Modal';
+import DeleteBtn from 'Components/Shared/DeleteBtn';
+import Modal from 'Components/Shared/Modal';
 import styles from './admin.module.css';
 
 function Admin({ admin }) {

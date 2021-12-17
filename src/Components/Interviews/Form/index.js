@@ -1,14 +1,14 @@
 import { useLocation, useHistory } from 'react-router-dom';
-import Modal from '../../Shared/Modal';
 import React, { useState, useEffect } from 'react';
-import Input from '../../Shared/Input';
+import Modal from 'Components/Shared/Modal';
+import Input from 'Components/Shared/Input';
 import styles from './form.module.css';
-import Select from '../../Shared/Select';
-import LoadingSpinner from '../../Shared/LoadingSpinner';
-import Button from '../../Shared/Button';
+import Select from 'Components/Shared/Select';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
+import Button from 'Components/Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addInterviews, updateInterviews } from '../../../redux/interviews/thunks';
-import { clearInterviewsError } from '../../../redux/interviews/actions';
+import { addInterviews, updateInterviews } from 'redux/interviews/thunks';
+import { clearInterviewsError } from 'redux/interviews/actions';
 
 function Form() {
   const dispatch = useDispatch();

@@ -2,12 +2,12 @@ import styles from './applications.module.css';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Application from './Application';
-import Modal from '../Shared/Modal';
-import LoadingSpinner from '../Shared/LoadingSpinner';
-import Button from '../Shared/Button';
+import Modal from 'Components/Shared/Modal';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
+import Button from 'Components/Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { getApplications } from '../../redux/applications/thunks';
-import { clearApplicationsError } from '../../redux/applications/actions';
+import { getApplications } from 'redux/applications/thunks';
+import { clearApplicationsError } from 'redux/applications/actions';
 
 function Applications() {
   const dispatch = useDispatch();

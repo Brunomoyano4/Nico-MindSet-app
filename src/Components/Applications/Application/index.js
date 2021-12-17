@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import DeleteBtn from '../../Shared/DeleteBtn';
-import Modal from '../../Shared/Modal';
+import DeleteBtn from 'Components/Shared/DeleteBtn';
+import Modal from 'Components/Shared/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteApplications } from '../../../redux/applications/thunks';
-import { clearApplicationsError } from '../../../redux/applications/actions';
+import { deleteApplications } from 'redux/applications/thunks';
+import { clearApplicationsError } from 'redux/applications/actions';
 
 function Application({ application }) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);

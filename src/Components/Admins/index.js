@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import Admin from './Admin';
-import Button from '../Shared/Button';
-import Modal from '../Shared/Modal';
+import Button from 'Components/Shared/Button';
+import Modal from 'Components/Shared/Modal';
 import styles from './admins.module.css';
-import LoadingSpinner from '../Shared/LoadingSpinner';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 
 function Admins() {
   const [admins, setAdmins] = useState([]);

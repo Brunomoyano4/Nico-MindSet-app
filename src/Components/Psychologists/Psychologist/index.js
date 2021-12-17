@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import DeleteBtn from '../../Shared/DeleteBtn';
 import { useHistory } from 'react-router-dom';
-import Modal from '../../Shared/Modal';
+import DeleteBtn from 'Components/Shared/DeleteBtn';
+import Modal from 'Components/Shared/Modal';
 import { useSelector, useDispatch } from 'react-redux';
-import { deletePsychologist, getPsychologists } from '../../../redux/psychologists/thunks';
-import { clearPsychologistsError } from '../../../redux/psychologists/actions';
+import { deletePsychologist, getPsychologists } from 'redux/psychologists/thunks';
+import { clearPsychologistsError } from 'redux/psychologists/actions';
 
 function Psychologist({ psychologist }) {
   const dispatch = useDispatch();

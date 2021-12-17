@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import Interview from './Interview/index';
-import Button from '../Shared/Button';
-import Modal from '../Shared/Modal';
+import Button from 'Components/Shared/Button';
+import Modal from 'Components/Shared/Modal';
 import styles from './interviews.module.css';
-import LoadingSpinner from '../Shared/LoadingSpinner';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import { useDispatch, useSelector } from 'react-redux';
-import { getInterviews } from '../../redux/interviews/thunks';
-import { clearInterviewsError } from '../../redux/interviews/actions';
+import { getInterviews } from 'redux/interviews/thunks';
+import { clearInterviewsError } from 'redux/interviews/actions';
 
 function Interviews() {
   const history = useHistory();

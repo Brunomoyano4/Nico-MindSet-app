@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import DeleteBtn from '../../Shared/DeleteBtn';
 import { useHistory } from 'react-router-dom';
-import Modal from '../../Shared/Modal';
+import DeleteBtn from 'Components/Shared/DeleteBtn';
+import Modal from 'Components/Shared/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteSession } from '../../../redux/sessions/thunks';
-import { clearSessionsError } from '../../../redux/sessions/actions';
+import { deleteSession } from 'redux/sessions/thunks';
+import { clearSessionsError } from 'redux/sessions/actions';
 
 function Session({ session }) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);

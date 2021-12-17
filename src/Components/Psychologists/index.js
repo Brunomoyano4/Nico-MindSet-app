@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import Psychologist from './Psychologist';
-import Button from '../Shared/Button';
+import Button from 'Components/Shared/Button';
 import styles from './psychologists.module.css';
-import LoadingSpinner from '../Shared/LoadingSpinner';
-import Modal from '../Shared/Modal';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
+import Modal from 'Components/Shared/Modal';
 
 function Psychologists() {
   const [psychologists, setPsychologists] = useState([]);

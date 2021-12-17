@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router';
-import Input from '../../Shared/Input';
+import Input from 'Components/Shared/Input';
 import styles from './form.module.css';
-import LoadingSpinner from '../../Shared/LoadingSpinner';
-import Modal from '../../Shared/Modal';
-import Button from '../../Shared/Button';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
+import Modal from 'Components/Shared/Modal';
+import Button from 'Components/Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPosition, getPositionById, updatePosition } from '../../../redux/positions/thunks';
-import { clearPostitionsError } from '../../../redux/positions/actions';
+import { addPosition, getPositionById, updatePosition } from 'redux/positions/thunks';
+import { clearPostitionsError } from 'redux/positions/actions';
 
 function Form() {
   const [clientIdValue, setClientIdValue] = useState('');

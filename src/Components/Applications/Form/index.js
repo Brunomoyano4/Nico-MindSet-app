@@ -1,18 +1,18 @@
 import styles from './form.module.css';
-import Modal from '../../Shared/Modal';
-import Input from '../../Shared/Input';
-import Select from '../../Shared/Select';
-import LoadingSpinner from '../../Shared/LoadingSpinner';
+import Modal from 'Components/Shared/Modal';
+import Input from 'Components/Shared/Input';
+import Select from 'Components/Shared/Select';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Button from '../../Shared/Button';
+import Button from 'Components/Shared/Button';
 import {
   addApplications,
   updateApplications,
   getApplicationsById,
   getApplicationsOptions
-} from '../../../redux/applications/thunks';
+} from 'redux/applications/thunks';
 
 function Form() {
   const history = useHistory();

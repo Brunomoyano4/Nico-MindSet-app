@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import Postulant from './Postulant';
-import Button from '../Shared/Button';
-import Modal from '../Shared/Modal';
+import Button from 'Components/Shared/Button';
+import Modal from 'Components/Shared/Modal';
 import styles from './postulants.module.css';
-import LoadingSpinner from '../Shared/LoadingSpinner';
+import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import { useSelector, useDispatch } from 'react-redux';
-import { getPostulants } from '../../redux/postulants/thunks';
-import { clearPostulantsError } from '../../redux/postulants/actions';
+import { getPostulants } from 'redux/postulants/thunks';
+import { clearPostulantsError } from 'redux/postulants/actions';
 
 function Postulants() {
   const history = useHistory();

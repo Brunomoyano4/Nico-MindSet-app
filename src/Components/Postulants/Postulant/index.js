@@ -1,11 +1,11 @@
 import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
-import DeleteBtn from '../../Shared/DeleteBtn/index';
-import Modal from '../../Shared/Modal';
-import styles from '../Postulant/postulant.module.css';
+import DeleteBtn from 'Components/Shared/DeleteBtn/index';
+import Modal from 'Components/Shared/Modal';
+import styles from 'Components/Postulant/postulant.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { deletePostulant } from '../../../redux/postulants/thunks';
-import { clearPostulantsError } from '../../../redux/postulants/actions';
+import { deletePostulant } from 'redux/postulants/thunks';
+import { clearPostulantsError } from 'redux/postulants/actions';
 
 const Postulant = ({ postulant }) => {
   const dispatch = useDispatch();
