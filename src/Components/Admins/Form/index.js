@@ -5,64 +5,54 @@ import Input from '../../Shared/Input';
 import styles from './adminsForm.module.css';
 import LoadingSpinner from '../../Shared/LoadingSpinner';
 import Button from '../../Shared/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAdmin, updateAdmin, getAdminById } from '../../../redux/admins/thunks';
+import { cleanError } from '../../../redux/admins/actions';
 
 function Form() {
+  const dispatch = useDispatch();
   const [firstNameValue, setFirstNameValue] = useState('');
   const [lastNameValue, setLastNameValue] = useState('');
   const [usernameValue, setUsernameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
+  const selectedItem = useSelector((store) => store.admins.selectedItem);
+  const loading = useSelector((store) => store.admins.isLoading);
+  const error = useSelector((store) => store.admins.error);
 
-  const setInputValues = ({ firstName, lastName, username, email, password }) => {
-    setFirstNameValue(firstName || 'N/A');
-    setLastNameValue(lastName || 'N/A');
-    setUsernameValue(username || 'N/A');
-    setEmailValue(email || 'N/A');
-    setPasswordValue(password || 'N/A');
-  };
-
-  let url;
   const history = useHistory();
   const params = useQuery();
   const adminId = params.get('id');
 
-  const options = {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      firstName: firstNameValue,
-      lastName: lastNameValue,
-      email: emailValue,
-      username: usernameValue,
-      password: passwordValue
-    })
-  };
-
   useEffect(() => {
     if (adminId) {
-      setLoading(true);
-      fetch(`${process.env.REACT_APP_API}/admins/${adminId}`)
-        .then((response) => {
-          if (response.status !== 200) {
-            return response.json().then(({ msg }) => {
-              throw new Error(msg);
-            });
-          }
-          return response.json();
-        })
-        .then((data) => setInputValues(data))
-        .catch((error) => setError(error.toString()))
-        .finally(() => setLoading(false));
+      dispatch(getAdminById(adminId));
     }
   }, []);
 
+  useEffect(() => {
+    if (adminId) {
+      if (Object.keys(selectedItem).length) {
+        setFirstNameValue(selectedItem.firstName);
+        setLastNameValue(selectedItem.lastName);
+        setUsernameValue(selectedItem.username);
+        setEmailValue(selectedItem.email);
+        setPasswordValue(selectedItem.password);
+      }
+    }
+  }, [selectedItem]);
+
+  const values = {
+    firstName: firstNameValue,
+    lastName: lastNameValue,
+    email: emailValue,
+    username: usernameValue,
+    password: passwordValue
+  };
+
   function useQuery() {
     const { search } = useLocation();
-
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
 
@@ -70,26 +60,12 @@ function Form() {
     event.preventDefault();
     setDisableButton(true);
     if (adminId) {
-      options.method = 'PUT';
-      url = `${process.env.REACT_APP_API}/admins/${adminId}`;
+      dispatch(updateAdmin(adminId, values));
     } else {
-      options.method = 'POST';
-      url = `${process.env.REACT_APP_API}/admins`;
+      dispatch(addAdmin(values));
     }
-    fetch(url, options)
-      .then((response) => {
-        if (response.status !== 200 && response.status !== 201) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        return (window.location.href = '/admins');
-      })
-      .then(() => history.replace('/admins'))
-      .catch((error) => {
-        setError(error.toString());
-        setDisableButton(false);
-      });
+    history.push('/admins');
+    setDisableButton(false);
   };
 
   return (
@@ -152,18 +128,13 @@ function Form() {
             onChange={(e) => setPasswordValue(e.target.value)}
           />
         </div>
-        <Button
-          className={styles.button}
-          onClick={onSubmit}
-          content={'SAVE'}
-          disabled={loading || disableButton}
-        />
+        <Button className={styles.button} content={'SAVE'} disabled={loading || disableButton} />
       </form>
       <Modal
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => cleanError()}
         type={'Error'}
       />
     </div>

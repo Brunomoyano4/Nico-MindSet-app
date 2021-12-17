@@ -8,10 +8,12 @@ import interviewsReducer from './interviews/reducer';
 import positionsReducer from './positions/reducer';
 import applicationsReducer from './applications/reducer';
 import sessionsReducer from './sessions/reducer';
+import adminsReducer from './admins/reducer';
 
 const rootReducer = combineReducers({
   //here the reducers
   profiles: profilesReducer,
+  admins: adminsReducer,
   clients: clientsReducer,
   postulants: postulantsReducer,
   psychologists: psychologistsReducer,
