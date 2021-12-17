@@ -3,40 +3,28 @@ import { useState } from 'react';
 import styles from './admin.module.css';
 import DeleteBtn from 'Components/Shared/DeleteBtn';
 import Modal from 'Components/Shared/Modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteAdmin } from 'redux/admins/thunks';
+import { cleanError } from 'redux/admins/actions';
 
 function Admin({ admin }) {
-  const [error, setError] = useState('');
+  const dispatch = useDispatch();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
+  const error = useSelector((store) => store.admins.error);
   const history = useHistory();
 
   const openEditForm = () => {
     history.push(`/admin/admins/form?id=${admin._id}`);
   };
 
-  const deleteAdmin = (event) => {
-    event.stopPropagation();
-    const url = `${process.env.REACT_APP_API}/admins/${admin._id}`;
-    fetch(url, {
-      method: 'DELETE'
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then(({ msg }) => {
-            throw new Error(msg);
-          });
-        }
-        setShowConfirmModal(false);
-        return history.go(0);
-      })
-      .catch((error) => setError(error.toString()));
-  };
-
   return (
     <>
       <Modal
         title="Are you sure you want to delete an Admin?"
-        onConfirm={(e) => deleteAdmin(e)}
+        onConfirm={(e) => {
+          e.stopPropagation();
+          dispatch(deleteAdmin(admin._id));
+        }}
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
         type={'Confirm'}
@@ -45,7 +33,7 @@ function Admin({ admin }) {
         title="Something went wrong!"
         subtitle={error}
         show={error}
-        closeModal={() => setError('')}
+        closeModal={() => cleanError()}
         type={'Error'}
       />
       <tr className={styles.tr} key={admin._id} onClick={openEditForm}>
