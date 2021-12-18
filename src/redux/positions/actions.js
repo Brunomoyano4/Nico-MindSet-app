@@ -94,7 +94,7 @@ export const updatePositionsRejected = (error) => ({
   error
 });
 
-export const clearPostitionsError = () => ({
+export const clearPositionsError = () => ({
   type: CLEAR_POSITIONS_ERROR
 });
 
