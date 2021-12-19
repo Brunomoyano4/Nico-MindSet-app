@@ -7,7 +7,7 @@ import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Button from 'Components/Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAdmin, updateAdmin, getAdminById } from 'redux/admins/thunks';
-import { cleanError } from 'redux/admins/actions';
+import { cleanError, cleanSelectedItem } from 'redux/admins/actions';
 import { Form, Field } from 'react-final-form';
 
 function AdminsForm() {
@@ -22,6 +22,8 @@ function AdminsForm() {
   useEffect(() => {
     if (adminId) {
       dispatch(getAdminById(adminId));
+    } else {
+      dispatch(cleanSelectedItem());
     }
   }, []);
 

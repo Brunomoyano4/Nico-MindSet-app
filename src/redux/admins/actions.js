@@ -14,7 +14,8 @@ import {
   UPDATE_ADMINS_FETCHING,
   UPDATE_ADMINS_FULFILLED,
   UPDATE_ADMINS_REJECTED,
-  CLEAN_ERROR
+  CLEAN_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 export const getAdminsFetching = () => ({
@@ -96,5 +97,11 @@ export const updateAdminsRejected = (error) => ({
 export const cleanError = () => {
   return {
     type: CLEAN_ERROR
+  };
+};
+
+export const cleanSelectedItem = () => {
+  return {
+    type: CLEAN_SELECTED_ITEM
   };
 };

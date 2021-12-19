@@ -13,7 +13,8 @@ import {
   DELETE_ADMINS_REJECTED,
   UPDATE_ADMINS_FETCHING,
   UPDATE_ADMINS_FULFILLED,
-  UPDATE_ADMINS_REJECTED
+  UPDATE_ADMINS_REJECTED,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 const initialState = {
@@ -115,6 +116,12 @@ const adminsReducer = (state = initialState, action) => {
         isLoading: false,
         error: action.error
       };
+    case CLEAN_SELECTED_ITEM: {
+      return {
+        ...state,
+        selectedItem: initialState.selectedItem
+      };
+    }
     default:
       return state;
   }
