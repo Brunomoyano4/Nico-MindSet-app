@@ -5,9 +5,10 @@ import { useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import ToggleSwitch from 'Components/Shared/ToggleSwitch';
+import { getSessions } from 'redux/sessions/thunks';
 
 function PostulantHome() {
-  const sessions = useSelector((store) => store.sessions.selectedItem);
+  const sessions = useSelector((store) => store.sessions.list);
   const postulant = useSelector((store) => store.postulants.selectedPostulant);
   const history = useHistory();
   const dispatch = useDispatch();
@@ -26,8 +27,13 @@ function PostulantHome() {
     }
   }, []);
 
+  useEffect(() => {
+    dispatch(getSessions());
+    sessions.filter((el) => el.postulant._id !== postulantId);
+  }, []);
+
   const CreateBtn = () => {
-    history.push(`postulant/postulants/form?id=61bd751a1d95a30cbccee7c2`);
+    history.push(`/admin/postulants/form?id=61bd751a1d95a30cbccee7c2`);
   };
 
   return (
@@ -78,6 +84,7 @@ function PostulantHome() {
             <div className={styles.sessionsInfo}>
               <div>
                 <h3>{`${sessions.date} ${sessions.time}`}</h3>
+                {console.log(sessions)}
                 <button className={styles.sessionsBtn}>TAKE</button>
               </div>
             </div>
