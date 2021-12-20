@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import Input from 'Components/Shared/Input';
 import styles from './form.module.css';
@@ -7,13 +7,10 @@ import Modal from 'Components/Shared/Modal';
 import Button from 'Components/Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { addPosition, getPositionById, updatePosition } from 'redux/positions/thunks';
-import { clearPositionsError } from 'redux/positions/actions';
+import { clearPositionsError, cleanSelectedPosition } from 'redux/positions/actions';
+import { Form, Field } from 'react-final-form';
 
-function Form() {
-  const [clientIdValue, setClientIdValue] = useState('');
-  const [jobValue, setJobValue] = useState('');
-  const [descriptionValue, setDescriptionValue] = useState('');
-  const [disableButton, setDisableButton] = useState(false);
+function PositionsForm() {
   const selectedItem = useSelector((store) => store.positions.selectedItem);
   const loading = useSelector((store) => store.positions.isLoading);
   const error = useSelector((store) => store.positions.error);
@@ -27,88 +24,82 @@ function Form() {
     if (positionId) {
       dispatch(getPositionById(positionId));
     }
+    return () => {
+      dispatch(cleanSelectedPosition());
+    };
   }, []);
-
-  useEffect(() => {
-    if (positionId) {
-      if (Object.keys(selectedItem).length) {
-        setClientIdValue(selectedItem.clientId);
-        setJobValue(selectedItem.job);
-        setDescriptionValue(selectedItem.description);
-      }
-    }
-  }, [selectedItem]);
-
-  const values = {
-    clientId: clientIdValue,
-    job: jobValue,
-    description: descriptionValue
-  };
 
   function useQuery() {
     const { search } = useLocation();
-
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
 
-  const onSubmit = (event) => {
-    event.preventDefault();
-    setDisableButton(true);
+  const onSubmit = (formValues) => {
     if (positionId) {
-      dispatch(updatePosition(positionId, values));
+      dispatch(updatePosition(positionId, formValues));
     } else {
-      dispatch(addPosition(values));
+      dispatch(addPosition(formValues));
     }
     history.replace('/admin/positions/list');
-    setDisableButton(false);
   };
+
+  const required = (value) => (value ? undefined : 'Required');
+
   return (
     <div className={styles.container}>
-      <form className={styles.form} onSubmit={onSubmit}>
-        <h2>Form</h2>
-        <div className={styles.form}>
-          {loading && (
-            <div className={styles.spinnerContainer}>
-              <LoadingSpinner />
+      <Form
+        onSubmit={onSubmit}
+        initialValues={selectedItem}
+        render={(formProps) => (
+          <form className={styles.form} onSubmit={formProps.handleSubmit}>
+            <h2>Form</h2>
+            <div className={styles.form}>
+              {loading && (
+                <div className={styles.spinnerContainer}>
+                  <LoadingSpinner />
+                </div>
+              )}
+              <Field
+                className={styles.input}
+                label="Id"
+                name="clientId"
+                placeholder="Id"
+                type="text"
+                validate={required}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                label="Job"
+                name="job"
+                placeholder="Job"
+                type="text"
+                validate={required}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                label="Description"
+                name="description"
+                placeholder="Description"
+                type="text"
+                validate={required}
+                component={Input}
+              />
             </div>
-          )}
-          <Input
-            className={styles.input}
-            label="Id"
-            name="clientId"
-            id="id"
-            type="text"
-            value={clientIdValue}
-            onChange={(e) => setClientIdValue(e.target.value)}
-            required
-          />
-          <Input
-            className={styles.input}
-            label="Job"
-            name="job"
-            id="job"
-            type="text"
-            value={jobValue}
-            onChange={(e) => setJobValue(e.target.value)}
-            required
-          />
-          <Input
-            className={styles.input}
-            label="Description"
-            name="description"
-            id="description"
-            type="text"
-            value={descriptionValue}
-            onChange={(e) => setDescriptionValue(e.target.value)}
-            required
-          />
-        </div>
-        <Button
-          className={styles.button}
-          content={positionId ? 'Update Position' : 'Create position'}
-          disabled={disableButton}
-        />
-      </form>
+            <Button
+              className={styles.button}
+              content={positionId ? 'Update Position' : 'Create position'}
+              disabled={
+                loading ||
+                formProps.submitting ||
+                formProps.pristine ||
+                formProps.hasValidationErrors
+              }
+            />
+          </form>
+        )}
+      />
       <Modal
         title="Something went wrong!"
         subtitle={error}
@@ -120,4 +111,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default PositionsForm;

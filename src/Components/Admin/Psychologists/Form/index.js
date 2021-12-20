@@ -43,7 +43,7 @@ function PsychologistsForm() {
     } else {
       dispatch(addPsychologist(formValues));
     }
-    history.push('/admin/psychologists/list');
+    history.replace('/admin/psychologists/list');
   };
 
   const required = (value) => (value ? undefined : 'Required');
