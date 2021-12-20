@@ -14,7 +14,8 @@ import {
   UPDATE_PSYCHOLOGIST_FETCHING,
   UPDATE_PSYCHOLOGIST_FULFILLED,
   UPDATE_PSYCHOLOGIST_REJECTED,
-  CLEAR_PSYCHOLOGIST_ERROR
+  CLEAR_PSYCHOLOGIST_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 const initialState = {
@@ -120,6 +121,12 @@ const psychologistsReducer = (state = initialState, action) => {
         ...state,
         error: ''
       };
+    case CLEAN_SELECTED_ITEM: {
+      return {
+        ...state,
+        selectedItem: initialState.selectedItem
+      };
+    }
     default:
       return state;
   }

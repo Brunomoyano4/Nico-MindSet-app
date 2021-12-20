@@ -14,7 +14,8 @@ import {
   UPDATE_PSYCHOLOGIST_FETCHING,
   UPDATE_PSYCHOLOGIST_FULFILLED,
   UPDATE_PSYCHOLOGIST_REJECTED,
-  CLEAR_PSYCHOLOGIST_ERROR
+  CLEAR_PSYCHOLOGIST_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 export const getPsychologistsFetching = () => {
@@ -37,20 +38,20 @@ export const getPsychologistsRejected = (error) => {
   };
 };
 
-export const getPsychologistsByIdFetching = () => {
+export const getPsychologistByIdFetching = () => {
   return {
     type: GET_PSYCHOLOGIST_BY_ID_FETCHING
   };
 };
 
-export const getPsychologistsByIdFulfilled = (data) => {
+export const getPsychologistByIdFulfilled = (data) => {
   return {
     type: GET_PSYCHOLOGIST_BY_ID_FULFILLED,
     payload: data
   };
 };
 
-export const getPsychologistsByIdRejected = (error) => {
+export const getPsychologistByIdRejected = (error) => {
   return {
     type: GET_PSYCHOLOGIST_BY_ID_REJECTED,
     payload: error
@@ -120,5 +121,11 @@ export const updatePsychologistRejected = (error) => {
 export const clearPsychologistsError = () => {
   return {
     type: CLEAR_PSYCHOLOGIST_ERROR
+  };
+};
+
+export const cleanSelectedItem = () => {
+  return {
+    type: CLEAN_SELECTED_ITEM
   };
 };
