@@ -57,7 +57,7 @@ function PsychologistsForm() {
     (value) =>
       validators.reduce((error, validator) => error || validator(value), undefined);
   const minLength = (value) =>
-    value && value.length > 7 ? undefined : 'Minimum Length is 8 characters';
+    value && value.toString().length > 7 ? undefined : 'Minimum Length is 8 characters';
 
   return (
     <div className={styles.container}>

@@ -22,7 +22,7 @@ const initialState = {
   isLoading: false,
   list: [],
   error: '',
-  selectedClient: {}
+  selectedItem: {}
 };
 
 const clientsReducer = (state = initialState, action) => {
@@ -48,13 +48,13 @@ const clientsReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
-        selectedClient: initialState.selectedClient
+        selectedItem: initialState.selectedItem
       };
     case GET_CLIENTS_BY_ID_FULFILLED:
       return {
         ...state,
         isLoading: false,
-        selectedClient: action.payload
+        selectedItem: action.payload
       };
     case GET_CLIENTS_BY_ID_REJECTED:
       return {
