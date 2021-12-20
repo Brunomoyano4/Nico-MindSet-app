@@ -51,6 +51,7 @@ function AdminsForm() {
     (...validators) =>
     (value) =>
       validators.reduce((error, validator) => error || validator(value), undefined);
+  const minLenght = (value) => (value ? value.length < 8 : 'Minimal Length is 8 characters');
 
   return (
     <div className={styles.container}>
@@ -103,6 +104,7 @@ function AdminsForm() {
                 name="password"
                 placeholder="Password"
                 type="password"
+                validate={composeValidators(required, minLenght)}
                 component={Input}
               />
             </div>
