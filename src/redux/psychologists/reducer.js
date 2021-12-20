@@ -2,6 +2,9 @@ import {
   GET_PSYCHOLOGISTS_FETCHING,
   GET_PSYCHOLOGISTS_FULFILLED,
   GET_PSYCHOLOGISTS_REJECTED,
+  GET_PSYCHOLOGIST_BY_ID_FETCHING,
+  GET_PSYCHOLOGIST_BY_ID_FULFILLED,
+  GET_PSYCHOLOGIST_BY_ID_REJECTED,
   ADD_PSYCHOLOGIST_FETCHING,
   ADD_PSYCHOLOGIST_FULFILLED,
   ADD_PSYCHOLOGIST_REJECTED,
@@ -11,12 +14,14 @@ import {
   UPDATE_PSYCHOLOGIST_FETCHING,
   UPDATE_PSYCHOLOGIST_FULFILLED,
   UPDATE_PSYCHOLOGIST_REJECTED,
-  CLEAR_PSYCHOLOGIST_ERROR
+  CLEAR_PSYCHOLOGIST_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 const initialState = {
   isLoading: false,
   list: [],
+  selectedItem: {},
   error: ''
 };
 
@@ -38,6 +43,25 @@ const psychologistsReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: action.error
+      };
+    case GET_PSYCHOLOGIST_BY_ID_FETCHING:
+      return {
+        ...state,
+        isLoading: true,
+        error: initialState.error,
+        selectedItem: initialState.selectedItem
+      };
+    case GET_PSYCHOLOGIST_BY_ID_FULFILLED:
+      return {
+        ...state,
+        isLoading: false,
+        selectedItem: action.payload
+      };
+    case GET_PSYCHOLOGIST_BY_ID_REJECTED:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload
       };
     case ADD_PSYCHOLOGIST_FETCHING:
       return {
@@ -97,6 +121,12 @@ const psychologistsReducer = (state = initialState, action) => {
         ...state,
         error: ''
       };
+    case CLEAN_SELECTED_ITEM: {
+      return {
+        ...state,
+        selectedItem: initialState.selectedItem
+      };
+    }
     default:
       return state;
   }

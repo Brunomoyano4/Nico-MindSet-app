@@ -14,7 +14,8 @@ import {
   UPDATE_CLIENTS_FETCHING,
   UPDATE_CLIENTS_FULFILLED,
   UPDATE_CLIENTS_REJECTED,
-  CLEAR_CLIENTS_ERROR
+  CLEAR_CLIENTS_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 export const getClientsFetching = () => ({
@@ -96,3 +97,9 @@ export const updateClientsRejected = (error) => ({
 export const clearClientsError = () => ({
   type: CLEAR_CLIENTS_ERROR
 });
+
+export const cleanSelectedItem = () => {
+  return {
+    type: CLEAN_SELECTED_ITEM
+  };
+};
