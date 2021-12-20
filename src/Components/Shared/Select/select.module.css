@@ -12,3 +12,15 @@
   outline-color: #72bc8e;
   box-shadow: 0 0 20px rgba(0, 255, 76, 0.25);
 }
+
+.selectError {
+  border-color: #f00;
+}
+
+.messageError {
+  display: flex;
+  align-items: center;
+  height: 21px;
+  font-size: 14px;
+  color: #f00;
+}
