@@ -49,7 +49,7 @@ function PsychologistsForm() {
   const required = (value) => (value ? undefined : 'Required');
   const mustBeString = (value) => (/^[a-záéíóúñ]+$/i.test(value) ? undefined : 'Text Only');
   const mustBeAlphanumeric = (value) =>
-    /^[a-z0-9]+$/i.test(value) ? undefined : 'Alphanumeric Only';
+    /^[a-z0-9áéíóúñ]+$/i.test(value) ? undefined : 'Alphanumeric Only';
   const mustBeEmail = (value) =>
     /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(value) ? undefined : 'Should be a Valid Email';
   const composeValidators =

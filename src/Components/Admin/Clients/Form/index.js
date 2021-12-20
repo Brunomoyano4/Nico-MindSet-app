@@ -44,7 +44,9 @@ function ClientsForm() {
 
   const required = (value) => (value ? undefined : 'Required');
   const mustBeString = (value) =>
-    /^[a-záéíóúñ]+( +[a-záéíóúñ]+)+$/i.test(value) ? undefined : 'Text Only';
+    /^[a-záéíóúñ_]+( [a-záéíóúñ_]+)*$/i.test(value)
+      ? undefined
+      : 'Text Only - Whitespaces in the middle';
   const mustBeNumber = (value) => (/^\d+$/.test(value) ? undefined : 'Numbers Only');
   const mustBeEmail = (value) =>
     /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(value) ? undefined : 'Should be a Valid Email';
