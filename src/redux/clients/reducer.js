@@ -14,7 +14,8 @@ import {
   UPDATE_CLIENTS_FETCHING,
   UPDATE_CLIENTS_FULFILLED,
   UPDATE_CLIENTS_REJECTED,
-  CLEAR_CLIENTS_ERROR
+  CLEAR_CLIENTS_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 const initialState = {
@@ -120,6 +121,12 @@ const clientsReducer = (state = initialState, action) => {
         ...state,
         error: ''
       };
+    case CLEAN_SELECTED_ITEM: {
+      return {
+        ...state,
+        selectedItem: initialState.selectedItem
+      };
+    }
     default:
       return state;
   }
