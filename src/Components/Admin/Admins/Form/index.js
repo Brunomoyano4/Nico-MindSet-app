@@ -1,5 +1,5 @@
 import { useLocation, useHistory } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styles from './adminsForm.module.css';
 import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
@@ -7,20 +7,14 @@ import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Button from 'Components/Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAdmin, updateAdmin, getAdminById } from 'redux/admins/thunks';
-import { cleanError } from 'redux/admins/actions';
+import { cleanError, cleanSelectedItem } from 'redux/admins/actions';
+import { Form, Field } from 'react-final-form';
 
-function Form() {
+function AdminsForm() {
   const dispatch = useDispatch();
-  const [firstNameValue, setFirstNameValue] = useState('');
-  const [lastNameValue, setLastNameValue] = useState('');
-  const [usernameValue, setUsernameValue] = useState('');
-  const [emailValue, setEmailValue] = useState('');
-  const [passwordValue, setPasswordValue] = useState('');
-  const [disableButton, setDisableButton] = useState(false);
   const selectedItem = useSelector((store) => store.admins.selectedItem);
   const loading = useSelector((store) => store.admins.isLoading);
   const error = useSelector((store) => store.admins.error);
-
   const history = useHistory();
   const params = useQuery();
   const adminId = params.get('id');
@@ -28,108 +22,105 @@ function Form() {
   useEffect(() => {
     if (adminId) {
       dispatch(getAdminById(adminId));
+    } else {
+      dispatch(cleanSelectedItem());
     }
   }, []);
-
-  useEffect(() => {
-    if (adminId) {
-      if (Object.keys(selectedItem).length) {
-        setFirstNameValue(selectedItem.firstName);
-        setLastNameValue(selectedItem.lastName);
-        setUsernameValue(selectedItem.username);
-        setEmailValue(selectedItem.email);
-        setPasswordValue(selectedItem.password);
-      }
-    }
-  }, [selectedItem]);
-
-  const values = {
-    firstName: firstNameValue,
-    lastName: lastNameValue,
-    email: emailValue,
-    username: usernameValue,
-    password: passwordValue
-  };
 
   function useQuery() {
     const { search } = useLocation();
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
 
-  const onSubmit = (event) => {
-    event.preventDefault();
-    setDisableButton(true);
+  const onSubmit = (formValues) => {
     if (adminId) {
-      dispatch(updateAdmin(adminId, values));
+      dispatch(updateAdmin(adminId, formValues));
     } else {
-      dispatch(addAdmin(values));
+      dispatch(addAdmin(formValues));
     }
     history.push('/admin/admins/list');
-    setDisableButton(false);
   };
+
+  const required = (value) => (value ? undefined : 'Required');
+  const mustBeString = (value) => (/^[a-záéíóúñ]+$/i.test(value) ? undefined : 'Text Only');
+  const mustBeAlphanumeric = (value) =>
+    /^[a-z0-9]+$/i.test(value) ? undefined : 'Alphanumeric Only';
+  const mustBeEmail = (value) =>
+    /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(value) ? undefined : 'Should be a Valid Email';
+  const composeValidators =
+    (...validators) =>
+    (value) =>
+      validators.reduce((error, validator) => error || validator(value), undefined);
+  const minLenght = (value) => (value ? value.length < 8 : 'Minimal Length is 8 characters');
 
   return (
     <div className={styles.container}>
-      <form className={styles.form} onSubmit={onSubmit}>
-        <h2>Form</h2>
-        <div className={styles.form}>
-          {loading && (
-            <div className={styles.spinnerContainer}>
-              <LoadingSpinner />
+      <Form
+        onSubmit={onSubmit}
+        initialValues={selectedItem}
+        render={(formProps) => (
+          <form className={styles.form} onSubmit={formProps.handleSubmit}>
+            <h2>Admins</h2>
+            <div className={styles.form}>
+              {loading && (
+                <div className={styles.spinnerContainer}>
+                  <LoadingSpinner />
+                </div>
+              )}
+              <Field
+                className={styles.input}
+                name="firstName"
+                placeholder="First name"
+                type="text"
+                validate={composeValidators(required, mustBeString)}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="lastName"
+                placeholder="Last name"
+                type="text"
+                validate={composeValidators(required, mustBeString)}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="username"
+                placeholder="Username"
+                type="text"
+                validate={composeValidators(required, mustBeAlphanumeric)}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="email"
+                placeholder="example@foo.com"
+                type="email"
+                validate={composeValidators(required, mustBeEmail)}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="password"
+                placeholder="Password"
+                type="password"
+                validate={composeValidators(required, minLenght)}
+                component={Input}
+              />
             </div>
-          )}
-          <Input
-            className={styles.input}
-            name="First Name"
-            placeholder="First name"
-            type="text"
-            required
-            value={firstNameValue}
-            onChange={(e) => setFirstNameValue(e.target.value)}
-            pattern="[a-zA-Z\s]+"
-          />
-          <Input
-            className={styles.input}
-            name="Last Name"
-            placeholder="Last name"
-            type="text"
-            required
-            value={lastNameValue}
-            onChange={(e) => setLastNameValue(e.target.value)}
-            pattern="[a-zA-Z\s]+"
-          />
-          <Input
-            className={styles.input}
-            name="Username"
-            placeholder="Username"
-            type="text"
-            required
-            value={usernameValue}
-            onChange={(e) => setUsernameValue(e.target.value)}
-            pattern="[a-zA-Z0-9\s]+"
-          />
-          <Input
-            className={styles.input}
-            name="Email"
-            placeholder="example@foo.com"
-            type="email"
-            required
-            value={emailValue}
-            onChange={(e) => setEmailValue(e.target.value)}
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-          />
-          <Input
-            className={styles.input}
-            name="password"
-            placeholder="Password"
-            type="password"
-            required
-            value={passwordValue}
-            onChange={(e) => setPasswordValue(e.target.value)}
-          />
-        </div>
-        <Button className={styles.button} content={'SAVE'} disabled={loading || disableButton} />
-      </form>
+            <Button
+              className={styles.button}
+              content={'SAVE'}
+              disabled={
+                loading ||
+                formProps.submitting ||
+                formProps.pristine ||
+                formProps.hasValidationErrors
+              }
+            />
+          </form>
+        )}
+      />
       <Modal
         title="Something went wrong!"
         subtitle={error}
@@ -140,5 +131,4 @@ function Form() {
     </div>
   );
 }
-
-export default Form;
+export default AdminsForm;
