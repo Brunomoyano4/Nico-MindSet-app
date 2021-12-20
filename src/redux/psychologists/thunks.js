@@ -2,6 +2,9 @@ import {
   getPsychologistsFetching,
   getPsychologistsFulfilled,
   getPsychologistsRejected,
+  getPsychologistByIdFetching,
+  getPsychologistByIdFulfilled,
+  getPsychologistByIdRejected,
   addPsychologistFetching,
   addPsychologistFulfilled,
   addPsychologistRejected,
@@ -32,6 +35,28 @@ export const getPsychologists = () => {
       })
       .catch((error) => {
         dispatch(getPsychologistsRejected(error.toString()));
+      });
+  };
+};
+
+export const getPsychologistById = (id) => {
+  return (dispatch) => {
+    dispatch(getPsychologistByIdFetching());
+    return fetch(`${URL}/${id}`)
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .then((response) => {
+        dispatch(getPsychologistByIdFulfilled(response));
+        return response;
+      })
+      .catch((error) => {
+        dispatch(getPsychologistByIdRejected(error.toString()));
       });
   };
 };

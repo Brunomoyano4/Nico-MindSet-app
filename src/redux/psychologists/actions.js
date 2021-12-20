@@ -2,6 +2,9 @@ import {
   GET_PSYCHOLOGISTS_FETCHING,
   GET_PSYCHOLOGISTS_FULFILLED,
   GET_PSYCHOLOGISTS_REJECTED,
+  GET_PSYCHOLOGIST_BY_ID_FETCHING,
+  GET_PSYCHOLOGIST_BY_ID_FULFILLED,
+  GET_PSYCHOLOGIST_BY_ID_REJECTED,
   ADD_PSYCHOLOGIST_FETCHING,
   ADD_PSYCHOLOGIST_FULFILLED,
   ADD_PSYCHOLOGIST_REJECTED,
@@ -30,6 +33,26 @@ export const getPsychologistsFulfilled = (data) => {
 export const getPsychologistsRejected = (error) => {
   return {
     type: GET_PSYCHOLOGISTS_REJECTED,
+    payload: error
+  };
+};
+
+export const getPsychologistsByIdFetching = () => {
+  return {
+    type: GET_PSYCHOLOGIST_BY_ID_FETCHING
+  };
+};
+
+export const getPsychologistsByIdFulfilled = (data) => {
+  return {
+    type: GET_PSYCHOLOGIST_BY_ID_FULFILLED,
+    payload: data
+  };
+};
+
+export const getPsychologistsByIdRejected = (error) => {
+  return {
+    type: GET_PSYCHOLOGIST_BY_ID_REJECTED,
     payload: error
   };
 };
