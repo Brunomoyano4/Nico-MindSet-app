@@ -14,7 +14,8 @@ import {
   UPDATE_POSTULANTS_FETCHING,
   UPDATE_POSTULANTS_FULFILLED,
   UPDATE_POSTULANTS_REJECTED,
-  CLEAR_POSTULANTS_ERROR
+  CLEAR_POSTULANTS_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 const initialState = {
@@ -120,6 +121,12 @@ const postulantsReducer = (state = initialState, action) => {
         ...state,
         error: ''
       };
+    case CLEAN_SELECTED_ITEM: {
+      return {
+        ...state,
+        selectedItem: initialState.selectedItem
+      };
+    }
     default:
       return state;
   }
