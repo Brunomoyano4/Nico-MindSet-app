@@ -2,6 +2,9 @@ import {
   GET_PROFILES_FETCHING,
   GET_PROFILES_FULFILLED,
   GET_PROFILES_REJECTED,
+  GET_PROFILE_BY_ID_FETCHING,
+  GET_PROFILE_BY_ID_FULFILLED,
+  GET_PROFILE_BY_ID_REJECTED,
   ADD_PROFILE_FETCHING,
   ADD_PROFILE_FULFILLED,
   ADD_PROFILE_REJECTED,
@@ -11,14 +14,16 @@ import {
   UPDATE_PROFILE_FETCHING,
   UPDATE_PROFILE_FULFILLED,
   UPDATE_PROFILE_REJECTED,
-  CLEAR_PROFILES_ERROR
+  CLEAR_PROFILES_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 const initialState = {
   isLoading: false,
   list: [],
   error: '',
-  profile: []
+  profile: [],
+  selectedItem: {}
 };
 
 const profilesReducer = (state = initialState, action) => {
@@ -39,6 +44,25 @@ const profilesReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: action.error
+      };
+    case GET_PROFILE_BY_ID_FETCHING:
+      return {
+        ...state,
+        isLoading: true,
+        error: initialState.error,
+        selectedItem: initialState.selectedItem
+      };
+    case GET_PROFILE_BY_ID_FULFILLED:
+      return {
+        ...state,
+        isLoading: false,
+        selectedItem: action.payload
+      };
+    case GET_PROFILE_BY_ID_REJECTED:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload
       };
     case ADD_PROFILE_FETCHING:
       return {
@@ -98,6 +122,12 @@ const profilesReducer = (state = initialState, action) => {
         ...state,
         error: ''
       };
+    case CLEAN_SELECTED_ITEM: {
+      return {
+        ...state,
+        selectedItem: initialState.selectedItem
+      };
+    }
     default:
       return state;
   }
