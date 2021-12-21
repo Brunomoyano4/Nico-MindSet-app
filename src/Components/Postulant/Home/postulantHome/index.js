@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 function PostulantHome() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedInterview, setselectedInterview] = useState('');
-  const [availableValue, setAvailableValue] = useState('');
+  const [availableValue, setAvailableValue] = useState(true);
   const sessions = useSelector((store) => store.sessions.list);
   const interviews = useSelector((store) => store.interviews.list);
   const postulant = useSelector((store) => store.postulants.selectedPostulant);
@@ -32,13 +32,14 @@ function PostulantHome() {
     const { search } = useLocation();
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
-  // ?id=61bd751a1d95a30cbccee7c2
 
   useEffect(() => {
-    // if (postulantId) {
     dispatch(getPostulantById(postulantId));
-    // }
   }, []);
+
+  useEffect(() => {
+    setAvailableValue(postulant.availabilty);
+  }, [postulant.availabilty]);
 
   useEffect(() => {
     dispatch(getSessions());
@@ -49,11 +50,13 @@ function PostulantHome() {
   }, [dispatch]);
 
   const EditBtn = () => {
-    history.push(`/admin/postulants/form?id=61bd751a1d95a30cbccee7c2`);
+    history.push(`/admin/postulants/form?id=${postulantId}`);
   };
 
   const changeAvailability = () => {
+    console.log('available opuesto:', !availableValue);
     setAvailableValue(!availableValue);
+    console.log(availableValue);
     const value = {
       availabilty: availableValue
     };
@@ -81,6 +84,7 @@ function PostulantHome() {
           <div className={styles.imgContainer}>
             <img
               className={styles.userImg}
+              id="userImg"
               src="https://pbs.twimg.com/profile_images/1198892618429739008/hcHxthRT_400x400.jpg"
               alt="exampleAvatar"
             ></img>
@@ -93,21 +97,21 @@ function PostulantHome() {
           <h2 className={styles.userName}>
             {postulant.firstName} {postulant.lastName}
           </h2>
-          <div className={styles.exp}>
-            {postulant.experience?.map((exp) => {
-              return (
-                <h2 className={styles.userInfo} key={exp.jobPosition}>{`${exp.jobPosition}`}</h2>
-              );
-            })}
-          </div>
           <div className={styles.prof}>
-            {postulant.profiles?.map((profile) => {
-              return (
-                <span className={styles.userInfo} key={profile.profile.profileName}>
-                  -{`${profile.profile.profileName}`}
-                </span>
-              );
-            })}
+            {!loading.postulantLoading && !postulant?.profiles?.length ? (
+              <h3 className={styles.nothingHere}>This profile has not been analyzed yet!</h3>
+            ) : (
+              <>
+                {postulant.profiles?.map((profile) => {
+                  return (
+                    <span className={styles.userInfo} key={profile.profile.profileName}>
+                      -{`${profile.profile.profileName}`}
+                    </span>
+                  );
+                })}
+                {console.log(`postulant.profiles.length`, postulant?.profiles?.length)}
+              </>
+            )}
           </div>
           <h2 className={styles.userInfo}>
             {postulant.city}, {postulant.province} - {postulant.country}
