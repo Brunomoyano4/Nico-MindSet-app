@@ -2,6 +2,9 @@ import {
   GET_INTERVIEWS_FETCHING,
   GET_INTERVIEWS_FULFILLED,
   GET_INTERVIEWS_REJECTED,
+  GET_INTERVIEW_BY_ID_FETCHING,
+  GET_INTERVIEW_BY_ID_FULFILLED,
+  GET_INTERVIEW_BY_ID_REJECTED,
   ADD_INTERVIEWS_FETCHING,
   ADD_INTERVIEWS_FULFILLED,
   ADD_INTERVIEWS_REJECTED,
@@ -11,14 +14,16 @@ import {
   UPDATE_INTERVIEWS_FETCHING,
   UPDATE_INTERVIEWS_FULFILLED,
   UPDATE_INTERVIEWS_REJECTED,
-  CLEAR_INTERVIEWS_ERROR
+  CLEAR_INTERVIEWS_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 const initialState = {
   isLoading: false,
   list: [],
   error: '',
-  interview: []
+  interview: [],
+  selectedItem: {}
 };
 
 const reducer = (state = initialState, action) => {
@@ -39,6 +44,25 @@ const reducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: action.error
+      };
+    case GET_INTERVIEW_BY_ID_FETCHING:
+      return {
+        ...state,
+        isLoading: true,
+        error: initialState.error,
+        selectedItem: initialState.selectedItem
+      };
+    case GET_INTERVIEW_BY_ID_FULFILLED:
+      return {
+        ...state,
+        isLoading: false,
+        selectedItem: action.payload
+      };
+    case GET_INTERVIEW_BY_ID_REJECTED:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload
       };
     case ADD_INTERVIEWS_FETCHING:
       return {
@@ -93,6 +117,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         error: ''
+      };
+    case CLEAN_SELECTED_ITEM:
+      return {
+        ...state,
+        selectedItem: initialState.selectedItem
       };
     default:
       return state;

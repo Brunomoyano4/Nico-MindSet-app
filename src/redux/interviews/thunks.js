@@ -2,6 +2,9 @@ import {
   getInterviewsFetching,
   getInterviewsFulfilled,
   getInterviewsRejected,
+  getInterviewByIdFetching,
+  getInterviewByIdFulfilled,
+  getInterviewByIdRejected,
   addInterviewsFetching,
   addInterviewsFulfilled,
   addInterviewsRejected,
@@ -32,6 +35,28 @@ export const getInterviews = () => {
       })
       .catch((error) => {
         dispatch(getInterviewsRejected(error.toString()));
+      });
+  };
+};
+
+export const getInterviewById = (id) => {
+  return (dispatch) => {
+    dispatch(getInterviewByIdFetching());
+    return fetch(`${URL}/${id}`)
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .then((response) => {
+        dispatch(getInterviewByIdFulfilled(response));
+        return response;
+      })
+      .catch((error) => {
+        dispatch(getInterviewByIdRejected(error.toString()));
       });
   };
 };
