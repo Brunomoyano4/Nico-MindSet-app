@@ -1,5 +1,5 @@
 import { useLocation, useHistory } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import styles from './form.module.css';
@@ -7,59 +7,17 @@ import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Button from 'Components/Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPostulantById, addPostulant, updatePostulant } from 'redux/postulants/thunks';
-import { clearPostulantsError } from 'redux/postulants/actions';
+import { clearPostulantsError, cleanSelectedItem } from 'redux/postulants/actions';
+import { Form, Field } from 'react-final-form';
 
-function Form() {
+function PostulantsForm() {
   const dispatch = useDispatch();
-  const [firstNameValue, setFirstNameValue] = useState('');
-  const [lastNameValue, setLastNameValue] = useState('');
-  const [userValue, setUserNameValue] = useState('');
-  const [emailValue, setEmailValue] = useState('');
-  const [passwordValue, setPasswordValue] = useState('');
-  const [birthdayValue, setBirthdayValue] = useState('');
-  const [streetValue, setStreetValue] = useState('');
-  const [streetNumberValue, setStreetNumberValue] = useState('');
-  const [zipCodeValue, setZipCodeValue] = useState('');
-  const [cityValue, setCityValue] = useState('');
-  const [provinceValue, setProvinceValue] = useState('');
-  const [countryValue, setCountryValue] = useState('');
-  const [telephoneValue, setTelephoneValue] = useState('');
-  const [jobPositionValue, setJobPositionValue] = useState('');
-  const [employerValue, setEmployerValue] = useState('');
-  const [startDateValue, setStartDateValue] = useState('');
-  const [endDateValue, setEndDateValue] = useState('');
-  const [descriptionValue, setDescriptionValue] = useState('');
-  const postulant = useSelector((store) => store.postulants.selectedPostulant);
+  const selectedItem = useSelector((store) => store.postulants.selectedItem);
   const error = useSelector((store) => store.postulants.error);
   const loading = useSelector((store) => store.postulants.isLoading);
   const history = useHistory();
   const params = useQuery();
   const postulantId = params.get('id');
-
-  const values = {
-    firstName: firstNameValue,
-    lastName: lastNameValue,
-    userName: userValue,
-    email: emailValue,
-    password: passwordValue,
-    birthDate: birthdayValue,
-    street: streetValue,
-    streetNumber: streetNumberValue,
-    city: cityValue,
-    postalCode: zipCodeValue,
-    province: provinceValue,
-    country: countryValue,
-    telephone: telephoneValue,
-    experience: [
-      {
-        jobPosition: jobPositionValue,
-        employer: employerValue,
-        startDate: startDateValue,
-        endDate: endDateValue,
-        description: descriptionValue
-      }
-    ]
-  };
 
   function useQuery() {
     const { search } = useLocation();
@@ -70,222 +28,213 @@ function Form() {
     if (postulantId) {
       dispatch(getPostulantById(postulantId));
     }
+    return () => {
+      dispatch(cleanSelectedItem());
+    };
   }, []);
 
-  useEffect(() => {
+  const onSubmit = (formValues) => {
     if (postulantId) {
-      setFirstNameValue(postulant?.firstName);
-      setLastNameValue(postulant?.lastName);
-      setUserNameValue(postulant?.userName);
-      setEmailValue(postulant?.email);
-      setPasswordValue(postulant?.password);
-      setBirthdayValue(postulant?.birthDate);
-      setStreetValue(postulant?.street);
-      setStreetNumberValue(postulant?.streetNumber);
-      setZipCodeValue(postulant?.postalCode);
-      setCityValue(postulant?.city);
-      setProvinceValue(postulant?.province);
-      setCountryValue(postulant?.country);
-      setTelephoneValue(postulant?.telephone);
-      setJobPositionValue(postulant?.experience?.[0]?.jobPosition);
-      setEmployerValue(postulant?.experience?.[0]?.employer);
-      setStartDateValue(postulant?.experience?.[0]?.startDate);
-      setEndDateValue(postulant?.experience?.[0]?.endDate);
-      setDescriptionValue(postulant?.experience?.[0]?.description);
-    }
-  }, [postulant]);
-
-  const onSubmit = (event) => {
-    event.preventDefault();
-    if (postulantId) {
-      dispatch(updatePostulant(postulantId, values));
+      dispatch(updatePostulant(postulantId, formValues));
     } else {
-      dispatch(addPostulant(values));
+      dispatch(addPostulant(formValues));
     }
     history.replace('/admin/postulants/list');
   };
 
+  const required = (value) => (value ? undefined : 'Required');
+  const mustBeNumber = (value) => (/^\d+$/.test(value) ? undefined : 'Numbers Only');
+  const mustBeStringNoSpace = (value) => (/^[a-záéíóúñ]+$/i.test(value) ? undefined : 'Text Only');
+  const mustBeString = (value) =>
+    /^[a-záéíóúñ_]+( [a-záéíóúñ_]+)*$/i.test(value)
+      ? undefined
+      : 'Text Only - Whitespaces in the middle';
+  const mustBeAlphanumeric = (value) =>
+    /^[a-z0-9áéíóúñ]+$/i.test(value) ? undefined : 'Alphanumeric Only';
+  const mustBeEmail = (value) =>
+    /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(value) ? undefined : 'Should be a Valid Email';
+  const composeValidators =
+    (...validators) =>
+    (value) =>
+      validators.reduce((error, validator) => error || validator(value), undefined);
+  const minLength = (value) =>
+    value && value.toString().length > 7 ? undefined : 'Minimum Length is 8 characters';
+
   return (
     <div className={styles.container}>
-      <form className={styles.form} onSubmit={onSubmit}>
-        <h2>Form</h2>
-        {loading && (
-          <div className={styles.spinnerContainer}>
-            <LoadingSpinner />
-          </div>
+      <Form
+        onSubmit={onSubmit}
+        initialValues={selectedItem}
+        render={(formProps) => (
+          <form className={styles.form} onSubmit={formProps.handleSubmit}>
+            <h2>Form</h2>
+            {loading && (
+              <div className={styles.spinnerContainer}>
+                <LoadingSpinner />
+              </div>
+            )}
+            <Field
+              className={styles.input}
+              name="firstName"
+              placeholder="First name"
+              type="text"
+              validate={composeValidators(required, mustBeString)}
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name="lastName"
+              placeholder="Last name"
+              type="text"
+              validate={composeValidators(required, mustBeStringNoSpace)}
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name="userName"
+              placeholder="Username"
+              type="text"
+              validate={composeValidators(required, mustBeAlphanumeric)}
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name="email"
+              placeholder="example@foo.com"
+              type="email"
+              validate={composeValidators(required, mustBeEmail)}
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name="password"
+              placeholder="Password"
+              type="password"
+              validate={composeValidators(required, minLength)}
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name="birthDate"
+              type="date"
+              validate={required}
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name="street"
+              placeholder="Street"
+              type="text"
+              validate={composeValidators(required, mustBeString)}
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name="streetNumber"
+              placeholder="Street number"
+              type="number"
+              min="0"
+              validate={composeValidators(required, mustBeNumber)}
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name="postalCode"
+              placeholder="Zip Code"
+              type="number"
+              min="0"
+              validate={composeValidators(required, mustBeNumber)}
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name="city"
+              placeholder="City"
+              type="text"
+              validate={composeValidators(required, mustBeString)}
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name="province"
+              placeholder="Province"
+              type="text"
+              validate={composeValidators(required, mustBeString)}
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name="country"
+              placeholder="Country"
+              type="text"
+              validate={composeValidators(required, mustBeString)}
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name="telephone"
+              placeholder="Telephone"
+              type="text"
+              validate={composeValidators(required, mustBeNumber, minLength)}
+              component={Input}
+            />
+            <h2>Postulant Experience</h2>
+            <div className={styles.form}>
+              <h3>Job info</h3>
+              <Field
+                className={styles.input}
+                name="experience[0].jobPosition"
+                placeholder="Job Position"
+                type="text"
+                validate={composeValidators(required, mustBeString)}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="experience[0].employer"
+                placeholder="Employer"
+                type="text"
+                validate={composeValidators(required, mustBeString)}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="experience[0].startDate"
+                placeholder="Start date"
+                type="date"
+                validate={required}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="experience[0].endDate"
+                placeholder="End date"
+                type="date"
+                validate={required}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="experience[0].description"
+                placeholder="Description"
+                type="text"
+                validate={required}
+                component={Input}
+              />
+            </div>
+            <Button
+              className={styles.button}
+              content={'SAVE'}
+              disabled={
+                loading ||
+                formProps.submitting ||
+                formProps.pristine ||
+                formProps.hasValidationErrors
+              }
+            />
+          </form>
         )}
-        <Input
-          name="firstName"
-          value={firstNameValue}
-          onChange={(e) => setFirstNameValue(e.target.value)}
-          placeholder="First name"
-          pattern="[a-zA-Z]+"
-          required
-        />
-        <Input
-          className={styles.input}
-          name="lastName"
-          value={lastNameValue}
-          onChange={(e) => setLastNameValue(e.target.value)}
-          placeholder="Last name"
-          pattern="[a-zA-Z]+"
-          required
-        />
-        <Input
-          className={styles.input}
-          name="userValue"
-          value={userValue}
-          onChange={(e) => setUserNameValue(e.target.value)}
-          placeholder="Username"
-          required
-        />
-        <Input
-          className={styles.input}
-          name="mailValue"
-          value={emailValue}
-          onChange={(e) => setEmailValue(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <Input
-          className={styles.input}
-          name="passwordValue"
-          value={passwordValue}
-          onChange={(e) => setPasswordValue(e.target.value)}
-          placeholder="Password"
-          required
-        />
-        <Input
-          className={styles.input}
-          name="birthdayValue"
-          value={birthdayValue}
-          onChange={(e) => setBirthdayValue(e.target.value)}
-          type="date"
-          required
-        />
-        <Input
-          className={styles.input}
-          name="streetValue"
-          value={streetValue}
-          onChange={(e) => setStreetValue(e.target.value)}
-          placeholder="Street"
-          required
-        />
-        <Input
-          className={styles.input}
-          name="streetNumberValue"
-          value={streetNumberValue}
-          onChange={(e) => setStreetNumberValue(e.target.value)}
-          placeholder="Street number"
-          type="number"
-          min="0"
-          required
-        />
-        <Input
-          className={styles.input}
-          name="zipCodeValue"
-          value={zipCodeValue}
-          onChange={(e) => setZipCodeValue(e.target.value)}
-          placeholder="Zip Code"
-          title="Zip code should only contain numbers"
-          required
-        />
-        <Input
-          className={styles.input}
-          name="cityValue"
-          value={cityValue}
-          onChange={(e) => setCityValue(e.target.value)}
-          placeholder="City"
-          required
-        />
-        <Input
-          className={styles.input}
-          name="provinceValue"
-          value={provinceValue}
-          onChange={(e) => setProvinceValue(e.target.value)}
-          placeholder="Province"
-          required
-        />
-        <Input
-          className={styles.input}
-          name="countryValue"
-          value={countryValue}
-          onChange={(e) => setCountryValue(e.target.value)}
-          placeholder="Country"
-          required
-        />
-        <Input
-          className={styles.input}
-          name="telephoneValue"
-          value={telephoneValue}
-          onChange={(e) => setTelephoneValue(e.target.value)}
-          placeholder="Telephone"
-          required
-        />
-        <h2>Postulant Experience</h2>
-        <div className={styles.form}>
-          <h3>Job info</h3>
-          <Input
-            className={styles.input}
-            name="jobPositionValue"
-            placeholder="Job Position"
-            value={jobPositionValue}
-            onChange={(e) => setJobPositionValue(e.target.value)}
-            required
-          />
-          <Input
-            className={styles.input}
-            name="employerValue"
-            placeholder="Employer"
-            value={employerValue}
-            onChange={(e) => setEmployerValue(e.target.value)}
-            required
-          />
-          <Input
-            className={styles.input}
-            name="startDateValue"
-            type="text"
-            value={startDateValue}
-            onFocus={(e) => {
-              e.currentTarget.type = 'date';
-              e.currentTarget.focus();
-            }}
-            onBlur={(e) => {
-              e.currentTarget.type = 'text';
-              e.currentTarget.focus();
-            }}
-            onChange={(e) => setStartDateValue(e.target.value)}
-            placeholder="Start date"
-            required
-          />
-          <Input
-            className={styles.input}
-            name="endDateValue"
-            type="text"
-            value={endDateValue}
-            onFocus={(e) => {
-              e.currentTarget.type = 'date';
-              e.currentTarget.focus();
-            }}
-            onBlur={(e) => {
-              e.currentTarget.type = 'text';
-              e.currentTarget.focus();
-            }}
-            onChange={(e) => setEndDateValue(e.target.value)}
-            placeholder="End date"
-            required
-          />
-          <Input
-            className={styles.input}
-            name="descriptionValue"
-            placeholder="Description"
-            value={descriptionValue}
-            onChange={(e) => setDescriptionValue(e.target.value)}
-            required
-          />
-        </div>
-        <Button className={styles.button} content={'SAVE'} disabled={loading} />
-      </form>
+      />
       <Modal
         title="Something went wrong!"
         subtitle={error}
@@ -297,4 +246,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default PostulantsForm;

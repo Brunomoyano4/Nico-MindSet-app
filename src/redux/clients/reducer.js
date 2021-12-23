@@ -14,14 +14,15 @@ import {
   UPDATE_CLIENTS_FETCHING,
   UPDATE_CLIENTS_FULFILLED,
   UPDATE_CLIENTS_REJECTED,
-  CLEAR_CLIENTS_ERROR
+  CLEAR_CLIENTS_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 const initialState = {
   isLoading: false,
   list: [],
   error: '',
-  selectedClient: {}
+  selectedItem: {}
 };
 
 const clientsReducer = (state = initialState, action) => {
@@ -47,13 +48,13 @@ const clientsReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
-        selectedClient: initialState.selectedClient
+        selectedItem: initialState.selectedItem
       };
     case GET_CLIENTS_BY_ID_FULFILLED:
       return {
         ...state,
         isLoading: false,
-        selectedClient: action.payload
+        selectedItem: action.payload
       };
     case GET_CLIENTS_BY_ID_REJECTED:
       return {
@@ -120,6 +121,12 @@ const clientsReducer = (state = initialState, action) => {
         ...state,
         error: ''
       };
+    case CLEAN_SELECTED_ITEM: {
+      return {
+        ...state,
+        selectedItem: initialState.selectedItem
+      };
+    }
     default:
       return state;
   }

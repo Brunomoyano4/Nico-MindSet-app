@@ -14,7 +14,8 @@ import {
   UPDATE_POSTULANTS_FETCHING,
   UPDATE_POSTULANTS_FULFILLED,
   UPDATE_POSTULANTS_REJECTED,
-  CLEAR_POSTULANTS_ERROR
+  CLEAR_POSTULANTS_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 export const getPostulantsFetching = () => ({
@@ -96,3 +97,9 @@ export const updatePostulantsRejected = (error) => ({
 export const clearPostulantsError = () => ({
   type: CLEAR_POSTULANTS_ERROR
 });
+
+export const cleanSelectedItem = () => {
+  return {
+    type: CLEAN_SELECTED_ITEM
+  };
+};

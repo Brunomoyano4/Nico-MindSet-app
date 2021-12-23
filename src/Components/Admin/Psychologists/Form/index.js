@@ -1,45 +1,27 @@
 import { useLocation, useHistory } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import styles from './form.module.css';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Button from 'Components/Shared/Button';
-import { updatePsychologist, addPsychologist } from 'redux/psychologists/thunks';
-import { clearPsychologistsError } from 'redux/psychologists/actions';
+import {
+  updatePsychologist,
+  addPsychologist,
+  getPsychologistById
+} from 'redux/psychologists/thunks';
+import { clearPsychologistsError, cleanSelectedItem } from 'redux/psychologists/actions';
+import { Form, Field } from 'react-final-form';
 
-function Form() {
+function PsychologistsForm() {
   const dispatch = useDispatch();
-  const psychologists = useSelector((store) => store.psychologists.list);
+  const selectedItem = useSelector((store) => store.psychologists.selectedItem);
   const error = useSelector((store) => store.psychologists.error);
   const loading = useSelector((store) => store.psychologists.isLoading);
   const history = useHistory();
   const params = useQuery();
   const psychologistId = params.get('id');
-  const [firstNameValue, setFirstNameValue] = useState('');
-  const [lastNameValue, setLastNameValue] = useState('');
-  const [userNameValue, setUserNameValue] = useState('');
-  const [emailValue, setEmailValue] = useState('');
-  const [passwordValue, setPasswordValue] = useState('');
-  const [disableButton, setDisableButton] = useState(false);
-
-  const setInputValues = ({ firstName, lastName, userName, email, password }) => {
-    console.log('setInputValues');
-    setFirstNameValue(firstName || '');
-    setLastNameValue(lastName || '');
-    setUserNameValue(userName || '');
-    setEmailValue(email || '');
-    setPasswordValue(password || '');
-  };
-
-  const values = {
-    firstName: firstNameValue,
-    lastName: lastNameValue,
-    email: emailValue,
-    userName: userNameValue,
-    password: passwordValue
-  };
 
   function useQuery() {
     const { search } = useLocation();
@@ -48,99 +30,103 @@ function Form() {
 
   useEffect(() => {
     if (psychologistId) {
-      console.log('useEffect - if psychologistId ');
-      psychologists.forEach((psychologist) => {
-        if (psychologist._id === psychologistId) setInputValues(psychologist);
-      });
+      dispatch(getPsychologistById(psychologistId));
     }
-  }, [psychologistId]);
+    return () => {
+      dispatch(cleanSelectedItem());
+    };
+  }, []);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    setDisableButton(true);
-
+  const onSubmit = (formValues) => {
     if (psychologistId) {
-      let response = dispatch(updatePsychologist(psychologistId, values));
-      if (response) {
-        setDisableButton(false);
-        history.replace('/admin/psychologists/list');
-      }
+      dispatch(updatePsychologist(psychologistId, formValues));
     } else {
-      let res = dispatch(addPsychologist(values));
-      if (res) {
-        setDisableButton(false);
-        history.replace('/admin/psychologists/list');
-      }
+      dispatch(addPsychologist(formValues));
     }
+    history.replace('/admin/psychologists/list');
   };
+
+  const required = (value) => (value ? undefined : 'Required');
+  const mustBeString = (value) => (/^[a-záéíóúñ]+$/i.test(value) ? undefined : 'Text Only');
+  const mustBeAlphanumeric = (value) =>
+    /^[a-z0-9áéíóúñ]+$/i.test(value) ? undefined : 'Alphanumeric Only';
+  const mustBeEmail = (value) =>
+    /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(value) ? undefined : 'Should be a Valid Email';
+  const composeValidators =
+    (...validators) =>
+    (value) =>
+      validators.reduce((error, validator) => error || validator(value), undefined);
+  const minLength = (value) =>
+    value && value.toString().length > 7 ? undefined : 'Minimum Length is 8 characters';
 
   return (
     <div className={styles.container}>
-      <form className={styles.form} onSubmit={onSubmit}>
-        <h2>Form</h2>
-        <div className={styles.form}>
-          {loading && (
-            <div className={styles.spinnerContainer}>
-              <LoadingSpinner />
+      <Form
+        onSubmit={onSubmit}
+        initialValues={selectedItem}
+        render={(formProps) => (
+          <form className={styles.form} onSubmit={formProps.handleSubmit}>
+            <h2>Form</h2>
+            <div className={styles.form}>
+              {loading && (
+                <div className={styles.spinnerContainer}>
+                  <LoadingSpinner />
+                </div>
+              )}
+              <Field
+                className={styles.input}
+                name="firstName"
+                placeholder="First name"
+                type="text"
+                validate={composeValidators(required, mustBeString)}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="lastName"
+                placeholder="Last name"
+                type="text"
+                validate={composeValidators(required, mustBeString)}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="userName"
+                placeholder="Username"
+                type="text"
+                validate={composeValidators(required, mustBeAlphanumeric)}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="email"
+                placeholder="example@foo.com"
+                type="email"
+                validate={composeValidators(required, mustBeEmail)}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="password"
+                placeholder="Password"
+                type="password"
+                validate={composeValidators(required, minLength)}
+                component={Input}
+              />
             </div>
-          )}
-          <Input
-            className={styles.input}
-            name="First Name"
-            placeholder="First name"
-            type="text"
-            required
-            value={firstNameValue}
-            onChange={(e) => setFirstNameValue(e.target.value)}
-            pattern="[a-zA-Z\s]+"
-          />
-          <Input
-            className={styles.input}
-            name="Last Name"
-            placeholder="Last name"
-            type="text"
-            required
-            value={lastNameValue}
-            onChange={(e) => setLastNameValue(e.target.value)}
-            pattern="[a-zA-Z\s]+"
-          />
-          <Input
-            className={styles.input}
-            name="User Name"
-            placeholder="User Name"
-            type="text"
-            required
-            value={userNameValue}
-            onChange={(e) => setUserNameValue(e.target.value)}
-            pattern="[a-zA-Z0-9\s]+"
-          />
-          <Input
-            className={styles.input}
-            name="Email"
-            placeholder="example@foo.com"
-            type="email"
-            required
-            value={emailValue}
-            onChange={(e) => setEmailValue(e.target.value)}
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-          />
-          <Input
-            className={styles.input}
-            name="password"
-            placeholder="Password"
-            type="password"
-            required
-            value={passwordValue}
-            onChange={(e) => setPasswordValue(e.target.value)}
-          />
-        </div>
-        <Button
-          className={styles.button}
-          onClick={onSubmit}
-          content={'SAVE'}
-          disabled={loading || disableButton}
-        />
-      </form>
+            <Button
+              className={styles.button}
+              content={'SAVE'}
+              disabled={
+                loading ||
+                formProps.submitting ||
+                formProps.pristine ||
+                formProps.hasValidationErrors
+              }
+            />
+          </form>
+        )}
+      />
       <Modal
         title="Something went wrong!"
         subtitle={error}
@@ -152,4 +138,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default PsychologistsForm;

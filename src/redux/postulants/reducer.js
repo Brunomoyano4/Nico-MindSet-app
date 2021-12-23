@@ -14,14 +14,15 @@ import {
   UPDATE_POSTULANTS_FETCHING,
   UPDATE_POSTULANTS_FULFILLED,
   UPDATE_POSTULANTS_REJECTED,
-  CLEAR_POSTULANTS_ERROR
+  CLEAR_POSTULANTS_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 const initialState = {
   isLoading: false,
   list: [],
   error: '',
-  selectedPostulant: {}
+  selectedItem: {}
 };
 
 const postulantsReducer = (state = initialState, action) => {
@@ -47,13 +48,13 @@ const postulantsReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
-        selectedPostulant: initialState.selectedPostulant
+        selectedItem: initialState.selectedItem
       };
     case GET_POSTULANTS_BY_ID_FULFILLED:
       return {
         ...state,
         isLoading: false,
-        selectedPostulant: action.payload
+        selectedItem: action.payload
       };
     case GET_POSTULANTS_BY_ID_REJECTED:
       return {
@@ -120,6 +121,12 @@ const postulantsReducer = (state = initialState, action) => {
         ...state,
         error: ''
       };
+    case CLEAN_SELECTED_ITEM: {
+      return {
+        ...state,
+        selectedItem: initialState.selectedItem
+      };
+    }
     default:
       return state;
   }
