@@ -2,7 +2,7 @@ import styles from './postulantHome.module.css';
 import Modal from 'Components/Shared/Modal';
 import ToggleSwitch from 'Components/Shared/ToggleSwitch';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { getPostulantById, updatePostulant } from 'redux/postulants/thunks';
 import { getSessions } from 'redux/sessions/thunks';
 import { getInterviews } from 'redux/interviews/thunks';
@@ -27,6 +27,7 @@ function PostulantHome() {
   const dispatch = useDispatch();
   const params = useQuery();
   const postulantId = params.get('id');
+  const firstUpdate = useRef(true);
 
   function useQuery() {
     const { search } = useLocation();
@@ -49,18 +50,21 @@ function PostulantHome() {
     dispatch(getInterviews());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (firstUpdate.current) return (firstUpdate.current = false);
+    dispatch(
+      updatePostulant(postulantId, {
+        availabilty: availableValue
+      })
+    );
+  }, [availableValue]);
+
   const EditBtn = () => {
     history.push(`/admin/postulants/form?id=${postulantId}`);
   };
 
   const changeAvailability = () => {
-    console.log('available opuesto:', !availableValue);
     setAvailableValue(!availableValue);
-    console.log(availableValue);
-    const value = {
-      availabilty: availableValue
-    };
-    dispatch(updatePostulant(postulantId, value));
   };
 
   const cancelInterview = () => {
@@ -121,6 +125,7 @@ function PostulantHome() {
               label="Available"
               toggled={postulant.availabilty}
               onClick={changeAvailability}
+              className={styles.toggled}
             />
           </div>
           <div className={styles.btnContainer}>
