@@ -11,7 +11,7 @@ const Routes = () => {
         <Switch>
           <Route path="/postulant" exact component={PostulantRoutes} />
           <Route path="/admin" component={AdminRoutes} />
-          <Redirect to="/postulant" />
+          <Redirect to="/postulant?id=61bd751a1d95a30cbccee7c2" />
         </Switch>
       </Suspense>
     </Router>

@@ -37,8 +37,8 @@ const Interview = ({ interview }) => {
         type={'Error'}
       />
       <tr className={styles.tr} key={interview._id} onClick={openEditForm}>
-        <td>{interview.positionId}</td>
-        <td>{interview.postulantId}</td>
+        <td>{`${interview?.positionId?.job}`}</td>
+        <td>{`${interview?.postulantId?.firstName} ${interview?.postulantId?.lastName}`}</td>
         <td>{interview.dateTime}</td>
         <td>
           <DeleteBtn
