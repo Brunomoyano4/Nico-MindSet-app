@@ -39,8 +39,10 @@ function PostulantHome() {
   }, []);
 
   useEffect(() => {
-    setAvailableValue(postulant.availabilty);
-  }, [postulant.availabilty]);
+    if (postulant) {
+      setAvailableValue(postulant.availabilty);
+    }
+  }, [postulant?.availabilty]);
 
   useEffect(() => {
     dispatch(getSessions());
@@ -52,11 +54,13 @@ function PostulantHome() {
 
   useEffect(() => {
     if (firstUpdate.current) return (firstUpdate.current = false);
-    dispatch(
-      updatePostulant(postulantId, {
-        availabilty: availableValue
-      })
-    );
+    if (postulant) {
+      dispatch(
+        updatePostulant(postulantId, {
+          availabilty: availableValue
+        })
+      );
+    }
   }, [availableValue]);
 
   const EditBtn = () => {
@@ -99,31 +103,30 @@ function PostulantHome() {
             </div>
           )}
           <h2 className={styles.userName}>
-            {postulant.firstName} {postulant.lastName}
+            {postulant?.firstName || '-'} {postulant?.lastName || '-'}
           </h2>
           <div className={styles.prof}>
             {!loading.postulantLoading && !postulant?.profiles?.length ? (
               <h3 className={styles.nothingHere}>This profile has not been analyzed yet!</h3>
             ) : (
               <>
-                {postulant.profiles?.map((profile) => {
+                {postulant?.profiles?.map((profile) => {
                   return (
                     <span className={styles.userInfo} key={profile.profile.profileName}>
                       -{`${profile.profile.profileName}`}
                     </span>
                   );
                 })}
-                {console.log(`postulant.profiles.length`, postulant?.profiles?.length)}
               </>
             )}
           </div>
           <h2 className={styles.userInfo}>
-            {postulant.city}, {postulant.province} - {postulant.country}
+            {postulant?.city}, {postulant?.province} - {postulant?.country}
           </h2>
           <div className={styles.toggleSwitch}>
             <ToggleSwitch
               label="Available"
-              toggled={postulant.availabilty}
+              toggled={postulant?.availabilty}
               onClick={changeAvailability}
               className={styles.toggled}
             />
