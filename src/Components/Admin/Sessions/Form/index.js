@@ -72,7 +72,7 @@ const SessionsForm = () => {
               className={styles.select}
               component={Select}
               label="Psychologist:"
-              name="psychologist"
+              name="psychology"
               id="psychologist"
               options={options.psychologists}
             />

@@ -43,17 +43,6 @@ function AppForm() {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (applicationId) {
-  //     if (Object.keys(selectedItem).length) {
-  //       setPositionsValue(selectedItem.positions._id);
-  //       setPostulantsValue(`${selectedItem?.postulants?._id}`);
-  //       setClientValue(selectedItem.client._id);
-  //       setResultValue(selectedItem.result);
-  //     }
-  //   }
-  // }, [selectedItem]);
-
   function useQuery() {
     const { search } = useLocation();
     return React.useMemo(() => new URLSearchParams(search), [search]);
@@ -67,21 +56,6 @@ function AppForm() {
     }
     history.push('/admin/applications/list');
   };
-
-  // const onSubmit = (event) => {
-  //   const values = {
-  //     positions: positionsValue,
-  //     client: clientValue,
-  //     postulants: postulantsValue,
-  //     result: resultValue
-  //   };
-  //   if (applicationId) {
-  //     dispatch(updateApplications(applicationId, values));
-  //   } else {
-  //     dispatch(addApplications(values));
-  //   }
-  //   history.push('/admin/applications/list');
-  // };
 
   const required = (value) => (value ? undefined : 'Required');
 
