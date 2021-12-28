@@ -12,17 +12,12 @@ import { Form, Field } from 'react-final-form';
 
 function ProfilesForm() {
   const dispatch = useDispatch();
-  const selectedItem = useSelector((store) => store.profiles.list);
+  const selectedItem = useSelector((store) => store.profiles.selectedItem);
   const error = useSelector((store) => store.profiles.error);
   const loading = useSelector((store) => store.profiles.isLoading);
   const history = useHistory();
   const params = useQuery();
   const profileId = params.get('id');
-
-  function useQuery() {
-    const { search } = useLocation();
-    return React.useMemo(() => new URLSearchParams(search), [search]);
-  }
 
   useEffect(() => {
     if (profileId) {
@@ -32,6 +27,10 @@ function ProfilesForm() {
     }
   }, []);
 
+  function useQuery() {
+    const { search } = useLocation();
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
   const onSubmit = (formValues) => {
     if (profileId) {
       dispatch(updateProfile(profileId, formValues));
@@ -47,18 +46,11 @@ function ProfilesForm() {
     <div className={styles.container}>
       <Form
         onSubmit={onSubmit}
-        initialValues={selectedItem}
+        initialValues={selectedItem[0]}
         render={(formProps) => (
           <form className={styles.form} onSubmit={formProps.handleSubmit}>
             <h2>Form</h2>
             <div className={styles.form}>
-              <Modal
-                title="Something went wrong!"
-                subtitle={error}
-                show={error}
-                closeModal={() => dispatch(clearProfilesError())}
-                type={'Error'}
-              />
               {loading && (
                 <div className={styles.spinnerContainer}>
                   <LoadingSpinner />
@@ -68,7 +60,8 @@ function ProfilesForm() {
                 className={styles.input}
                 placeholder="Profile Name"
                 label="Profile Name:"
-                id="profile-name"
+                id="profileName"
+                name="profileName"
                 component={Input}
                 validate={required}
               />
@@ -76,6 +69,7 @@ function ProfilesForm() {
                 className={styles.input}
                 placeholder="Branch"
                 label="Branch:"
+                name="branch"
                 id="profile-branch"
                 validate={required}
                 component={Input}
@@ -84,6 +78,7 @@ function ProfilesForm() {
                 className={styles.input}
                 placeholder="Description"
                 label="Description:"
+                name="description"
                 id="profile-description"
                 validate={required}
                 component={Input}
@@ -102,6 +97,13 @@ function ProfilesForm() {
             />
           </form>
         )}
+      />
+      <Modal
+        title="Something went wrong!"
+        subtitle={error}
+        show={error}
+        closeModal={() => dispatch(clearProfilesError())}
+        type={'Error'}
       />
     </div>
   );

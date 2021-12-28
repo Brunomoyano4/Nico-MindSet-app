@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import styles from './form.module.css';
-// import Select from 'Components/Shared/Select';
+import Select from 'Components/Shared/Select';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Button from 'Components/Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
@@ -79,21 +79,17 @@ function InterviewsForm() {
                 validate={required}
                 component={Input}
               />
-              {/* <Select
+              <Field
                 className={styles.select}
                 name="Status"
-                value={statusValue}
-                onChange={(event) => {
-                  setStatusValue(event.target.value);
-                }}
-                required
+                component={Select}
                 options={[
                   { value: 'pending', label: 'Pending' },
                   { value: 'cancelled', label: 'Cancelled' },
                   { value: 'next step', label: 'Next Step' },
                   { value: 'finished', label: 'Finished' }
                 ]}
-              /> */}
+              />
             </div>
             <Button
               content={'SAVE'}

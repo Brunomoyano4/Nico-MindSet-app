@@ -68,28 +68,22 @@ const SessionsForm = () => {
                 <LoadingSpinner />
               </div>
             )}
-            {/* <Select
-          className={styles.select}
-          value={psychologistValue}
-          onChange={(e) => {
-            setPsychologistValue(e.target.value);
-          }}
-          label="Psychologist:"
-          id="psychologist"
-          options={options.psychologists}
-          required
-          />
-          <Select
-          className={styles.select}
-          value={postulantValue}
-          onChange={(e) => {
-            setPostulantsValue(e.target.value);
-          }}
-          label="Postulant:"
-          id="postulant"
-          options={options.postulants}
-        required */}
-            {/* /> */}
+            <Field
+              className={styles.select}
+              component={Select}
+              label="Psychologist:"
+              name="psychologist"
+              id="psychologist"
+              options={options.psychologists}
+            />
+            <Field
+              className={styles.select}
+              component={Select}
+              label="Postulant:"
+              name="postulant"
+              id="postulant"
+              options={options.postulants}
+            />
             <Field
               className={styles.input}
               label="date"
@@ -119,9 +113,12 @@ const SessionsForm = () => {
             />
             <Button
               className={styles.button}
+              type="submit"
               content={sessionId ? 'Update Position' : 'Create position'}
               disabled={
-                loading ||
+                loading.postulantsLoading ||
+                loading.sessionsLoading ||
+                loading.psychologistsLoading ||
                 formProps.submitting ||
                 formProps.pristine ||
                 formProps.hasValidationErrors
