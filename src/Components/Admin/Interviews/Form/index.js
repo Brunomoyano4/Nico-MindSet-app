@@ -48,7 +48,7 @@ function InterviewsForm() {
     <div className={styles.container}>
       <Form
         onSubmit={onSubmit}
-        initialValues={selectedItem}
+        initialValues={selectedItem[0]}
         render={(formProps) => (
           <form className={styles.form} onSubmit={formProps.handleSubmit}>
             <h2>Form</h2>
@@ -60,29 +60,34 @@ function InterviewsForm() {
               )}
               <Field
                 className={styles.input}
-                name="Position Id"
+                name="positionId"
+                id="Position-Id"
                 placeholder="Position's Id"
                 validate={required}
                 component={Input}
               />
               <Field
                 className={styles.input}
-                name="Postulant Id"
+                name="postulantId"
+                id="Postulant-Id"
                 placeholder="Postulant's Id"
                 validate={required}
                 component={Input}
               />
               <Field
                 className={styles.input}
-                name="Date time"
+                name="dateTime"
+                id="date-time"
                 placeholder="DD/MM/YYYY HH:MM"
                 validate={required}
                 component={Input}
               />
               <Field
                 className={styles.select}
-                name="Status"
+                name="status"
+                id="status"
                 component={Select}
+                validate={required}
                 options={[
                   { value: 'pending', label: 'Pending' },
                   { value: 'cancelled', label: 'Cancelled' },
