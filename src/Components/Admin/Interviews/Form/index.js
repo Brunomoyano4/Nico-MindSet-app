@@ -1,5 +1,5 @@
 import { useLocation, useHistory } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import styles from './form.module.css';
@@ -7,37 +7,18 @@ import Select from 'Components/Shared/Select';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Button from 'Components/Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addInterviews, updateInterviews } from 'redux/interviews/thunks';
-import { clearInterviewsError } from 'redux/interviews/actions';
+import { addInterviews, updateInterviews, getInterviewById } from 'redux/interviews/thunks';
+import { clearInterviewsError, cleanSelectedItem } from 'redux/interviews/actions';
+import { Form, Field } from 'react-final-form';
 
-function Form() {
+function InterviewsForm() {
   const dispatch = useDispatch();
-  const [positionIdValue, setPositionIdValue] = useState('');
-  const [postulantIdValue, setPostulantIdValue] = useState('');
-  const [dateTimeValue, setDateTimeValue] = useState('');
-  const [statusValue, setStatusValue] = useState('');
-  const [disableButton, setDisableButton] = useState(false);
-  const data = useSelector((store) => store.interviews.list);
+  const selectedItem = useSelector((store) => store.interviews.selectedItem);
   const loading = useSelector((store) => store.interviews.isLoading);
   const error = useSelector((store) => store.interviews.error);
-
-  const setInputValues = (data) => {
-    setPositionIdValue(data.positionId || ''),
-      setPostulantIdValue(data.postulantId || ''),
-      setDateTimeValue(data.dateTime || ''),
-      setStatusValue(data.status || '');
-  };
-
   const history = useHistory();
   const params = useQuery();
   const interviewId = params.get('id');
-
-  const values = {
-    positionId: positionIdValue,
-    postulantId: postulantIdValue,
-    dateTime: dateTimeValue,
-    status: statusValue
-  };
 
   function useQuery() {
     const { search } = useLocation();
@@ -46,82 +27,87 @@ function Form() {
 
   useEffect(() => {
     if (interviewId) {
-      data.forEach((interview) => {
-        if (interview._id === interviewId) setInputValues(interview);
-      });
-    }
-  }, [interviewId]);
-
-  const onSubmit = (event) => {
-    event.preventDefault();
-    setDisableButton(true);
-    if (interviewId) {
-      dispatch(updateInterviews(interviewId, values));
+      dispatch(getInterviewById(interviewId));
     } else {
-      dispatch(addInterviews(values));
+      dispatch(cleanSelectedItem());
+    }
+  }, []);
+
+  const onSubmit = (formValues) => {
+    if (interviewId) {
+      dispatch(updateInterviews(interviewId, formValues));
+    } else {
+      dispatch(addInterviews(formValues));
     }
     history.replace('/admin/interviews/list');
-    setDisableButton(false);
   };
+
+  const required = (value) => (value ? undefined : 'Required');
 
   return (
     <div className={styles.container}>
-      <form className={styles.form} onSubmit={onSubmit}>
-        <h2>Form</h2>
-        <div className={styles.form}>
-          {loading && (
-            <div className={styles.spinnerContainer}>
-              <LoadingSpinner />
+      <Form
+        onSubmit={onSubmit}
+        initialValues={selectedItem[0]}
+        render={(formProps) => (
+          <form className={styles.form} onSubmit={formProps.handleSubmit}>
+            <h2>Form</h2>
+            <div className={styles.form}>
+              {loading && (
+                <div className={styles.spinnerContainer}>
+                  <LoadingSpinner />
+                </div>
+              )}
+              <Field
+                className={styles.input}
+                name="positionId"
+                id="Position-Id"
+                placeholder="Position's Id"
+                validate={required}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="postulantId"
+                id="Postulant-Id"
+                placeholder="Postulant's Id"
+                validate={required}
+                component={Input}
+              />
+              <Field
+                className={styles.input}
+                name="dateTime"
+                id="date-time"
+                placeholder="DD/MM/YYYY HH:MM"
+                validate={required}
+                component={Input}
+              />
+              <Field
+                className={styles.select}
+                name="status"
+                id="status"
+                component={Select}
+                validate={required}
+                options={[
+                  { value: 'pending', label: 'Pending' },
+                  { value: 'cancelled', label: 'Cancelled' },
+                  { value: 'next step', label: 'Next Step' },
+                  { value: 'finished', label: 'Finished' }
+                ]}
+              />
             </div>
-          )}
-          <Input
-            className={styles.input}
-            name="Position Id"
-            placeholder="Position's Id"
-            value={positionIdValue}
-            onChange={(event) => {
-              setPositionIdValue(event.target.value);
-            }}
-            required
-          />
-          <Input
-            className={styles.input}
-            name="Postulant Id"
-            placeholder="Postulant's Id"
-            value={postulantIdValue}
-            onChange={(event) => {
-              setPostulantIdValue(event.target.value);
-            }}
-            required
-          />
-          <Input
-            className={styles.input}
-            name="Date time"
-            placeholder="DD/MM/YYYY HH:MM"
-            value={dateTimeValue}
-            onChange={(event) => {
-              setDateTimeValue(event.target.value);
-            }}
-            required
-          />
-          <Select
-            className={styles.select}
-            name="Status"
-            value={statusValue}
-            onChange={(event) => {
-              setStatusValue(event.target.value);
-            }}
-            required
-            options={[
-              { value: 'pending', label: 'Pending' },
-              { value: 'cancelled', label: 'Cancelled' },
-              { value: 'next step', label: 'Next Step' },
-              { value: 'finished', label: 'Finished' }
-            ]}
-          />
-        </div>
-        <Button content={'SAVE'} disabled={loading || disableButton} />
-      </form>
+            <Button
+              content={'SAVE'}
+              disabled={
+                loading ||
+                formProps.submitting ||
+                formProps.pristine ||
+                formProps.hasValidationErrors
+              }
+            />
+          </form>
+        )}
+      />
       <Modal
         title="Something went wrong!"
         subtitle={error}
@@ -138,4 +124,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default InterviewsForm;

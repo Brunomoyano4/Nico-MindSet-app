@@ -2,6 +2,9 @@ import {
   GET_INTERVIEWS_FETCHING,
   GET_INTERVIEWS_FULFILLED,
   GET_INTERVIEWS_REJECTED,
+  GET_INTERVIEW_BY_ID_FETCHING,
+  GET_INTERVIEW_BY_ID_FULFILLED,
+  GET_INTERVIEW_BY_ID_REJECTED,
   ADD_INTERVIEWS_FETCHING,
   ADD_INTERVIEWS_FULFILLED,
   ADD_INTERVIEWS_REJECTED,
@@ -11,7 +14,8 @@ import {
   UPDATE_INTERVIEWS_FETCHING,
   UPDATE_INTERVIEWS_FULFILLED,
   UPDATE_INTERVIEWS_REJECTED,
-  CLEAR_INTERVIEWS_ERROR
+  CLEAR_INTERVIEWS_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 export const getInterviewsFetching = () => ({
@@ -27,6 +31,26 @@ export const getInterviewsRejected = (error) => ({
   type: GET_INTERVIEWS_REJECTED,
   error
 });
+
+export const getInterviewByIdFetching = () => {
+  return {
+    type: GET_INTERVIEW_BY_ID_FETCHING
+  };
+};
+
+export const getInterviewByIdFulfilled = (data) => {
+  return {
+    type: GET_INTERVIEW_BY_ID_FULFILLED,
+    payload: data
+  };
+};
+
+export const getInterviewByIdRejected = (error) => {
+  return {
+    type: GET_INTERVIEW_BY_ID_REJECTED,
+    payload: error
+  };
+};
 
 export const addInterviewsFetching = () => ({
   type: ADD_INTERVIEWS_FETCHING
@@ -73,5 +97,11 @@ export const updateInterviewsRejected = (error) => ({
 export const clearInterviewsError = () => {
   return {
     type: CLEAR_INTERVIEWS_ERROR
+  };
+};
+
+export const cleanSelectedItem = () => {
+  return {
+    type: CLEAN_SELECTED_ITEM
   };
 };

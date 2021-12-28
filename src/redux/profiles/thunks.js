@@ -2,6 +2,9 @@ import {
   getProfilesFetching,
   getProfilesFulfilled,
   getProfilesRejected,
+  getProfileByIdFetching,
+  getProfileByIdFulfilled,
+  getProfileByIdRejected,
   addProfileFetching,
   addProfileFulfilled,
   addProfileRejected,
@@ -32,6 +35,28 @@ export const getProfiles = () => {
       })
       .catch((error) => {
         dispatch(getProfilesRejected(error.toString()));
+      });
+  };
+};
+
+export const getProfileById = (id) => {
+  return (dispatch) => {
+    dispatch(getProfileByIdFetching());
+    return fetch(`${URL}/${id}`)
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
+        }
+        return response.json();
+      })
+      .then((response) => {
+        dispatch(getProfileByIdFulfilled(response));
+        return response;
+      })
+      .catch((error) => {
+        dispatch(getProfileByIdRejected(error.toString()));
       });
   };
 };

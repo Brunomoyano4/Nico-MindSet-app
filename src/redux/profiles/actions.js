@@ -2,6 +2,9 @@ import {
   GET_PROFILES_FETCHING,
   GET_PROFILES_FULFILLED,
   GET_PROFILES_REJECTED,
+  GET_PROFILE_BY_ID_FETCHING,
+  GET_PROFILE_BY_ID_FULFILLED,
+  GET_PROFILE_BY_ID_REJECTED,
   ADD_PROFILE_FETCHING,
   ADD_PROFILE_FULFILLED,
   ADD_PROFILE_REJECTED,
@@ -11,7 +14,8 @@ import {
   UPDATE_PROFILE_FETCHING,
   UPDATE_PROFILE_FULFILLED,
   UPDATE_PROFILE_REJECTED,
-  CLEAR_PROFILES_ERROR
+  CLEAR_PROFILES_ERROR,
+  CLEAN_SELECTED_ITEM
 } from './constants';
 
 export const getProfilesFetching = () => {
@@ -30,6 +34,26 @@ export const getProfilesFulfilled = (data) => {
 export const getProfilesRejected = (error) => {
   return {
     type: GET_PROFILES_REJECTED,
+    payload: error
+  };
+};
+
+export const getProfileByIdFetching = () => {
+  return {
+    type: GET_PROFILE_BY_ID_FETCHING
+  };
+};
+
+export const getProfileByIdFulfilled = (data) => {
+  return {
+    type: GET_PROFILE_BY_ID_FULFILLED,
+    payload: data
+  };
+};
+
+export const getProfileByIdRejected = (error) => {
+  return {
+    type: GET_PROFILE_BY_ID_REJECTED,
     payload: error
   };
 };
@@ -97,5 +121,11 @@ export const updateProfileRejected = (error) => {
 export const clearProfilesError = () => {
   return {
     type: CLEAR_PROFILES_ERROR
+  };
+};
+
+export const cleanSelectedItem = () => {
+  return {
+    type: CLEAN_SELECTED_ITEM
   };
 };

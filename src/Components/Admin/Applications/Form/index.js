@@ -3,7 +3,7 @@ import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import Select from 'Components/Shared/Select';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'Components/Shared/Button';
@@ -13,21 +13,16 @@ import {
   getApplicationsById,
   getApplicationsOptions
 } from 'redux/applications/thunks';
+import { Form, Field } from 'react-final-form';
+import { clearApplicationsError, cleanSelectedApplications } from 'redux/applications/actions';
 
-function Form() {
+function AppForm() {
   const history = useHistory();
   const params = useQuery();
   const applicationId = params.get('id');
   const dispatch = useDispatch();
-
-  const [positionsValue, setPositionsValue] = useState('');
-  const [clientValue, setClientValue] = useState('');
-  const [postulantsValue, setPostulantsValue] = useState('');
-  const [resultValue, setResultValue] = useState('');
-
-  const [disableButton, setDisableButton] = useState(false);
   const error = useSelector((store) => store.applications.error);
-  const isLoading = useSelector((store) => store.applications.isLoading);
+  const loading = useSelector((store) => store.applications.isLoading);
   const selectedItem = useSelector((store) => store.applications.selectedItem);
   const options = useSelector((store) => store.applications.options);
 
@@ -42,103 +37,104 @@ function Form() {
 
   useEffect(() => {
     if (applicationId) {
-      if (Object.keys(selectedItem).length) {
-        setPositionsValue(selectedItem.positions._id);
-        setPostulantsValue(`${selectedItem?.postulants?._id}`);
-        setClientValue(selectedItem.client._id);
-        setResultValue(selectedItem.result);
-      }
+      dispatch(getApplicationsById(applicationId));
+    } else {
+      dispatch(cleanSelectedApplications());
     }
-  }, [selectedItem]);
+  }, []);
 
   function useQuery() {
     const { search } = useLocation();
     return React.useMemo(() => new URLSearchParams(search), [search]);
   }
 
-  const onSubmit = (event) => {
-    event.preventDefault();
-    setDisableButton(true);
-    const values = {
-      positions: positionsValue,
-      client: clientValue,
-      postulants: postulantsValue,
-      result: resultValue
-    };
+  const onSubmit = (formValues) => {
     if (applicationId) {
-      dispatch(updateApplications(applicationId, values));
+      dispatch(updateApplications(applicationId, formValues));
     } else {
-      dispatch(addApplications(values));
+      dispatch(addApplications(formValues));
     }
     history.push('/admin/applications/list');
-    setDisableButton(false);
   };
+
+  const required = (value) => (value ? undefined : 'Required');
 
   return (
     <>
       <div className={styles.container}>
-        <form className={styles.form} onSubmit={onSubmit}>
-          <h2>Form</h2>
-          <div className={styles.form}>
-            <Modal
-              title="Something went wrong!"
-              subtitle={error}
-              show={error}
-              closeModal={() => error}
-              type={'Error'}
-            />
-            <h3 className={error ? styles.error : ''}>{error}</h3>
-            {Object.values(isLoading).some(Boolean) && (
-              <div className={styles.spinnerContainer}>
-                <LoadingSpinner />
+        <Form
+          onSubmit={onSubmit}
+          initialValues={selectedItem}
+          render={(formProps) => (
+            <form className={styles.form} onSubmit={formProps.handleSubmit}>
+              <h2>Form</h2>
+              <div className={styles.form}>
+                <Modal
+                  title="Something went wrong!"
+                  subtitle={error}
+                  show={error}
+                  closeModal={() => dispatch(clearApplicationsError())}
+                  type={'Error'}
+                />
+                <h3 className={error ? styles.error : ''}>{error}</h3>
+                {Object.values(loading).some(Boolean) && (
+                  <div className={styles.spinnerContainer}>
+                    <LoadingSpinner />
+                  </div>
+                )}
+                <Field
+                  className={styles.select}
+                  label="Position:"
+                  id="positions-select"
+                  name="positions"
+                  options={options.positions}
+                  component={Select}
+                  validate={required}
+                />
+                <Field
+                  className={styles.select}
+                  label="Client:"
+                  id="client-select"
+                  name="client"
+                  options={options.clients}
+                  component={Select}
+                  validate={required}
+                />
+                <Field
+                  className={styles.select}
+                  label="Postulant:"
+                  id="postulants-select"
+                  name="postulants"
+                  options={options.postulants}
+                  component={Select}
+                  validate={required}
+                />
+                <Field
+                  className={styles.input}
+                  placeholder="Result"
+                  label="Result:"
+                  id="result-input"
+                  name="result"
+                  component={Input}
+                  validate={required}
+                />
               </div>
-            )}
-            <Select
-              className={styles.select}
-              value={positionsValue}
-              onChange={(e) => setPositionsValue(e.target.value)}
-              label="Position:"
-              id="positions-select"
-              options={options.positions}
-              required
-            />
-            <Select
-              className={styles.select}
-              value={clientValue}
-              onChange={(e) => setClientValue(e.target.value)}
-              label="Client:"
-              id="client-select"
-              options={options.clients}
-              required
-            />
-            <Select
-              className={styles.select}
-              value={postulantsValue}
-              onChange={(e) => setPostulantsValue(e.target.value)}
-              label="Postulant:"
-              id="postulants-select"
-              options={options.postulants}
-              required
-            />
-            <Input
-              className={styles.input}
-              placeholder="Result"
-              value={resultValue}
-              onChange={(e) => setResultValue(e.target.value)}
-              label="Result:"
-              id="result-input"
-              required
-            />
-          </div>
-          <Button
-            className={styles.button}
-            content={applicationId ? 'Update Application' : 'Create Application'}
-            disabled={disableButton}
-          />
-        </form>
+              <Button
+                className={styles.button}
+                content={applicationId ? 'Update Application' : 'Create Application'}
+                disabled={
+                  loading ||
+                  formProps.submitting ||
+                  formProps.pristine ||
+                  formProps.hasValidationErrors
+                }
+              />
+            </form>
+          )}
+        />
       </div>
     </>
   );
 }
 
-export default Form;
+export default AppForm;
