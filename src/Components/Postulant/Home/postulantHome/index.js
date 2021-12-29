@@ -17,7 +17,7 @@ function PostulantHome() {
   const [availableValue, setAvailableValue] = useState(true);
   const sessions = useSelector((store) => store.sessions.list);
   const interviews = useSelector((store) => store.interviews.list);
-  const postulant = useSelector((store) => store.postulants.selectedPostulant);
+  const postulant = useSelector((store) => store.postulants.selectedItem);
   const loading = {
     sessionsLoading: useSelector((store) => store.sessions.isLoading),
     interviewsLoading: useSelector((store) => store.interviews.isLoading),
@@ -103,6 +103,7 @@ function PostulantHome() {
             </div>
           )}
           <h2 className={styles.userName}>
+            {console.log(postulant)}
             {postulant?.firstName || '-'} {postulant?.lastName || '-'}
           </h2>
           <div className={styles.prof}>
