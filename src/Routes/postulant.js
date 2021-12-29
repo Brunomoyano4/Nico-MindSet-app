@@ -5,7 +5,7 @@ import Layout from 'Components/Layout';
 const PostulantRoutes = () => {
   const { url } = useRouteMatch();
   return (
-    <Layout routes={[{ name: 'Go to admin app', path: '/admin' }]}>
+    <Layout routes={[{ name: 'Logout', path: '/auth/login' }]}>
       <Switch>
         <Route path={`${url}/`} component={Home} />
       </Switch>

@@ -21,7 +21,8 @@ const URL = `${process.env.REACT_APP_API}/admins`;
 export const getAdmins = () => {
   return (dispatch) => {
     dispatch(getAdminsFetching());
-    return fetch(URL)
+    const token = sessionStorage.getItem('token');
+    return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {
