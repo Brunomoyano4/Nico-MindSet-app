@@ -21,4 +21,18 @@ export const tokenListener = () => {
   });
 };
 
+export const logOutUser = () => {
+  firebase
+    .auth()
+    .signOut()
+    .then(
+      function () {
+        console.log('deslogueado');
+      },
+      function (error) {
+        console.log(error);
+      }
+    );
+};
+
 export default firebaseApp;

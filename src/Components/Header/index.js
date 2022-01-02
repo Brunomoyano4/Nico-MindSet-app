@@ -1,5 +1,6 @@
 import styles from './header.module.css';
 import { Link } from 'react-router-dom';
+import LogOutButton from 'Components/Shared/ButtonLogOut';
 
 function Header(props) {
   return (
@@ -15,6 +16,7 @@ function Header(props) {
             </li>
           ))}
         </ul>
+        {props.authenticated && <LogOutButton />}
       </nav>
     </header>
   );

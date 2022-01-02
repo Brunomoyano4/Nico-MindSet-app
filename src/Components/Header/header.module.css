@@ -47,9 +47,3 @@
   text-transform: capitalize;
   color: white;
 }
-
-.logOut {
-  border: none;
-  background: none;
-  cursor: pointer;
-}

@@ -6,7 +6,7 @@ const Layout = (props) => {
   const { routes = [] } = props;
   return (
     <div className={styles.container}>
-      <Header routes={routes} />
+      <Header routes={routes} authenticated={props.authenticated} />
       {props.children}
       <Footer />
     </div>

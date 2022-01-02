@@ -41,7 +41,7 @@ const AdminRoutes = () => {
   }, []);
 
   return (
-    <Layout routes={adminsRoutes}>
+    <Layout routes={adminsRoutes} authenticated={true}>
       <Switch>
         <PrivateRoute path={`${url}/admins/list`} component={Admins} />
         <PrivateRoute path={`${url}/admins/form`} component={AdminsForm} />
