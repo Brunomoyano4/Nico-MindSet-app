@@ -17,11 +17,12 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/psychologists`;
+const token = sessionStorage.getItem('token');
 
 export const getPsychologists = () => {
   return (dispatch) => {
     dispatch(getPsychologistsFetching());
-    return fetch(URL)
+    return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -42,7 +43,7 @@ export const getPsychologists = () => {
 export const getPsychologistById = (id) => {
   return (dispatch) => {
     dispatch(getPsychologistByIdFetching());
-    return fetch(`${URL}/${id}`)
+    return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -67,7 +68,8 @@ export const addPsychologist = (psychologist) => {
     return fetch(URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(psychologist)
     })
@@ -94,7 +96,8 @@ export const updatePsychologist = (psychologistId, psychologist) => {
     return fetch(`${URL}/${psychologistId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(psychologist)
     })
@@ -118,7 +121,7 @@ export const updatePsychologist = (psychologistId, psychologist) => {
 export const deletePsychologist = (id) => {
   return (dispatch) => {
     dispatch(deletePsychologistFetching());
-    fetch(`${URL}/${id}`, { method: 'DELETE' })
+    fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {

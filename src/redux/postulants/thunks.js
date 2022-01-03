@@ -17,11 +17,12 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/postulants`;
+const token = sessionStorage.getItem('token');
 
 export const getPostulants = () => {
   return (dispatch) => {
     dispatch(getPostulantsFetching());
-    return fetch(URL)
+    return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -42,7 +43,7 @@ export const getPostulants = () => {
 export const getPostulantById = (id) => {
   return (dispatch) => {
     dispatch(getPostulantsByIdFetching());
-    return fetch(`${URL}/${id}`)
+    return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -66,7 +67,8 @@ export const addPostulant = (postulant) => {
     return fetch(URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(postulant)
     })
@@ -93,7 +95,8 @@ export const updatePostulant = (postulantId, postulant) => {
     return fetch(`${URL}/${postulantId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(postulant)
     })
@@ -117,7 +120,7 @@ export const updatePostulant = (postulantId, postulant) => {
 export const deletePostulant = (id) => {
   return (dispatch) => {
     dispatch(deletePostulantsFetching());
-    fetch(`${URL}/${id}`, { method: 'DELETE' })
+    fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {

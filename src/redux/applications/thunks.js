@@ -20,11 +20,12 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/applications`;
+const token = sessionStorage.getItem('token');
 
 export const getApplications = () => {
   return (dispatch) => {
     dispatch(getApplicationsFetching());
-    return fetch(URL)
+    return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -45,7 +46,7 @@ export const getApplications = () => {
 export const getApplicationsById = (id) => {
   return (dispatch) => {
     dispatch(getApplicationsByIdFetching());
-    return fetch(`${URL}/${id}`)
+    return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -70,7 +71,8 @@ export const addApplications = (application) => {
     return fetch(`${process.env.REACT_APP_API}/applications`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(application)
     })
@@ -97,7 +99,8 @@ export const updateApplications = (applicationId, application) => {
     return fetch(`${URL}/${applicationId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(application)
     })
@@ -121,7 +124,7 @@ export const updateApplications = (applicationId, application) => {
 export const deleteApplications = (id) => {
   return (dispatch) => {
     dispatch(deleteApplicationsFetching());
-    fetch(`${URL}/${id}`, { method: 'DELETE' })
+    fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {
@@ -139,7 +142,7 @@ export const deleteApplications = (id) => {
 export const getApplicationsOptions = (resource) => {
   return (dispatch) => {
     dispatch(getApplicationsOptionsFetching());
-    fetch(`${process.env.REACT_APP_API}/${resource}`)
+    fetch(`${process.env.REACT_APP_API}/${resource}`, { headers: { token } })
       .then(async (res) => {
         if (res.status === 200) {
           const data = await res.json();

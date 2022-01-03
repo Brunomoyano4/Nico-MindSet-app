@@ -17,11 +17,12 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/clients`;
+const token = sessionStorage.getItem('token');
 
 export const getClients = () => {
   return (dispatch) => {
     dispatch(getClientsFetching());
-    return fetch(URL)
+    return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -42,7 +43,7 @@ export const getClients = () => {
 export const getClientById = (id) => {
   return (dispatch) => {
     dispatch(getClientsByIdFetching());
-    return fetch(`${URL}/${id}`)
+    return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -66,7 +67,8 @@ export const addClient = (client) => {
     return fetch(URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(client)
     })
@@ -93,7 +95,8 @@ export const updateClient = (clientId, client) => {
     return fetch(`${URL}/${clientId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(client)
     })
@@ -117,7 +120,7 @@ export const updateClient = (clientId, client) => {
 export const deleteClient = (id) => {
   return (dispatch) => {
     dispatch(deleteClientsFetching());
-    fetch(`${URL}/${id}`, { method: 'DELETE' })
+    fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {

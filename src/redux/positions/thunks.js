@@ -17,11 +17,12 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/positions`;
+const token = sessionStorage.getItem('token');
 
 export const getPositions = () => {
   return (dispatch) => {
     dispatch(getPositionsFetching());
-    return fetch(URL)
+    return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -42,7 +43,7 @@ export const getPositions = () => {
 export const getPositionById = (id) => {
   return (dispatch) => {
     dispatch(getPositionByIdFetching());
-    return fetch(`${URL}/${id}`)
+    return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -67,7 +68,8 @@ export const addPosition = (position) => {
     return fetch(URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(position)
     })
@@ -94,7 +96,8 @@ export const updatePosition = (positionId, position) => {
     return fetch(`${URL}/${positionId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(position)
     })
@@ -118,7 +121,7 @@ export const updatePosition = (positionId, position) => {
 export const deletePosition = (id) => {
   return (dispatch) => {
     dispatch(deletePositionsFetching());
-    fetch(`${URL}/${id}`, { method: 'DELETE' })
+    fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {

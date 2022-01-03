@@ -17,11 +17,12 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/profiles`;
+const token = sessionStorage.getItem('token');
 
 export const getProfiles = () => {
   return (dispatch) => {
     dispatch(getProfilesFetching());
-    return fetch(URL)
+    return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -42,7 +43,7 @@ export const getProfiles = () => {
 export const getProfileById = (id) => {
   return (dispatch) => {
     dispatch(getProfileByIdFetching());
-    return fetch(`${URL}/${id}`)
+    return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -67,7 +68,8 @@ export const addProfile = (profile) => {
     return fetch(URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(profile)
     })
@@ -94,7 +96,8 @@ export const updateProfile = (profileId, profile) => {
     return fetch(`${URL}/${profileId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(profile)
     })
@@ -118,7 +121,7 @@ export const updateProfile = (profileId, profile) => {
 export const deleteProfile = (id) => {
   return (dispatch) => {
     dispatch(deleteProfileFetching());
-    fetch(`${URL}/${id}`, { method: 'DELETE' })
+    fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {

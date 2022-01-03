@@ -17,11 +17,11 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/admins`;
+const token = sessionStorage.getItem('token');
 
 export const getAdmins = () => {
   return (dispatch) => {
     dispatch(getAdminsFetching());
-    const token = sessionStorage.getItem('token');
     return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
@@ -43,7 +43,7 @@ export const getAdmins = () => {
 export const getAdminById = (id) => {
   return (dispatch) => {
     dispatch(getAdminByIdFetching());
-    return fetch(`${URL}/${id}`)
+    return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -68,7 +68,8 @@ export const addAdmin = (admin) => {
     return fetch(URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(admin)
     })
@@ -95,7 +96,8 @@ export const updateAdmin = (adminId, admin) => {
     return fetch(`${URL}/${adminId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(admin)
     })
@@ -119,7 +121,7 @@ export const updateAdmin = (adminId, admin) => {
 export const deleteAdmin = (id) => {
   return (dispatch) => {
     dispatch(deleteAdminsFetching());
-    fetch(`${URL}/${id}`, { method: 'DELETE' })
+    fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {
