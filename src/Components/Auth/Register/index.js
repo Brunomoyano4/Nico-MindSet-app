@@ -1,11 +1,8 @@
-import { useLocation, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import React, { useEffect } from 'react';
 import { addPostulant } from 'redux/postulants/thunks';
 import { login } from 'redux/auth/thunks';
-import { cleanError } from 'redux/auth/actions';
 import { Form, Field } from 'react-final-form';
-import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import styles from './register.module.css';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
@@ -13,7 +10,6 @@ import Button from 'Components/Shared/Button';
 
 function PostulantsForm() {
   const dispatch = useDispatch();
-  const error = useSelector((store) => store.postulants.error);
   const loading = useSelector((store) => store.postulants.isLoading);
   const history = useHistory();
 
