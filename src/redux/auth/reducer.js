@@ -8,6 +8,7 @@ import {
 
 const initialState = {
   isLoading: false,
+  role: '',
   authenticated: false,
   error: ''
 };
@@ -25,6 +26,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isFetching: false,
+        role: action.payload,
         authenticated: true
       };
     }

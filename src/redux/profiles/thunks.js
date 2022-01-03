@@ -17,10 +17,11 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/profiles`;
-const token = sessionStorage.getItem('token');
+let token;
 
 export const getProfiles = () => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getProfilesFetching());
     return fetch(URL, { headers: { token } })
       .then((response) => {
@@ -42,6 +43,7 @@ export const getProfiles = () => {
 
 export const getProfileById = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getProfileByIdFetching());
     return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
@@ -64,6 +66,7 @@ export const getProfileById = (id) => {
 
 export const addProfile = (profile) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(addProfileFetching());
     return fetch(URL, {
       method: 'POST',
@@ -92,6 +95,7 @@ export const addProfile = (profile) => {
 
 export const updateProfile = (profileId, profile) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(updateProfileFetching());
     return fetch(`${URL}/${profileId}`, {
       method: 'PUT',
@@ -120,6 +124,7 @@ export const updateProfile = (profileId, profile) => {
 
 export const deleteProfile = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(deleteProfileFetching());
     fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {

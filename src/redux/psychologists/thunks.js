@@ -17,10 +17,11 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/psychologists`;
-const token = sessionStorage.getItem('token');
+let token;
 
 export const getPsychologists = () => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getPsychologistsFetching());
     return fetch(URL, { headers: { token } })
       .then((response) => {
@@ -42,6 +43,7 @@ export const getPsychologists = () => {
 
 export const getPsychologistById = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getPsychologistByIdFetching());
     return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
@@ -64,6 +66,7 @@ export const getPsychologistById = (id) => {
 
 export const addPsychologist = (psychologist) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(addPsychologistFetching());
     return fetch(URL, {
       method: 'POST',
@@ -92,6 +95,7 @@ export const addPsychologist = (psychologist) => {
 
 export const updatePsychologist = (psychologistId, psychologist) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(updatePsychologistFetching());
     return fetch(`${URL}/${psychologistId}`, {
       method: 'PUT',
@@ -120,6 +124,7 @@ export const updatePsychologist = (psychologistId, psychologist) => {
 
 export const deletePsychologist = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(deletePsychologistFetching());
     fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {

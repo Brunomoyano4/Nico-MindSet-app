@@ -17,10 +17,11 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/postulants`;
-const token = sessionStorage.getItem('token');
+let token;
 
 export const getPostulants = () => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getPostulantsFetching());
     return fetch(URL, { headers: { token } })
       .then((response) => {
@@ -43,6 +44,7 @@ export const getPostulants = () => {
 export const getPostulantById = (id) => {
   return (dispatch) => {
     dispatch(getPostulantsByIdFetching());
+    token = sessionStorage.getItem('token');
     return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
@@ -63,8 +65,9 @@ export const getPostulantById = (id) => {
 
 export const addPostulant = (postulant) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(addPostulantsFetching());
-    return fetch(URL, {
+    return fetch(`${process.env.REACT_APP_API}/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -91,6 +94,7 @@ export const addPostulant = (postulant) => {
 
 export const updatePostulant = (postulantId, postulant) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(updatePostulantsFetching());
     return fetch(`${URL}/${postulantId}`, {
       method: 'PUT',
@@ -119,6 +123,7 @@ export const updatePostulant = (postulantId, postulant) => {
 
 export const deletePostulant = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(deletePostulantsFetching());
     fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {

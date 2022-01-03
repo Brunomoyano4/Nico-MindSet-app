@@ -10,7 +10,8 @@ export const login = (credentials) => {
       .then(async (response) => {
         const token = await response.user.getIdToken();
         sessionStorage.setItem('token', token);
-        return dispatch(loginSuccess());
+        const fbToken = firebase.auth().currentUser.getIdTokenResult();
+        return dispatch(loginSuccess((await fbToken).claims));
       })
       .catch((error) => {
         return dispatch(loginError(error.toString()));

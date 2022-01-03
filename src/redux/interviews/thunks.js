@@ -17,10 +17,11 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/interviews`;
-const token = sessionStorage.getItem('token');
+let token;
 
 export const getInterviews = () => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getInterviewsFetching());
     return fetch(URL, { headers: { token } })
       .then((response) => {
@@ -42,8 +43,8 @@ export const getInterviews = () => {
 
 export const getInterviewById = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getInterviewByIdFetching());
-    const token = sessionStorage.getItem('token');
     return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
@@ -65,6 +66,7 @@ export const getInterviewById = (id) => {
 
 export const addInterviews = (interview) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(addInterviewsFetching());
     fetch(`${process.env.REACT_APP_API}/interviews`, {
       method: 'POST',
@@ -86,6 +88,7 @@ export const addInterviews = (interview) => {
 
 export const deleteInterviews = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(deleteInterviewsFetching());
     fetch(`${process.env.REACT_APP_API}/interviews/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
@@ -104,6 +107,7 @@ export const deleteInterviews = (id) => {
 
 export const updateInterviews = (interviewId, interview) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(updateInterviewsFetching());
     return fetch(`${URL}/${interviewId}`, {
       method: 'PUT',

@@ -1,45 +1,35 @@
 import { useLocation, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect } from 'react';
+import { addPostulant } from 'redux/postulants/thunks';
+import { login } from 'redux/auth/thunks';
+import { cleanError } from 'redux/auth/actions';
+import { Form, Field } from 'react-final-form';
 import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import styles from './register.module.css';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Button from 'Components/Shared/Button';
-import { useDispatch, useSelector } from 'react-redux';
-import { getPostulantById, addPostulant, updatePostulant } from 'redux/postulants/thunks';
-import { clearPostulantsError, cleanSelectedItem } from 'redux/postulants/actions';
-import { Form, Field } from 'react-final-form';
 
 function PostulantsForm() {
   const dispatch = useDispatch();
-  const selectedItem = useSelector((store) => store.postulants.selectedItem);
   const error = useSelector((store) => store.postulants.error);
   const loading = useSelector((store) => store.postulants.isLoading);
   const history = useHistory();
-  const params = useQuery();
-  const postulantId = params.get('id');
-
-  function useQuery() {
-    const { search } = useLocation();
-    return React.useMemo(() => new URLSearchParams(search), [search]);
-  }
-
-  useEffect(() => {
-    if (postulantId) {
-      dispatch(getPostulantById(postulantId));
-    }
-    return () => {
-      dispatch(cleanSelectedItem());
-    };
-  }, []);
 
   const onSubmit = (formValues) => {
-    if (postulantId) {
-      dispatch(updatePostulant(postulantId, formValues));
-    } else {
-      dispatch(addPostulant(formValues));
-    }
-    history.replace('/admin/postulants/list');
+    const credentials = {
+      email: formValues.email,
+      password: formValues.password
+    };
+    console.log(credentials);
+    dispatch(addPostulant(formValues))
+      .then(() => dispatch(login(credentials)))
+      .then((response) => {
+        if (response) {
+          history.push(`/postulant?id=${response.payload.mongoDBID}`);
+        }
+      });
   };
 
   const required = (value) => (value ? undefined : 'Required');
@@ -64,7 +54,6 @@ function PostulantsForm() {
     <div className={styles.container}>
       <Form
         onSubmit={onSubmit}
-        initialValues={selectedItem}
         render={(formProps) => (
           <form className={styles.form} onSubmit={formProps.handleSubmit}>
             <h2>Form</h2>
@@ -222,25 +211,9 @@ function PostulantsForm() {
                 component={Input}
               />
             </div>
-            <Button
-              className={styles.button}
-              content={'SAVE'}
-              disabled={
-                loading ||
-                formProps.submitting ||
-                formProps.pristine ||
-                formProps.hasValidationErrors
-              }
-            />
+            <Button className={styles.button} content={'SAVE'} />
           </form>
         )}
-      />
-      <Modal
-        title="Something went wrong!"
-        subtitle={error}
-        show={error}
-        closeModal={() => dispatch(clearPostulantsError())}
-        type={'Error'}
       />
     </div>
   );

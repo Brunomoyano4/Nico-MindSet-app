@@ -20,10 +20,11 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/applications`;
-const token = sessionStorage.getItem('token');
+let token;
 
 export const getApplications = () => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getApplicationsFetching());
     return fetch(URL, { headers: { token } })
       .then((response) => {
@@ -45,6 +46,7 @@ export const getApplications = () => {
 
 export const getApplicationsById = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getApplicationsByIdFetching());
     return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
@@ -67,6 +69,7 @@ export const getApplicationsById = (id) => {
 
 export const addApplications = (application) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(addApplicationsFetching());
     return fetch(`${process.env.REACT_APP_API}/applications`, {
       method: 'POST',
@@ -95,6 +98,7 @@ export const addApplications = (application) => {
 
 export const updateApplications = (applicationId, application) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(updateApplicationsFetching());
     return fetch(`${URL}/${applicationId}`, {
       method: 'PUT',
@@ -123,6 +127,7 @@ export const updateApplications = (applicationId, application) => {
 
 export const deleteApplications = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(deleteApplicationsFetching());
     fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
@@ -141,6 +146,7 @@ export const deleteApplications = (id) => {
 
 export const getApplicationsOptions = (resource) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getApplicationsOptionsFetching());
     fetch(`${process.env.REACT_APP_API}/${resource}`, { headers: { token } })
       .then(async (res) => {

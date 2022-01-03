@@ -20,10 +20,11 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/sessions`;
-const token = sessionStorage.getItem('token');
+let token;
 
 export const getSessions = () => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getSessionsFetching());
     return fetch(URL, { headers: { token } })
       .then((response) => {
@@ -45,6 +46,7 @@ export const getSessions = () => {
 
 export const getSessionById = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getSessionByIdFetching());
     return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
@@ -67,6 +69,7 @@ export const getSessionById = (id) => {
 
 export const getSessionsOptions = (resource) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getSessionsOptionsFetching());
     fetch(`${process.env.REACT_APP_API}/${resource}`, { headers: { token } })
       .then(async (res) => {
@@ -85,6 +88,7 @@ export const getSessionsOptions = (resource) => {
 
 export const addSession = (session) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(addSessionsFetching());
     return fetch(URL, {
       method: 'POST',
@@ -113,6 +117,7 @@ export const addSession = (session) => {
 
 export const updateSession = (sessionId, session) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(updateSessionsFetching());
     return fetch(`${URL}/${sessionId}`, {
       method: 'PUT',
@@ -141,6 +146,7 @@ export const updateSession = (sessionId, session) => {
 
 export const deleteSession = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(deleteSessionsFetching());
     fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
