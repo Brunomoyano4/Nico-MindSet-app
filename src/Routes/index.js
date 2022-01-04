@@ -14,7 +14,6 @@ const Routes = () => {
           <Route path="/admin" component={AdminRoutes} />
           <Route path="/auth" component={AuthRoutes} />
           <Redirect to="/auth" />
-          {/* <Redirect to="/postulant?id=61bd751a1d95a30cbccee7c2" /> */}
         </Switch>
       </Suspense>
     </Router>

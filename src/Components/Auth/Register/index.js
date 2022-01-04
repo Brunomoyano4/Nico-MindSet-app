@@ -18,7 +18,6 @@ function PostulantsForm() {
       email: formValues.email,
       password: formValues.password
     };
-    console.log(credentials);
     dispatch(addPostulant(formValues))
       .then(() => dispatch(login(credentials)))
       .then((response) => {
