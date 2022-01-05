@@ -3,6 +3,7 @@ import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-d
 
 const AdminRoutes = lazy(() => import('Routes/admin'));
 const PostulantRoutes = lazy(() => import('Routes/postulant'));
+const AuthRoutes = lazy(() => import('Routes/auth'));
 
 const Routes = () => {
   return (
@@ -11,7 +12,8 @@ const Routes = () => {
         <Switch>
           <Route path="/postulant" exact component={PostulantRoutes} />
           <Route path="/admin" component={AdminRoutes} />
-          <Redirect to="/postulant?id=61bd751a1d95a30cbccee7c2" />
+          <Route path="/auth" component={AuthRoutes} />
+          <Redirect to="/auth" />
         </Switch>
       </Suspense>
     </Router>

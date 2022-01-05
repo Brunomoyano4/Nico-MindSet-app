@@ -17,11 +17,13 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/admins`;
+let token;
 
 export const getAdmins = () => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getAdminsFetching());
-    return fetch(URL)
+    return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {
@@ -41,8 +43,9 @@ export const getAdmins = () => {
 
 export const getAdminById = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getAdminByIdFetching());
-    return fetch(`${URL}/${id}`)
+    return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -63,11 +66,13 @@ export const getAdminById = (id) => {
 
 export const addAdmin = (admin) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(addAdminsFetching());
     return fetch(URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(admin)
     })
@@ -90,11 +95,13 @@ export const addAdmin = (admin) => {
 
 export const updateAdmin = (adminId, admin) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(updateAdminsFetching());
     return fetch(`${URL}/${adminId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(admin)
     })
@@ -117,8 +124,9 @@ export const updateAdmin = (adminId, admin) => {
 
 export const deleteAdmin = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(deleteAdminsFetching());
-    fetch(`${URL}/${id}`, { method: 'DELETE' })
+    fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {

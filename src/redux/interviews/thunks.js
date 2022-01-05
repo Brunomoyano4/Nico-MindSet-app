@@ -17,11 +17,13 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/interviews`;
+let token;
 
 export const getInterviews = () => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getInterviewsFetching());
-    return fetch(URL)
+    return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {
@@ -41,8 +43,9 @@ export const getInterviews = () => {
 
 export const getInterviewById = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getInterviewByIdFetching());
-    return fetch(`${URL}/${id}`)
+    return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -63,11 +66,13 @@ export const getInterviewById = (id) => {
 
 export const addInterviews = (interview) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(addInterviewsFetching());
     fetch(`${process.env.REACT_APP_API}/interviews`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(interview)
     })
@@ -83,8 +88,9 @@ export const addInterviews = (interview) => {
 
 export const deleteInterviews = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(deleteInterviewsFetching());
-    fetch(`${process.env.REACT_APP_API}/interviews/${id}`, { method: 'DELETE' })
+    fetch(`${process.env.REACT_APP_API}/interviews/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {
@@ -101,11 +107,13 @@ export const deleteInterviews = (id) => {
 
 export const updateInterviews = (interviewId, interview) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(updateInterviewsFetching());
     return fetch(`${URL}/${interviewId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(interview)
     })

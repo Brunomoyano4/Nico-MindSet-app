@@ -24,7 +24,6 @@ function Psychologist({ psychologist }) {
           e.stopPropagation();
           dispatch(deletePsychologist(psychologist._id));
           setShowConfirmModal(false);
-          history.go(0);
         }}
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}

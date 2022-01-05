@@ -17,11 +17,13 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/postulants`;
+let token;
 
 export const getPostulants = () => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getPostulantsFetching());
-    return fetch(URL)
+    return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -42,7 +44,8 @@ export const getPostulants = () => {
 export const getPostulantById = (id) => {
   return (dispatch) => {
     dispatch(getPostulantsByIdFetching());
-    return fetch(`${URL}/${id}`)
+    token = sessionStorage.getItem('token');
+    return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -62,11 +65,13 @@ export const getPostulantById = (id) => {
 
 export const addPostulant = (postulant) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(addPostulantsFetching());
-    return fetch(URL, {
+    return fetch(`${process.env.REACT_APP_API}/auth/register`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(postulant)
     })
@@ -89,11 +94,13 @@ export const addPostulant = (postulant) => {
 
 export const updatePostulant = (postulantId, postulant) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(updatePostulantsFetching());
     return fetch(`${URL}/${postulantId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(postulant)
     })
@@ -116,8 +123,9 @@ export const updatePostulant = (postulantId, postulant) => {
 
 export const deletePostulant = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(deletePostulantsFetching());
-    fetch(`${URL}/${id}`, { method: 'DELETE' })
+    fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {

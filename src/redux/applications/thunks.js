@@ -20,11 +20,13 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/applications`;
+let token;
 
 export const getApplications = () => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getApplicationsFetching());
-    return fetch(URL)
+    return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -44,8 +46,9 @@ export const getApplications = () => {
 
 export const getApplicationsById = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getApplicationsByIdFetching());
-    return fetch(`${URL}/${id}`)
+    return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -66,11 +69,13 @@ export const getApplicationsById = (id) => {
 
 export const addApplications = (application) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(addApplicationsFetching());
     return fetch(`${process.env.REACT_APP_API}/applications`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(application)
     })
@@ -93,11 +98,13 @@ export const addApplications = (application) => {
 
 export const updateApplications = (applicationId, application) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(updateApplicationsFetching());
     return fetch(`${URL}/${applicationId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(application)
     })
@@ -120,8 +127,9 @@ export const updateApplications = (applicationId, application) => {
 
 export const deleteApplications = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(deleteApplicationsFetching());
-    fetch(`${URL}/${id}`, { method: 'DELETE' })
+    fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {
@@ -138,8 +146,9 @@ export const deleteApplications = (id) => {
 
 export const getApplicationsOptions = (resource) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getApplicationsOptionsFetching());
-    fetch(`${process.env.REACT_APP_API}/${resource}`)
+    fetch(`${process.env.REACT_APP_API}/${resource}`, { headers: { token } })
       .then(async (res) => {
         if (res.status === 200) {
           const data = await res.json();

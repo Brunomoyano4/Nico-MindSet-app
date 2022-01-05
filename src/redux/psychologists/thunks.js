@@ -17,11 +17,13 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/psychologists`;
+let token;
 
 export const getPsychologists = () => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getPsychologistsFetching());
-    return fetch(URL)
+    return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -41,8 +43,9 @@ export const getPsychologists = () => {
 
 export const getPsychologistById = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getPsychologistByIdFetching());
-    return fetch(`${URL}/${id}`)
+    return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -63,11 +66,13 @@ export const getPsychologistById = (id) => {
 
 export const addPsychologist = (psychologist) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(addPsychologistFetching());
     return fetch(URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(psychologist)
     })
@@ -90,11 +95,13 @@ export const addPsychologist = (psychologist) => {
 
 export const updatePsychologist = (psychologistId, psychologist) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(updatePsychologistFetching());
     return fetch(`${URL}/${psychologistId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(psychologist)
     })
@@ -117,8 +124,9 @@ export const updatePsychologist = (psychologistId, psychologist) => {
 
 export const deletePsychologist = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(deletePsychologistFetching());
-    fetch(`${URL}/${id}`, { method: 'DELETE' })
+    fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {

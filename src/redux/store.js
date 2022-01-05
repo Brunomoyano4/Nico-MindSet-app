@@ -9,6 +9,7 @@ import positionsReducer from './positions/reducer';
 import applicationsReducer from './applications/reducer';
 import sessionsReducer from './sessions/reducer';
 import adminsReducer from './admins/reducer';
+import authReducer from './auth/reducer';
 
 const rootReducer = combineReducers({
   //here the reducers
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   positions: positionsReducer,
   applications: applicationsReducer,
   interviews: interviewsReducer,
-  sessions: sessionsReducer
+  sessions: sessionsReducer,
+  auth: authReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

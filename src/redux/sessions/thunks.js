@@ -20,11 +20,13 @@ import {
 } from './actions';
 
 const URL = `${process.env.REACT_APP_API}/sessions`;
+let token;
 
 export const getSessions = () => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getSessionsFetching());
-    return fetch(URL)
+    return fetch(URL, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -44,8 +46,9 @@ export const getSessions = () => {
 
 export const getSessionById = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getSessionByIdFetching());
-    return fetch(`${URL}/${id}`)
+    return fetch(`${URL}/${id}`, { headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ msg }) => {
@@ -66,8 +69,9 @@ export const getSessionById = (id) => {
 
 export const getSessionsOptions = (resource) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(getSessionsOptionsFetching());
-    fetch(`${process.env.REACT_APP_API}/${resource}`)
+    fetch(`${process.env.REACT_APP_API}/${resource}`, { headers: { token } })
       .then(async (res) => {
         if (res.status === 200) {
           const data = await res.json();
@@ -84,11 +88,13 @@ export const getSessionsOptions = (resource) => {
 
 export const addSession = (session) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(addSessionsFetching());
     return fetch(URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(session)
     })
@@ -111,11 +117,13 @@ export const addSession = (session) => {
 
 export const updateSession = (sessionId, session) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(updateSessionsFetching());
     return fetch(`${URL}/${sessionId}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        token
       },
       body: JSON.stringify(session)
     })
@@ -138,8 +146,9 @@ export const updateSession = (sessionId, session) => {
 
 export const deleteSession = (id) => {
   return (dispatch) => {
+    token = sessionStorage.getItem('token');
     dispatch(deleteSessionsFetching());
-    fetch(`${URL}/${id}`, { method: 'DELETE' })
+    fetch(`${URL}/${id}`, { method: 'DELETE', headers: { token } })
       .then((response) => {
         if (response.status !== 200) {
           return response.json().then(({ message }) => {

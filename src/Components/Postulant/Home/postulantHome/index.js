@@ -40,9 +40,9 @@ function PostulantHome() {
 
   useEffect(() => {
     if (postulant) {
-      setAvailableValue(postulant.availabilty);
+      setAvailableValue(postulant.availability);
     }
-  }, [postulant?.availabilty]);
+  }, [postulant?.availability]);
 
   useEffect(() => {
     dispatch(getSessions());
@@ -103,7 +103,6 @@ function PostulantHome() {
             </div>
           )}
           <h2 className={styles.userName}>
-            {console.log(postulant)}
             {postulant?.firstName || '-'} {postulant?.lastName || '-'}
           </h2>
           <div className={styles.prof}>
@@ -127,7 +126,7 @@ function PostulantHome() {
           <div className={styles.toggleSwitch}>
             <ToggleSwitch
               label="Available"
-              toggled={postulant?.availabilty}
+              toggled={postulant?.availability}
               onClick={changeAvailability}
               className={styles.toggled}
             />
