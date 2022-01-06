@@ -1,11 +1,10 @@
 import styles from './postulantHome.module.css';
 import Modal from 'Components/Shared/Modal';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getPostulantById, updatePostulant } from 'redux/postulants/thunks';
 import { deleteSession, getSessions } from 'redux/sessions/thunks';
 import { useLocation } from 'react-router-dom';
-import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPsychologistById } from 'redux/psychologists/thunks';
 
@@ -18,7 +17,6 @@ function PostulantHome() {
   const loading = {
     sessionsLoading: useSelector((store) => store.sessions.isLoading)
   };
-  const history = useHistory();
   const dispatch = useDispatch();
   const params = useQuery();
   const psychologistId = params.get('id');
