@@ -60,23 +60,6 @@
   height: auto;
 }
 
-.statusInfo {
-  padding: 5px;
-  text-transform: capitalize;
-}
-
-.succesfullSession {
-  color: #27ae60;
-}
-
-.assignedSession {
-  color: #0068bd;
-}
-
-.cancelledSession {
-  color: crimson;
-}
-
 .userInfo {
   padding: 5px;
   text-transform: uppercase;
@@ -102,6 +85,36 @@
   text-transform: uppercase;
   justify-content: center;
   text-align: center;
+}
+
+.sessionCard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #d1d1d1;
+  border-radius: 3%;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.5);
+  width: 40%;
+  margin: 3% 0;
+  padding: 3%;
+  max-height: 620px;
+  overflow-y: scroll;
+}
+
+.statusInfo {
+  padding: 5px;
+  text-transform: capitalize;
+}
+
+.succesfullSession {
+  color: #27ae60;
+}
+
+.assignedSession {
+  color: #0068bd;
+}
+
+.cancelledSession {
+  color: crimson;
 }
 
 .btn {
@@ -141,7 +154,12 @@
   padding: 5px;
   max-width: 150px;
   border-radius: 3%;
-  box-shadow: 1px 1px 1px 1px rgba(116, 115, 115, 0.233);
+  box-shadow: 2px 2px 2px 2px rgba(116, 115, 115, 0.233);
+}
+
+.cardsInfo:hover {
+  background: #eeeeee;
+  cursor: pointer;
 }
 
 .cardsInfoTitle {
@@ -157,6 +175,7 @@
   border-radius: 5%;
   margin: 4px;
   padding: 5px;
+  cursor: pointer;
 }
 
 .cardsInfo button:hover {
@@ -169,7 +188,38 @@
   padding-top: 15px;
 }
 
+.sessionsButtonsContainer {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 2px solid olive;
+}
+
 .sessionsContainer {
   display: flex;
   flex-wrap: wrap;
+}
+
+.sessionsButton {
+  padding: 5px 40px 5px 40px;
+  text-transform: uppercase;
+  text-align: center;
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  width: 50%;
+  font-size: 15px;
+  font-weight: 800;
+}
+.verticalLine {
+  display: inline-block;
+  border-left: 1px solid olive;
+  margin: 0 10px;
+  height: 30px;
+}
+.sessionsButton:hover {
+  background: #eeeeee;
+}
+
+.sessionInfoBtn {
+  background: transparent;
 }

@@ -11,6 +11,7 @@ import { getPsychologistById } from 'redux/psychologists/thunks';
 
 function PostulantHome() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showPrevSessions, setShowPrevSessions] = useState(false);
   const [selectedSession, setselectedSession] = useState('');
   const sessions = useSelector((store) => store.sessions.list);
   const psychologist = useSelector((store) => store.psychologists.selectedItem);
@@ -21,6 +22,7 @@ function PostulantHome() {
   const dispatch = useDispatch();
   const params = useQuery();
   const psychologistId = params.get('id');
+  const today = new Date();
 
   function useQuery() {
     const { search } = useLocation();
@@ -94,42 +96,77 @@ function PostulantHome() {
             </button>
           </div>
         </div>
-        <div className={styles.divContainer}>
-          <div className={styles.sessionCard}>
-            <div className={styles.cardsInfoContainer}>
-              <h2 className={styles.cardsInfoTitle}>scheduled sessions</h2>
-              <div>
-                {loading.sessionsLoading && (
-                  <div className={styles.spinnerContainer}>
-                    <LoadingSpinner />
-                  </div>
-                )}
-                {!loading && !sessions.length && (
-                  <h3 className={styles.nothingHere}>No sessions yet!</h3>
-                )}
-              </div>
+        <div className={styles.sessionCard}>
+          <div className={styles.cardsInfoContainer}>
+            <div className={styles.sessionsButtonsContainer}>
+              <button className={styles.sessionsButton} onClick={() => setShowPrevSessions(false)}>
+                scheduled sessions
+              </button>
+              <span className={styles.verticalLine} />
+              <button className={styles.sessionsButton} onClick={() => setShowPrevSessions(true)}>
+                previous sessions
+              </button>
             </div>
-            <div className={styles.sessionsContainer}>
-              {sessions.map((session, i) => {
-                const today = new Date();
-                const sessionDate = new Date(session.date);
-                const formatedSessionsDate = sessionDate.toLocaleDateString();
-                return (
-                  <>
-                    {sessionDate >= today && (
-                      <div key={i} className={styles.cardsInfo}>
-                        <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
-                        <span className={styles.postulantInfo}>
-                          with: {`${session.postulant?.firstName} ${session.postulant?.lastName}`}
-                        </span>
-                        <h3 className={styles.statusInfo}>status: {checkSessionStatus(session)}</h3>
-                        <button className={styles.sessionsBtn}>MORE INFO</button>
-                      </div>
-                    )}
-                  </>
-                );
-              })}
+            <div>
+              {loading.sessionsLoading && (
+                <div className={styles.spinnerContainer}>
+                  <LoadingSpinner />
+                </div>
+              )}
+              {!loading && !sessions.length && (
+                <h3 className={styles.nothingHere}>No sessions yet!</h3>
+              )}
             </div>
+          </div>
+          <div className={styles.sessionsContainer}>
+            {!showPrevSessions ? (
+              <>
+                {sessions.map((session, i) => {
+                  const today = new Date();
+                  const sessionDate = new Date(session.date);
+                  const formatedSessionsDate = sessionDate.toLocaleDateString();
+                  return (
+                    <>
+                      {session.psychology._id === psychologistId && sessionDate >= today && (
+                        <div key={i} className={styles.cardsInfo}>
+                          <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
+                          <span className={styles.postulantInfo}>
+                            with: {`${session.postulant?.firstName} ${session.postulant?.lastName}`}
+                          </span>
+                          <h3 className={styles.statusInfo}>
+                            status: {checkSessionStatus(session)}
+                          </h3>
+                          <button className={styles.sessionInfoBtn}>MORE INFO</button>
+                        </div>
+                      )}
+                    </>
+                  );
+                })}
+              </>
+            ) : (
+              <>
+                {sessions.map((session, i) => {
+                  const sessionDate = new Date(session.date);
+                  const formatedSessionsDate = sessionDate.toLocaleDateString();
+                  return (
+                    <>
+                      {session.psychology._id === psychologistId && sessionDate <= today && (
+                        <div key={i} className={styles.cardsInfo}>
+                          <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
+                          <span className={styles.postulantInfo}>
+                            with: {`${session.postulant?.firstName} ${session.postulant?.lastName}`}
+                          </span>
+                          <h3 className={styles.statusInfo}>
+                            status: {checkSessionStatus(session)}
+                          </h3>
+                          <button className={styles.sessionInfoBtn}>MORE INFO</button>
+                        </div>
+                      )}
+                    </>
+                  );
+                })}
+              </>
+            )}
           </div>
         </div>
       </section>
