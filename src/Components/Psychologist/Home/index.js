@@ -13,7 +13,7 @@ function PostulantHome() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedSession, setselectedSession] = useState('');
   const sessions = useSelector((store) => store.sessions.list);
-  const psychologist = useSelector((store) => store.postulants.selectedItem);
+  const psychologist = useSelector((store) => store.psychologists.selectedItem);
   const loading = {
     sessionsLoading: useSelector((store) => store.sessions.isLoading)
   };
@@ -39,6 +39,19 @@ function PostulantHome() {
     dispatch(deleteSession(selectedSession));
   };
 
+  const checkSessionStatus = (session) => {
+    if (session) {
+      switch (session.status) {
+        case 'assigned':
+          return <span className={styles.assignedSession}>{session.status}</span>;
+        case 'successful':
+          return <span className={styles.succesfullSession}>{session.status}</span>;
+        case 'cancelled':
+          return <span className={styles.cancelledSession}>{session.status}</span>;
+      }
+    }
+  };
+
   return (
     <>
       <Modal
@@ -57,7 +70,7 @@ function PostulantHome() {
             <img
               className={styles.userImg}
               id="userImg"
-              src="https://pbs.twimg.com/profile_images/1198892618429739008/hcHxthRT_400x400.jpg"
+              src="https://minimaltoolkit.com/images/randomdata/female/2.jpg"
               alt="exampleAvatar"
             ></img>
           </div>
@@ -69,70 +82,51 @@ function PostulantHome() {
           <h2 className={styles.userName}>
             {psychologist?.firstName || '-'} {psychologist?.lastName || '-'}
           </h2>
-          <h2>psychologist</h2>
           <h2 className={styles.userInfo}>
-            {psychologist?.city}, {psychologist?.province} - {psychologist?.country}
+            psychologist <span className={styles.userInfo}>certified</span>
           </h2>
           <div className={styles.btnContainer}>
             <button onClick={() => console.log('EditBtn')} className={styles.btn}>
-              EDIT
+              settings
+            </button>
+            <button onClick={() => console.log('EditBtn')} className={styles.btn}>
+              edit
             </button>
           </div>
         </div>
         <div className={styles.divContainer}>
-          <div className={styles.cardsInfoContainer}>
-            <h2 className={styles.cardsInfoTitle}>AVAILABLE SESSIONS</h2>
-            <div>
-              {loading.sessionsLoading && (
-                <div className={styles.spinnerContainer}>
-                  <LoadingSpinner />
-                </div>
-              )}
-              {!loading && !sessions.length && (
-                <h3 className={styles.nothingHere}>No sessions yet!</h3>
-              )}
+          <div className={styles.sessionCard}>
+            <div className={styles.cardsInfoContainer}>
+              <h2 className={styles.cardsInfoTitle}>scheduled sessions</h2>
+              <div>
+                {loading.sessionsLoading && (
+                  <div className={styles.spinnerContainer}>
+                    <LoadingSpinner />
+                  </div>
+                )}
+                {!loading && !sessions.length && (
+                  <h3 className={styles.nothingHere}>No sessions yet!</h3>
+                )}
+              </div>
+            </div>
+            <div className={styles.sessionsContainer}>
               {sessions.map((session, i) => {
+                const today = new Date();
                 const sessionDate = new Date(session.date);
                 const formatedSessionsDate = sessionDate.toLocaleDateString();
                 return (
-                  <div key={i} className={styles.cardsInfo}>
-                    <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
-                    <button className={styles.sessionsBtn}>TAKE</button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-        <div className={styles.divContainer}>
-          <div className={styles.infoCardsContainer}>
-            <h2 className={styles.cardsInfoTitle}>JOB INTERVIEWS</h2>
-            <div>
-              {loading.interviewsLoading && (
-                <div className={styles.spinnerContainer}>
-                  <LoadingSpinner />
-                </div>
-              )}
-              {!loading && !sessions.length && (
-                <h3 className={styles.nothingHere}>No sessions yet!</h3>
-              )}
-              {sessions.map((interview, i) => {
-                return (
-                  <div key={i} className={styles.cardsInfo}>
-                    <h3>{`${interview.dateTime} ${interview.status}`}</h3>
-                    {interview.status === 'pending' && (
-                      <button
-                        className={styles.sessionsBtn}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setselectedSession(interview._id);
-                          setShowConfirmModal(true);
-                        }}
-                      >
-                        CANCEL
-                      </button>
+                  <>
+                    {sessionDate >= today && (
+                      <div key={i} className={styles.cardsInfo}>
+                        <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
+                        <span className={styles.postulantInfo}>
+                          with: {`${session.postulant?.firstName} ${session.postulant?.lastName}`}
+                        </span>
+                        <h3 className={styles.statusInfo}>status: {checkSessionStatus(session)}</h3>
+                        <button className={styles.sessionsBtn}>MORE INFO</button>
+                      </div>
                     )}
-                  </div>
+                  </>
                 );
               })}
             </div>
