@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 225px;
+  height: 50px;
+  min-width: none;
+  background-color: #72bc8e;
+}
+
+.brand {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.nameColor {
+  color: black;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5%;
+  min-height: 100px;
+  background-color: #72bc8e;
+}
+
+.appName {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  padding-right: 25%;
+}
+
+.titles{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.title{
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  color:white;
+  font-weight: 800;
+  font-size: 25px;
+}
+
+.logOutButton{
+  font-size: 50px;
+  font-weight: 800;
+  text-decoration: none;
+}

@@ -1,0 +1,37 @@
+.wrapper .sideBar{
+      background: #27ae60;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 225px;
+      height: 90%;
+      margin-top:100px;
+      margin-bottom: 100px;
+      transition: all 0.5s ease;
+}
+
+.asideMenu {
+    display: block;
+  }
+
+
+.routes {
+  display: block;
+  flex-wrap: wrap;
+  list-style-type: none;
+  margin: 15px;
+}
+
+.routes > li, a {
+  /* margin: 10%; */
+  padding: 5%;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: capitalize;
+  color: white;
+}
+
+a:hover {
+  color: aliceblue;
+}
