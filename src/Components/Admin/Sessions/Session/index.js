@@ -40,7 +40,7 @@ function Session({ session }) {
         <td>{`${session?.postulant?.firstName} ${session?.postulant?.lastName}`}</td>
         <td>{session.time}</td>
         <td>{session.date}</td>
-        <td>{session.stat}</td>
+        <td>{session.status}</td>
         <td>
           <DeleteBtn
             onClick={(e) => {

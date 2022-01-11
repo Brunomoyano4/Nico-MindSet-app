@@ -133,7 +133,7 @@ function PostulantHome() {
           </div>
           <div className={styles.btnContainer}>
             <button onClick={EditBtn} className={styles.btn}>
-              EDIT
+              edit
             </button>
           </div>
         </div>

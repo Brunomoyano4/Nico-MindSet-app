@@ -22,7 +22,7 @@ function AdminsForm() {
             history.push(`/postulant?id=${response.payload.mongoDBID}`);
             break;
           case 'psychologist':
-            history.push(`/postulant?id=${response.payload.mongoDBID}`);
+            history.push(`/psychologists?id=${response.payload.mongoDBID}`);
             break;
           case 'admin':
             history.push('/admin');
