@@ -1,6 +1,9 @@
 .container {
   display: flex;
   flex-direction: column;
+  /* position: fixed; */
+  /* bottom: 0;
+  width: 100%; */
   align-items: center;
 }
 
@@ -19,7 +22,7 @@
   align-items: center;
   height: 50px;
   width: 90%;
-  padding: 0 5%;
+  padding: 0 5vw;
   background-color: #f2f2f2;
 }
 
@@ -29,8 +32,8 @@
   color: black;
 }
 
-.socialIcon {
-  margin-left: 5px;
+.itemContainer{
+  display: flex;
 }
 
 @media screen and (min-width: 750px) {

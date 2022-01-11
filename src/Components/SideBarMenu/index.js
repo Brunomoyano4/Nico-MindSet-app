@@ -6,6 +6,9 @@ function SideBarMenu(props) {
     <aside>
       <div className={styles.wrapper}>
         <div className={styles.sideBar}>
+          <Link to="/" className={styles.appName}>
+            Mind<span className={styles.nameColor}>SET</span>
+          </Link>
           <ul className={styles.routes}>
             {props.routes.map((route) => (
               <li key={route.name}>

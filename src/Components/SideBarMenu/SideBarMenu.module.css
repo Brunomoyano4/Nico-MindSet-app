@@ -1,14 +1,29 @@
-.wrapper .sideBar{
+.wrapper {
       background: #27ae60;
       position: fixed;
       top: 0;
       left: 0;
       width: 225px;
-      height: 90%;
-      margin-top:100px;
-      margin-bottom: 100px;
+      height: 100%;
       transition: all 0.5s ease;
 }
+
+.sideBar{
+  margin-top: 15%;
+}
+
+.nameColor {
+  color: black;
+}
+
+.appName {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  padding-right: 25%;
+}
+
 
 .asideMenu {
     display: block;
@@ -19,8 +34,9 @@
   display: block;
   flex-wrap: wrap;
   list-style-type: none;
-  margin: 15px;
+  margin-top: 30%;
 }
+
 
 .routes > li, a {
   /* margin: 10%; */
@@ -33,5 +49,5 @@
 }
 
 a:hover {
-  color: aliceblue;
+  color: rgb(18, 102, 175);
 }
