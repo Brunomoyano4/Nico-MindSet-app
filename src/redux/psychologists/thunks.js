@@ -68,7 +68,7 @@ export const addPsychologist = (psychologist) => {
   return (dispatch) => {
     token = sessionStorage.getItem('token');
     dispatch(addPsychologistFetching());
-    return fetch(URL, {
+    return fetch(`${process.env.REACT_APP_API}/auth/register/psychologist`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
