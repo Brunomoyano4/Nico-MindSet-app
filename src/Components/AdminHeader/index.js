@@ -5,7 +5,7 @@ import LogOutButton from 'Components/Shared/ButtonLogOut';
 function AdminHeader(props) {
   return (
     <header>
-      <nav className={styles.navbar}>
+      <nav className={styles.container}>
         <div className={styles.titles}>
           {/* <Link to="/" className={styles.appName}>
             Mind<span className={styles.nameColor}>SET</span>

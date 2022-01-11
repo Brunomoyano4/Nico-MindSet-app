@@ -8,7 +8,7 @@ const AdminLayout = (props) => {
   return (
     <div className={styles.container}>
       <AdminHeader className={styles.navbar} routes={routes} authenticated={props.authenticated} />
-      {props.children}
+      <div className={styles.entitiesContainer}>{props.children}</div>
       <SideBarMenu
         className={styles.asideMenu}
         routes={routes}

@@ -1,7 +1,8 @@
-.navbar {
+.container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-left: 15vw;
   padding: 0 5%;
   min-height: 100px;
   background-color: #72bc8e;
@@ -21,7 +22,6 @@ h1{
   font-weight: bold;
   color: white;
   text-decoration: none;
-  padding-right: 25%;
 }
 
 .titles{
@@ -36,6 +36,7 @@ h1{
   color:white;
   font-weight: 800;
   font-size: 25px;
+  margin-left: 15vw;
 }
 
 .logOutButton{
