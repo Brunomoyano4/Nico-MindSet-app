@@ -125,12 +125,12 @@
   border: none;
   margin: 20px;
   background-color: #27ae60;
-  text-transform: uppercase;
   color: #ffff;
   font-size: 20px;
   width: 150px;
   height: 50px;
   cursor: pointer;
+  text-transform: uppercase;
 }
 
 .btn:hover {

@@ -137,7 +137,7 @@ function PostulantHome() {
             </button>
           </div>
         </div>
-        {!postulant.profile ? (
+        {postulant.profiles?.length <= 0 ? (
           <div className={styles.divContainer}>
             <div className={styles.cardsInfoContainer}>
               <h2 className={styles.cardsInfoTitle}>AVAILABLE SESSIONS</h2>
