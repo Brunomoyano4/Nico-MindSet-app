@@ -1,5 +1,6 @@
-import styles from './postulantHome.module.css';
+import styles from './psychologistHome.module.css';
 import Modal from 'Components/Shared/Modal';
+import Button from 'Components/Shared/Button';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import React, { useEffect, useState } from 'react';
 import { getPostulantById, updatePostulant } from 'redux/postulants/thunks';
@@ -8,13 +9,14 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPsychologistById } from 'redux/psychologists/thunks';
 
-function PostulantHome() {
+function PsychologistHome() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showPrevSessions, setShowPrevSessions] = useState(false);
   const [selectedSession, setselectedSession] = useState('');
   const sessions = useSelector((store) => store.sessions.list);
   const psychologist = useSelector((store) => store.psychologists.selectedItem);
   const loading = {
+    psychologistLoading: useSelector((store) => store.psychologists.isLoading),
     sessionsLoading: useSelector((store) => store.sessions.isLoading)
   };
   const dispatch = useDispatch();
@@ -74,7 +76,7 @@ function PostulantHome() {
               alt="exampleAvatar"
             ></img>
           </div>
-          {loading.postulantLoading && (
+          {loading.sessionsLoading && (
             <div className={styles.spinnerContainer}>
               <LoadingSpinner />
             </div>
@@ -86,12 +88,19 @@ function PostulantHome() {
             psychologist <span className={styles.userInfo}>certified</span>
           </h2>
           <div className={styles.btnContainer}>
-            <button onClick={() => console.log('EditBtn')} className={styles.btn}>
-              settings
-            </button>
-            <button onClick={() => console.log('EditBtn')} className={styles.btn}>
-              edit
-            </button>
+            <Button
+              onClick={() => console.log('SettingsBtn')}
+              className={styles.btn}
+              disabled={loading.psychologistLoading}
+              content={'settings'}
+            />
+            <Button
+              onClick={() => console.log('SettingsBtn')}
+              className={styles.btn}
+              disabled={loading.psychologistLoading}
+              content={'edit'}
+            />
+            {/* <button onClick={() => console.log('EditBtn')} className={styles.btn}></button> */}
           </div>
         </div>
         <div className={styles.sessionCard}>
@@ -172,4 +181,4 @@ function PostulantHome() {
   );
 }
 
-export default PostulantHome;
+export default PsychologistHome;
