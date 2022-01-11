@@ -104,9 +104,9 @@ const SessionsForm = () => {
             />
             <Field
               className={styles.input}
-              label="stat"
-              name="stat"
-              id="stat"
+              label="status"
+              name="status"
+              id="status"
               type="text"
               validate={required}
               component={Input}

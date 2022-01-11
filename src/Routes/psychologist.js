@@ -1,10 +1,10 @@
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import { useEffect } from 'react';
 import { tokenListener } from 'helper/firebase';
-import Home from 'Components/Postulant/Home';
+import Home from 'Components/Psychologist/Home';
 import Layout from 'Components/Layout';
 
-const PostulantRoutes = () => {
+const PsychologistRoutes = () => {
   const { url } = useRouteMatch();
   useEffect(() => {
     tokenListener();
@@ -18,4 +18,4 @@ const PostulantRoutes = () => {
   );
 };
 
-export default PostulantRoutes;
+export default PsychologistRoutes;
