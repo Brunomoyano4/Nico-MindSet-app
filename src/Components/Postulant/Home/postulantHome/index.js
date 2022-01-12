@@ -140,8 +140,8 @@ function PostulantHome() {
         {postulant.profiles?.length <= 0 ? (
           <div className={styles.divContainer}>
             <div className={styles.cardsInfoContainer}>
-              <h2 className={styles.cardsInfoTitle}>AVAILABLE SESSIONS</h2>
-              <div>
+              <h2 className={styles.cardsInfoTitle}>available sessions</h2>
+              <div className={styles.sessionsDiv}>
                 {loading.sessionsLoading && (
                   <div className={styles.spinnerContainer}>
                     <LoadingSpinner />
@@ -156,7 +156,7 @@ function PostulantHome() {
                   return (
                     <div key={i} className={styles.cardsInfo}>
                       <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
-                      <button className={styles.sessionsBtn}>TAKE</button>
+                      <button>take</button>
                     </div>
                   );
                 })}
