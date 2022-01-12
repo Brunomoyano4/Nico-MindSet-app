@@ -50,6 +50,8 @@ function PsychologistHome() {
           return <span className={styles.succesfullSession}>{session.status}</span>;
         case 'cancelled':
           return <span className={styles.cancelledSession}>{session.status}</span>;
+        case 'default':
+          return <span>No sessions yet</span>;
       }
     }
   };
