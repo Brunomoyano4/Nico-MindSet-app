@@ -50,3 +50,36 @@
 a:hover {
   color: rgb(18, 102, 175);
 }
+
+@media (max-width: 1024px) {
+  .wrapper{
+    position: absolute;
+    display: block;
+    margin-top: 8vw;
+    height: 15vh;
+    width: 100vw;
+  }
+  .routes {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    list-style-type: none;
+    margin-top: 0vh;
+
+  }
+  .routes > li, a {
+    margin-top: 0vh;
+    padding: 1%;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: capitalize;
+    color: black;
+  }
+  .sideBar{
+    display: flex;
+    flex-direction: row;
+    margin-top: 2vh;
+    margin-left: 2vw;
+  }
+}

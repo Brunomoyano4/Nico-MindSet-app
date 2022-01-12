@@ -36,7 +36,7 @@ function GetSessions() {
               <th>POSTULANT</th>
               <th>TIME</th>
               <th>DATE</th>
-              <th>STAT</th>
+              <th>STATUS</th>
               <th>ACTION</th>
             </tr>
           </thead>

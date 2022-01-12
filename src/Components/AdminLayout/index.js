@@ -6,16 +6,18 @@ import SideBarMenu from 'Components/SideBarMenu';
 const AdminLayout = (props) => {
   const { routes = [] } = props;
   return (
-    <div className={styles.container}>
-      <AdminHeader className={styles.navbar} routes={routes} authenticated={props.authenticated} />
-      <div className={styles.entitiesContainer}>{props.children}</div>
-      <SideBarMenu
-        className={styles.asideMenu}
-        routes={routes}
-        authenticated={props.authenticated}
-      />
+    <>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <AdminHeader routes={routes} authenticated={props.authenticated} />
+        </div>
+        <div className={styles.sideBar}>
+          <div className={styles.content}>{props.children}</div>
+          <SideBarMenu routes={routes} authenticated={props.authenticated} />
+        </div>
+      </div>
       <Footer />
-    </div>
+    </>
   );
 };
 

@@ -2,20 +2,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 15vw;
-  padding: 0 5%;
-  min-height: 100px;
+  padding: 0 10vw;
+  height: 10vh;
   background-color: #72bc8e;
-  flex-basis: calc(100vw-50px);
+  /* flex-basis: calc(100vw-50px); */
 }
 
 .nameColor {
   color: black;
 }
 
-h1{
-  margin-left: -250px;
-}
 
 .appName {
   font-size: 2rem;
@@ -43,4 +39,40 @@ h1{
   font-size: 50px;
   font-weight: 800;
   text-decoration: none;
+}
+
+@media (max-width: 1024px) {
+  .container{
+    display: block;
+    margin-top: 0;
+  }
+  .nameColor {
+    color: black;
+  }
+  
+  h1{
+    margin-left: 0px;
+  }
+  
+  .appName {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .titles{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  .title{
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    color:white;
+    font-weight: 800;
+    font-size: 25px;
+    margin-left: 15vw;
+  }
 }
