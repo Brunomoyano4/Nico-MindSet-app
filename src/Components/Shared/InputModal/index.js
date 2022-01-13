@@ -1,4 +1,4 @@
-/*import styles from './inputModal.module.css';
+import styles from './inputModal.module.css';
 import React, { useEffect } from 'react';
 import { Form, Field } from 'react-final-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import Input from 'Components/Shared/Input';
 
 function Modal(props) {
   const dispatch = useDispatch();
+  const selectedItem = useSelector((store) => store.postulants.selectedItem);
   const loading = useSelector((store) => store.postulants.isLoading);
   const required = (value) => (value ? undefined : 'Required');
   const mustBeNumber = (value) => (/^\d+$/.test(value) ? undefined : 'Numbers Only');
@@ -47,13 +48,8 @@ function Modal(props) {
     props.closeModal(event);
   };
 
-  const onConfirm = (event) => {
-    event.stopPropagation();
-    props.onConfirm(event);
-  };
-
   const onSubmit = (formValues) => {
-    dispatch(updatePostulant(postulantId, formValues));
+    dispatch(updatePostulant(props.postulant._id, formValues));
 
     history.replace('/admin/postulants/list');
   };
@@ -254,4 +250,4 @@ function Modal(props) {
   );
 }
 
-export default Modal; */
+export default Modal;
