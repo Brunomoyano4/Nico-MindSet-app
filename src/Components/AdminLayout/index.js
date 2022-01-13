@@ -15,8 +15,8 @@ const AdminLayout = (props) => {
           <div className={styles.content}>{props.children}</div>
           <SideBarMenu routes={routes} authenticated={props.authenticated} />
         </div>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 };

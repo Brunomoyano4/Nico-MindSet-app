@@ -9,6 +9,7 @@
 
 .sideBar{
   margin-top: 15%;
+  margin-left: 2vw;
 }
 
 .nameColor {
@@ -26,6 +27,7 @@
 
 .asideMenu {
     display: block;
+
   }
 
 
@@ -38,7 +40,6 @@
 
 
 .routes > li, a {
-  /* margin: 10%; */
   padding: 5%;
   font-size: 1rem;
   font-weight: 600;
@@ -48,7 +49,7 @@
 }
 
 a:hover {
-  color: rgb(18, 102, 175);
+  color: #083d27;
 }
 
 @media (max-width: 1024px) {
@@ -68,18 +69,26 @@ a:hover {
 
   }
   .routes > li, a {
+    display: flex;
     margin-top: 0vh;
     padding: 1%;
     font-size: 0.8rem;
     font-weight: 600;
     text-decoration: none;
     text-transform: capitalize;
-    color: black;
+    color: white;
   }
   .sideBar{
-    display: flex;
-    flex-direction: row;
     margin-top: 2vh;
-    margin-left: 2vw;
+    margin-left: 0vw;
+  }
+  .appName {
+    display: flex;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    padding-left: 2vw;
   }
 }

@@ -19,6 +19,13 @@
   text-align: center;
 }
 
+td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
 .list th,
 .list td {
   padding: 12px 15px;

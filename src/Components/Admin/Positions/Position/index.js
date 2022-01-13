@@ -38,7 +38,7 @@ function Position({ position }) {
       <tr key={position._id} onClick={openEditForm}>
         <td>{position.clientId}</td>
         <td>{position.job}</td>
-        <td>{position.description}</td>
+        <td title={position.description}>{position.description}</td>
         <td>{position.createdAt}</td>
         <td>
           <DeleteBtn

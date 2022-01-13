@@ -5,7 +5,6 @@
   padding: 0 10vw;
   height: 10vh;
   background-color: #72bc8e;
-  /* flex-basis: calc(100vw-50px); */
 }
 
 .nameColor {
@@ -42,37 +41,34 @@
 }
 
 @media (max-width: 1024px) {
+
   .container{
-    display: block;
-    margin-top: 0;
+    height: 15vh;
   }
   .nameColor {
     color: black;
   }
-  
-  h1{
-    margin-left: 0px;
-  }
-  
+
   .appName {
     font-size: 2rem;
     font-weight: bold;
     color: white;
     text-decoration: none;
   }
-  
+
   .titles{
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
   }
-  
+
   .title{
     justify-content: flex-start;
     flex-wrap: wrap;
     color:white;
     font-weight: 800;
-    font-size: 25px;
-    margin-left: 15vw;
+    font-size: 20px;
+    margin-left: 0vw;
   }
+
 }

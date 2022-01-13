@@ -6,12 +6,7 @@
 }
 
 @media (max-width: 1024px) {
-  .container{
-    display: block;
-  }
   .content{
-    margin-top: 23vw;
+    margin-top: 15vw;
   }
-
-
 }

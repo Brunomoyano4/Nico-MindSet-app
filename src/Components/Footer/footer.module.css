@@ -9,9 +9,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 1;
   height: 50px;
   width: 90%;
   padding: 0 5vw;
+  margin-top: auto;
   background-color: #f2f2f2;
 }
 
@@ -19,7 +21,6 @@
   font-size: 0.7rem;
   font-style: italic;
   color: black;
-
 }
 
 .itemContainer{
@@ -29,9 +30,5 @@
 @media screen and (min-width: 750px) {
   .socialIcon {
     margin-left: 15px;
-  }
-  .container{
-    padding: 0;
-    margin: 0;
   }
 }
