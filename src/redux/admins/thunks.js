@@ -68,7 +68,7 @@ export const addAdmin = (admin) => {
   return (dispatch) => {
     token = sessionStorage.getItem('token');
     dispatch(addAdminsFetching());
-    return fetch(URL, {
+    return fetch(`${process.env.REACT_APP_API}/auth/register/admin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
