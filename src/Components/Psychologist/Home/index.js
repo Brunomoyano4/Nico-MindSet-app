@@ -72,13 +72,14 @@ function PsychologistHome() {
         type={'Confirm'}
       />
       <InputModal
-        title="Edit your data"
+        title="Info"
         onConfirm={(e) => {
           e.stopPropagation();
           console.log('llego al confirm');
         }}
         show={showInputModal}
         type={inputState}
+        session={selectedSession}
         closeModal={() => setShowInputModal(false)}
       />
       <section className={styles.container}>
@@ -163,6 +164,7 @@ function PsychologistHome() {
                           <button
                             className={styles.sessionInfoBtn}
                             onClick={() => {
+                              setselectedSession(session);
                               setInputState('postulantProfile');
                               setShowInputModal(true);
                             }}
