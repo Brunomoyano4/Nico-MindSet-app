@@ -1,12 +1,9 @@
 import styles from './inputModal.module.css';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import PostulantForm from 'Components/Admin/Postulants/Form';
 import PsychologistsForm from 'Components/Admin/Psychologists/Form';
-import { updatePostulant } from 'redux/postulants/thunks';
 
 function InputModal(props) {
-  const dispatch = useDispatch();
   if (!props.show) {
     return null;
   }
@@ -16,21 +13,15 @@ function InputModal(props) {
     props.closeModal(event);
   };
 
-  const onSubmit = (formValues) => {
-    dispatch(updatePostulant(props.postulant._id, formValues));
-
-    //history.replace('/admin/postulants/list');
-  };
-
   const setModalContent = (type) => {
     if (type) {
       switch (type) {
         case 'postulant':
           return <PostulantForm edit={true} closeModal={(e) => onCloseModal(e)} />;
         case 'psychologist':
-          return <PsychologistsForm />;
+          return <PsychologistsForm edit={true} closeModal={(e) => onCloseModal(e)} />;
         case 'postulantProfile':
-          return <span className={styles.cancelledSession}>{type.status}</span>;
+          return <span>gika</span>;
       }
     }
   };
@@ -39,6 +30,9 @@ function InputModal(props) {
     <div className={styles.container}>
       <div className={styles.modal}>
         <div className={styles.title}>
+          <span className={styles.closeBtn} onClick={(e) => onCloseModal(e)}>
+            X
+          </span>
           <h2>{props.title}</h2>
           <span className={styles.subtitle}>{props.subtitle}</span>
         </div>

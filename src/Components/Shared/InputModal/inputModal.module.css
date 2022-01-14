@@ -20,13 +20,25 @@
   margin: 0 auto;
   display: block;
   width: 90%;
-  /* Change the max-width value on a media query breakpoint to make this example more "responsive" */ 
+  /* Change the max-width value on a media query breakpoint to make this example more "responsive" */
   max-width: 800px;
   height: 90%;
-  overflow-y: initial !important
+  overflow-y: initial !important;
 }
 
-.title{
+.closeBtn {
+  color: white;
+  margin: 5px 5px 0 0;
+  padding: 5px;
+  border: 2px white solid;
+  border-radius: 5px;
+  align-self: flex-end;
+  cursor: pointer;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
   background-color: #27ae60;
   border-radius: 5px 5px 0px 0px;
 }
@@ -43,7 +55,6 @@
   overflow-y: auto;
 }
 
-
 .modalBody::-webkit-scrollbar {
   width: 15px;
 }
@@ -55,19 +66,19 @@
 }
 
 .modal button:disabled {
-	background: #555;
-	cursor: not-allowed;
+  background: #555;
+  cursor: not-allowed;
 }
 
 .modal button {
-  display:inline-block;
+  display: inline-block;
   justify-content: center;
   box-sizing: border-box;
-	width: 40%;
-	max-width: 580px;
-	padding: 15px;
+  width: 40%;
+  max-width: 580px;
+  padding: 15px;
   margin: 80px 30px;
-	border-top-style: none;
+  border-top-style: none;
   border-right-style: none;
   border-left-style: none;
   color: #fff;
@@ -80,27 +91,27 @@
   justify-content: center;
 }
 
-.confirmBtnModal{
+.confirmBtnModal {
   background: #72bc8e;
 }
 
 .confirmBtnModal:hover {
-	background: #86d6a5;
+  background: #86d6a5;
 }
 
-.cancelBtnModal{
-  background: #646464  !important;
+.cancelBtnModal {
+  background: #646464 !important;
 }
 
 .cancelBtnModal:hover {
-	background: #797878;
+  background: #797878;
 }
 
-.backBtnModal{
+.backBtnModal {
   background: red;
 }
 
-.backBtnModal:hover{
+.backBtnModal:hover {
   background: darkred;
 }
 

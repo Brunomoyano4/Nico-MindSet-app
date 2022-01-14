@@ -3,6 +3,7 @@ import Modal from 'Components/Shared/Modal';
 import Button from 'Components/Shared/Button';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import React, { useEffect, useState } from 'react';
+import InputModal from 'Components/Shared/InputModal';
 import { getPostulantById, updatePostulant } from 'redux/postulants/thunks';
 import { deleteSession, getSessions } from 'redux/sessions/thunks';
 import { useLocation } from 'react-router-dom';
@@ -12,7 +13,9 @@ import { getPsychologistById } from 'redux/psychologists/thunks';
 function PsychologistHome() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showPrevSessions, setShowPrevSessions] = useState(false);
-  const [selectedSession, setselectedSession] = useState('');
+  const [showInputModal, setShowInputModal] = useState(false);
+  const [selectedSession, setselectedSession] = useState('psychologist');
+  const [inputState, setInputState] = useState('');
   const sessions = useSelector((store) => store.sessions.list);
   const psychologist = useSelector((store) => store.psychologists.selectedItem);
   const loading = {
@@ -68,6 +71,16 @@ function PsychologistHome() {
         closeModal={() => setShowConfirmModal(false)}
         type={'Confirm'}
       />
+      <InputModal
+        title="Edit your data"
+        onConfirm={(e) => {
+          e.stopPropagation();
+          console.log('llego al confirm');
+        }}
+        show={showInputModal}
+        type={inputState}
+        closeModal={() => setShowInputModal(false)}
+      />
       <section className={styles.container}>
         <div className={styles.userInfoContainer}>
           <div className={styles.imgContainer}>
@@ -97,12 +110,14 @@ function PsychologistHome() {
               content={'settings'}
             />
             <Button
-              onClick={() => console.log('SettingsBtn')}
+              onClick={() => {
+                setInputState('psychologist');
+                setShowInputModal(true);
+              }}
               className={styles.btn}
               disabled={loading.psychologistLoading}
               content={'edit'}
             />
-            {/* <button onClick={() => console.log('EditBtn')} className={styles.btn}></button> */}
           </div>
         </div>
         <div className={styles.sessionCard}>
@@ -145,7 +160,15 @@ function PsychologistHome() {
                           <h3 className={styles.statusInfo}>
                             status: {checkSessionStatus(session)}
                           </h3>
-                          <button className={styles.sessionInfoBtn}>MORE INFO</button>
+                          <button
+                            className={styles.sessionInfoBtn}
+                            onClick={() => {
+                              setInputState('postulantProfile');
+                              setShowInputModal(true);
+                            }}
+                          >
+                            MORE INFO
+                          </button>
                         </div>
                       )}
                     </>

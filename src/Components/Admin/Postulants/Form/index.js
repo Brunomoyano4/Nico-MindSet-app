@@ -25,12 +25,14 @@ function PostulantsForm(props) {
   }
 
   useEffect(() => {
-    if (postulantId) {
-      dispatch(getPostulantById(postulantId));
+    if (!props.edit) {
+      if (postulantId) {
+        dispatch(getPostulantById(postulantId));
+      }
+      return () => {
+        dispatch(cleanSelectedItem());
+      };
     }
-    return () => {
-      dispatch(cleanSelectedItem());
-    };
   }, []);
 
   const onSubmit = (formValues) => {
@@ -42,8 +44,7 @@ function PostulantsForm(props) {
       }
       history.replace('/admin/postulants/list');
     }
-    history.go(0);
-    dispatch(updatePostulant(postulantId, formValues)).then();
+    dispatch(updatePostulant(postulantId, formValues)).then(history.go(0));
 
     // console.log(props.edit);
   };

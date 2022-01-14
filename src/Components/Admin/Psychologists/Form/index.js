@@ -14,7 +14,7 @@ import {
 import { clearPsychologistsError, cleanSelectedItem } from 'redux/psychologists/actions';
 import { Form, Field } from 'react-final-form';
 
-function PsychologistsForm() {
+function PsychologistsForm(props) {
   const dispatch = useDispatch();
   const selectedItem = useSelector((store) => store.psychologists.selectedItem);
   const error = useSelector((store) => store.psychologists.error);
@@ -29,21 +29,26 @@ function PsychologistsForm() {
   }
 
   useEffect(() => {
-    if (psychologistId) {
-      dispatch(getPsychologistById(psychologistId));
+    if (!props.edit) {
+      if (psychologistId) {
+        dispatch(getPsychologistById(psychologistId));
+      }
+      return () => {
+        dispatch(cleanSelectedItem());
+      };
     }
-    return () => {
-      dispatch(cleanSelectedItem());
-    };
   }, []);
 
   const onSubmit = (formValues) => {
-    if (psychologistId) {
-      dispatch(updatePsychologist(psychologistId, formValues));
-    } else {
-      dispatch(addPsychologist(formValues));
+    if (!props.edit) {
+      if (psychologistId) {
+        dispatch(updatePsychologist(psychologistId, formValues));
+      } else {
+        dispatch(addPsychologist(formValues));
+      }
+      history.replace('/admin/psychologists/list');
     }
-    history.replace('/admin/psychologists/list');
+    dispatch(updatePsychologist(psychologistId, formValues));
   };
 
   const required = (value) => (value ? undefined : 'Required');

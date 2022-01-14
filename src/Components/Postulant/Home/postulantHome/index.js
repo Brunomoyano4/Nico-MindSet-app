@@ -97,7 +97,6 @@ function PostulantHome() {
           console.log('llego al confirm');
         }}
         show={showInputModal}
-        postulant={postulant}
         type={'postulant'}
         closeModal={() => setShowInputModal(false)}
       />
