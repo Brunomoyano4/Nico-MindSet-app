@@ -26,7 +26,7 @@ const initialState = {
   list: [],
   position: [],
   selectedItem: {},
-  options: { profiles: [] },
+  options: { profiles: [], clients: [] },
   error: ''
 };
 
@@ -76,9 +76,15 @@ const positionsReducer = (state = initialState, action) => {
       };
     case GET_POSITION_OPTIONS_FULFILLED: {
       const addedOptions = action.payload.map((option) => {
+        let prueba;
+        {
+          option.profileName
+            ? (prueba = `${option.profileName}`)
+            : (prueba = `${option.customerName}`);
+        }
         return {
           value: option._id,
-          label: `${option.profileName}`
+          label: prueba
         };
       });
       const options = { ...state.options };

@@ -36,7 +36,7 @@ function Position({ position }) {
         type={'Error'}
       />
       <tr key={position._id} onClick={openEditForm}>
-        <td>{position.clientId}</td>
+        <td>{position.clientId.customerName}</td>
         <td>{position.job}</td>
         <td>{position.description}</td>
         <td>{position.createdAt}</td>

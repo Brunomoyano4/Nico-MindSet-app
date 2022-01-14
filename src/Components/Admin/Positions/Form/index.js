@@ -20,6 +20,7 @@ function PositionsForm() {
   const selectedItem = useSelector((store) => store.positions.selectedItem);
   const loading = useSelector((store) => store.positions.isLoading);
   const error = useSelector((store) => store.positions.error);
+
   const dispatch = useDispatch();
   const history = useHistory();
   const options = useSelector((store) => store.positions.options);
@@ -32,6 +33,7 @@ function PositionsForm() {
       dispatch(getPositionById(positionId));
     }
     dispatch(getPositionsOptions('profiles'));
+    dispatch(getPositionsOptions('clients'));
     dispatch(cleanSelectedPosition());
   }, [dispatch]);
 
@@ -41,6 +43,7 @@ function PositionsForm() {
   }
 
   const onSubmit = (formValues) => {
+    console.log(options.profiles);
     if (positionId) {
       dispatch(updatePosition(positionId, formValues));
     } else {
@@ -69,18 +72,20 @@ function PositionsForm() {
                 className={styles.select}
                 component={Select}
                 label="Profile:"
-                name="profile"
-                id="profile"
+                name="profiles"
+                id="profiles"
                 options={options.profiles}
+                validate={required}
               />
               <Field
-                className={styles.input}
-                label="Id"
+                className={styles.select}
+                label="Client:"
+                component={Select}
                 name="clientId"
                 placeholder="Id"
                 type="text"
                 validate={required}
-                component={Input}
+                options={options.clients}
               />
               <Field
                 className={styles.input}
@@ -96,7 +101,6 @@ function PositionsForm() {
                 label="Description"
                 name="description"
                 placeholder="Description"
-                type="text"
                 validate={required}
                 component={Input}
               />
