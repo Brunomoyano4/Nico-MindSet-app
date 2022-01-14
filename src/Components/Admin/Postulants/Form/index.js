@@ -10,7 +10,7 @@ import { getPostulantById, addPostulant, updatePostulant } from 'redux/postulant
 import { clearPostulantsError, cleanSelectedItem } from 'redux/postulants/actions';
 import { Form, Field } from 'react-final-form';
 
-function PostulantsForm() {
+function PostulantsForm(props) {
   const dispatch = useDispatch();
   const selectedItem = useSelector((store) => store.postulants.selectedItem);
   const error = useSelector((store) => store.postulants.error);
@@ -34,12 +34,18 @@ function PostulantsForm() {
   }, []);
 
   const onSubmit = (formValues) => {
-    if (postulantId) {
-      dispatch(updatePostulant(postulantId, formValues));
-    } else {
-      dispatch(addPostulant(formValues));
+    if (!props.edit) {
+      if (postulantId) {
+        dispatch(updatePostulant(postulantId, formValues));
+      } else {
+        dispatch(addPostulant(formValues));
+      }
+      history.replace('/admin/postulants/list');
     }
-    history.replace('/admin/postulants/list');
+    history.go(0);
+    dispatch(updatePostulant(postulantId, formValues)).then();
+
+    // console.log(props.edit);
   };
 
   const required = (value) => (value ? undefined : 'Required');

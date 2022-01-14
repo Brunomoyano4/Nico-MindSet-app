@@ -26,7 +26,7 @@ function InputModal(props) {
     if (type) {
       switch (type) {
         case 'postulant':
-          return <PostulantForm />;
+          return <PostulantForm edit={true} closeModal={(e) => onCloseModal(e)} />;
         case 'psychologist':
           return <PsychologistsForm />;
         case 'postulantProfile':
@@ -36,7 +36,7 @@ function InputModal(props) {
   };
 
   return (
-    <div className={styles.container} onClick={(e) => onCloseModal(e)}>
+    <div className={styles.container}>
       <div className={styles.modal}>
         <div className={styles.title}>
           <h2>{props.title}</h2>
