@@ -5,6 +5,9 @@ import {
   GET_POSITION_BY_ID_FETCHING,
   GET_POSITION_BY_ID_FULFILLED,
   GET_POSITION_BY_ID_REJECTED,
+  GET_POSITION_OPTIONS_FETCHING,
+  GET_POSITION_OPTIONS_FULFILLED,
+  GET_POSITION_OPTIONS_REJECTED,
   ADD_POSITIONS_FETCHING,
   ADD_POSITIONS_FULFILLED,
   ADD_POSITIONS_REJECTED,
@@ -21,7 +24,9 @@ import {
 const initialState = {
   isLoading: false,
   list: [],
+  position: [],
   selectedItem: {},
+  options: { profiles: [] },
   error: ''
 };
 
@@ -63,6 +68,32 @@ const positionsReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: action.payload
+      };
+    case GET_POSITION_OPTIONS_FETCHING:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case GET_POSITION_OPTIONS_FULFILLED: {
+      const addedOptions = action.payload.map((option) => {
+        return {
+          value: option._id,
+          label: `${option.profileName}`
+        };
+      });
+      const options = { ...state.options };
+      options[action.resource] = addedOptions;
+      return {
+        ...state,
+        options,
+        isLoading: false
+      };
+    }
+    case GET_POSITION_OPTIONS_REJECTED:
+      return {
+        ...state,
+        error: action.error,
+        isLoading: false
       };
     case ADD_POSITIONS_FETCHING:
       return {

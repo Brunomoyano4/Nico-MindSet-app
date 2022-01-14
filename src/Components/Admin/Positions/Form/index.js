@@ -6,9 +6,15 @@ import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Modal from 'Components/Shared/Modal';
 import Button from 'Components/Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPosition, getPositionById, updatePosition } from 'redux/positions/thunks';
+import {
+  addPosition,
+  getPositionById,
+  updatePosition,
+  getPositionsOptions
+} from 'redux/positions/thunks';
 import { clearPositionsError, cleanSelectedPosition } from 'redux/positions/actions';
 import { Form, Field } from 'react-final-form';
+import Select from 'Components/Shared/Select';
 
 function PositionsForm() {
   const selectedItem = useSelector((store) => store.positions.selectedItem);
@@ -16,6 +22,7 @@ function PositionsForm() {
   const error = useSelector((store) => store.positions.error);
   const dispatch = useDispatch();
   const history = useHistory();
+  const options = useSelector((store) => store.positions.options);
 
   const params = useQuery();
   const positionId = params.get('id');
@@ -24,10 +31,9 @@ function PositionsForm() {
     if (positionId) {
       dispatch(getPositionById(positionId));
     }
-    return () => {
-      dispatch(cleanSelectedPosition());
-    };
-  }, []);
+    dispatch(getPositionsOptions('profiles'));
+    dispatch(cleanSelectedPosition());
+  }, [dispatch]);
 
   function useQuery() {
     const { search } = useLocation();
@@ -59,6 +65,14 @@ function PositionsForm() {
                   <LoadingSpinner />
                 </div>
               )}
+              <Field
+                className={styles.select}
+                component={Select}
+                label="Profile:"
+                name="profile"
+                id="profile"
+                options={options.profiles}
+              />
               <Field
                 className={styles.input}
                 label="Id"
