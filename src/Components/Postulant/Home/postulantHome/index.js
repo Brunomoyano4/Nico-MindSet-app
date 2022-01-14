@@ -1,5 +1,6 @@
 import styles from './postulantHome.module.css';
 import Modal from 'Components/Shared/Modal';
+import InputModal from 'Components/Shared/InputModal';
 import ToggleSwitch from 'Components/Shared/ToggleSwitch';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import React, { useEffect, useState, useRef } from 'react';
@@ -13,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function PostulantHome() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showInputModal, setShowInputModal] = useState(false);
   const [selectedInterview, setselectedInterview] = useState('');
   const [availableValue, setAvailableValue] = useState(true);
   const sessions = useSelector((store) => store.sessions.list);
@@ -64,7 +66,8 @@ function PostulantHome() {
   }, [availableValue]);
 
   const EditBtn = () => {
-    history.push(`/admin/postulants/form?id=${postulantId}`);
+    //history.push(`/admin/postulants/form?id=${postulantId}`);
+    setShowInputModal(true);
   };
 
   const changeAvailability = () => {
@@ -86,6 +89,17 @@ function PostulantHome() {
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
         type={'Confirm'}
+      />
+      <InputModal
+        title="Edit your data"
+        onConfirm={(e) => {
+          e.stopPropagation();
+          console.log('llego al confirm');
+        }}
+        show={showInputModal}
+        postulant={postulant}
+        type={'postulant'}
+        closeModal={() => setShowInputModal(false)}
       />
       <section className={styles.container}>
         <div className={styles.userInfoContainer}>
