@@ -1,13 +1,13 @@
 .input {
   padding: 10px;
-  width: 100%;
-  border-color: #72bc8eaa;
-  border-radius: 2px;
   outline: none;
   box-sizing: border-box;
   background: #fff;
-  margin-top: 4%;
-  color: #555;
+  margin-top: 2%;
+  width: 25vw;
+  border-color: #72bc8eaa;
+  border-radius: 6px;
+  min-width: 15vw;
 }
 
 .input:first-of-type {
@@ -33,4 +33,35 @@
   height: 21px;
   font-size: 14px;
   color: #f00;
+}
+
+textArea{
+  padding: 10px;
+  outline: none;
+  box-sizing: border-box;
+  background: #fff;
+  margin-top: 2%;
+  width: 25vw;
+  height: 20vh;
+  max-width: 25vw;
+  max-height: 15vh;
+  border-color: #72bc8eaa;
+  border-radius: 6px;
+  min-width: 25vw;
+  min-height: 15vh;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+}
+textArea:focus {
+  outline-color: #72bc8e;
+  box-shadow: 0 0 20px rgba(0, 255, 76, 0.25);
+}
+textArea::-webkit-scrollbar {
+  width: 10px;
+}
+
+textArea::-webkit-scrollbar-thumb {
+  background-color: #72bc8e;
+  border-radius: 5px;
 }

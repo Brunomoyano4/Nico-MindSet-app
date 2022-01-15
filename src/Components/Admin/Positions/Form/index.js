@@ -97,12 +97,12 @@ function PositionsForm() {
                 component={Input}
               />
               <Field
-                className={styles.input}
+                className={styles.textArea}
                 label="Description"
                 name="description"
                 placeholder="Description"
                 validate={required}
-                component={Input}
+                component={'textarea'}
               />
             </div>
             <Button

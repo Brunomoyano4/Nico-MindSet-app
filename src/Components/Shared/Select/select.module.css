@@ -1,11 +1,18 @@
 .select {
   padding: 10px;
+  width: 25vw;
   border-color: #72bc8eaa;
   border-radius: 6px;
+  min-width: 15vw;
 }
 
 .label {
   padding-block: 0.5rem;
+}
+
+.option {
+  display: flex;
+  justify-content: center;
 }
 
 .select:focus {
@@ -24,3 +31,5 @@
   font-size: 14px;
   color: #f00;
 }
+
+
