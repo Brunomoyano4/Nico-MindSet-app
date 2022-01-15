@@ -8,11 +8,6 @@
   color: red;
   font-weight: 600;
 }
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
 .list {
   border-collapse: collapse;
@@ -24,8 +19,8 @@
 
 .list thead tr {
   background-color: #27ae60;
-    color: #ffffff;
-    text-align: center;
+  color: #ffffff;
+  text-align: center;
 }
 
 .list th,
