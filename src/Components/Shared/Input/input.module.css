@@ -4,10 +4,10 @@
   box-sizing: border-box;
   background: #fff;
   margin-top: 2%;
-  width: 25vw;
+  width: 13vw;
   border-color: #72bc8eaa;
   border-radius: 6px;
-  min-width: 15vw;
+  min-width: 10vw;
 }
 
 .input:first-of-type {
@@ -41,13 +41,13 @@ textArea{
   box-sizing: border-box;
   background: #fff;
   margin-top: 2%;
-  width: 25vw;
+  width: 13vw;
   height: 20vh;
   max-width: 25vw;
   max-height: 15vh;
   border-color: #72bc8eaa;
   border-radius: 6px;
-  min-width: 25vw;
+  min-width: 13vw;
   min-height: 15vh;
   font-family: inherit;
   font-size: 13px;
@@ -65,3 +65,37 @@ textArea::-webkit-scrollbar-thumb {
   background-color: #72bc8e;
   border-radius: 5px;
 }
+
+@media (max-width: 1024px) {
+  textArea{
+  padding: 10px;
+  outline: none;
+  box-sizing: border-box;
+  background: #fff;
+  margin-top: 2%;
+  width: 20vw;
+  height: 20vh;
+  max-width: 20vw;
+  max-height: 20vh;
+  border-color: #72bc8eaa;
+  border-radius: 6px;
+  min-width: 20vw;
+  min-height: 20vh;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  }
+
+  .input {
+    padding: 10px;
+    outline: none;
+    box-sizing: border-box;
+    background: #fff;
+    margin-top: 2%;
+    width: 20vw;
+    border-color: #72bc8eaa;
+    border-radius: 6px;
+    min-width: 20vw;
+  }
+}
+

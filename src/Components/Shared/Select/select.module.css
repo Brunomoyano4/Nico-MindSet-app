@@ -3,7 +3,8 @@
   width: 25vw;
   border-color: #72bc8eaa;
   border-radius: 6px;
-  min-width: 15vw;
+  min-width: 10vw;
+  width: 13vw;
 }
 
 .label {
@@ -30,6 +31,16 @@
   height: 21px;
   font-size: 14px;
   color: #f00;
+}
+
+@media (max-width: 1024px) {
+  .select {
+    padding: 10px;
+    width: 20vw;
+    border-color: #72bc8eaa;
+    border-radius: 6px;
+    min-width: 20vw;
+  }
 }
 
 
