@@ -201,6 +201,7 @@
 
 .sessionsButton {
   padding: 5px 40px 5px 40px;
+  margin-bottom: 5px;
   text-transform: uppercase;
   text-align: center;
   background: transparent;
@@ -218,6 +219,18 @@
 }
 .sessionsButton:hover {
   background: #eeeeee;
+}
+
+.sessionsButton:hover,
+.sessionsButton:focus,
+.sessionsButton:active,
+.sessionsButton.active{
+  border-bottom: 10px solid #27ae5fc0;
+  background-color: #32e77e83 ;
+  border-radius: 5px;
+  transform: scale(1, 1);
+  transition-timing-function: ease-in;
+  transition: 0.2s;
 }
 
 .sessionInfoBtn {
