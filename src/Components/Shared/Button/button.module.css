@@ -10,6 +10,7 @@
   border-left-style: none;
   color: #fff;
   cursor: pointer;
+  text-transform: capitalize !important;
   border-radius: 5px;
 }
 

@@ -14,7 +14,7 @@ function InputModal(props) {
   const dispatch = useDispatch();
   const history = useHistory();
   const session = props.session;
-  const postulant = props.session.postulant;
+  const postulant = props.session?.postulant;
   const [showConfirmButtons, setShowConfirmButtons] = useState(false);
   const loading = {
     sessionsLoading: useSelector((store) => store.sessions.isLoading),
