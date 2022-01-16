@@ -1,5 +1,6 @@
 import styles from './postulantHome.module.css';
 import Modal from 'Components/Shared/Modal';
+import InputModal from 'Components/Shared/InputModal';
 import ToggleSwitch from 'Components/Shared/ToggleSwitch';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import React, { useEffect, useState, useRef } from 'react';
@@ -8,12 +9,12 @@ import { getSessions } from 'redux/sessions/thunks';
 import { getInterviews } from 'redux/interviews/thunks';
 import { deleteInterviews } from 'redux/interviews/thunks';
 import { useLocation } from 'react-router-dom';
-import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 function PostulantHome() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [selectedInterview, setselectedInterview] = useState('');
+  const [showInputModal, setShowInputModal] = useState(false);
+  const [selectedInterview, setSelectedInterview] = useState('');
   const [availableValue, setAvailableValue] = useState(true);
   const sessions = useSelector((store) => store.sessions.list);
   const interviews = useSelector((store) => store.interviews.list);
@@ -23,7 +24,7 @@ function PostulantHome() {
     interviewsLoading: useSelector((store) => store.interviews.isLoading),
     postulantLoading: useSelector((store) => store.postulants.isLoading)
   };
-  const history = useHistory();
+
   const dispatch = useDispatch();
   const params = useQuery();
   const postulantId = params.get('id');
@@ -64,7 +65,8 @@ function PostulantHome() {
   }, [availableValue]);
 
   const EditBtn = () => {
-    history.push(`/admin/postulants/form?id=${postulantId}`);
+    //history.push(`/admin/postulants/form?id=${postulantId}`);
+    setShowInputModal(true);
   };
 
   const changeAvailability = () => {
@@ -78,7 +80,7 @@ function PostulantHome() {
   return (
     <>
       <Modal
-        title="Are you sure you want to delete the selected session?"
+        title="Are you sure you want to delete the selected interview?"
         onConfirm={(e) => {
           e.stopPropagation();
           cancelInterview();
@@ -86,6 +88,16 @@ function PostulantHome() {
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
         type={'Confirm'}
+      />
+      <InputModal
+        title="Edit your data"
+        onConfirm={(e) => {
+          e.stopPropagation();
+          console.log('llego al confirm');
+        }}
+        show={showInputModal}
+        type={'postulant'}
+        closeModal={() => setShowInputModal(false)}
       />
       <section className={styles.container}>
         <div className={styles.userInfoContainer}>
@@ -183,7 +195,7 @@ function PostulantHome() {
                         className={styles.sessionsBtn}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setselectedInterview(interview._id);
+                          setSelectedInterview(interview._id);
                           setShowConfirmModal(true);
                         }}
                       >
