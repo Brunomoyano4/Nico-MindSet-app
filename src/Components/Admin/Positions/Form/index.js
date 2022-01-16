@@ -15,6 +15,7 @@ import {
 import { clearPositionsError, cleanSelectedPosition } from 'redux/positions/actions';
 import { Form, Field } from 'react-final-form';
 import Select from 'Components/Shared/Select';
+import TextArea from 'Components/Shared/TextArea';
 
 function PositionsForm() {
   const selectedItem = useSelector((store) => store.positions.selectedItem);
@@ -102,7 +103,7 @@ function PositionsForm() {
                 name="description"
                 placeholder="Description"
                 validate={required}
-                component={'textarea'}
+                component={TextArea}
               />
             </div>
             <Button
