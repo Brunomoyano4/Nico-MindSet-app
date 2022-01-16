@@ -32,7 +32,7 @@ function Positions() {
         <table className={styles.list}>
           <thead>
             <tr>
-              <th>ID</th>
+              <th>CLIENT</th>
               <th>JOB</th>
               <th>DESCRIPTION</th>
               <th>DATE</th>
