@@ -77,3 +77,8 @@
 .checkbox:checked + .label .switch {
   right: 0px;
 }
+
+.toggle_switch:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}

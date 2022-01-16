@@ -45,7 +45,7 @@
   flex-direction: column;
   align-content: center;
   border: 1px solid #d1d1d1;
-  border-radius: 5%;
+  border-radius: 15px;
   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.5);
   width: 45%;
   min-width: 280px;
@@ -58,7 +58,7 @@
   background-image: URL('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80');
   background-size: cover;
   object-fit: cover;
-  border-radius: 5%;
+  border-radius: 15px;
   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -190,7 +190,7 @@ input[type='checkbox']:checked ~ .userImg {
 .cardsInfo {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   margin-top: 20px;
   padding: 10px;
@@ -208,7 +208,7 @@ input[type='checkbox']:checked ~ .userImg {
   text-transform: uppercase;
   justify-content: center;
   padding-bottom: 5px;
-  margin: 10px 5px 0 0;
+  margin: 10px 0;
 }
 
 .sessionsDiv {
@@ -225,7 +225,7 @@ input[type='checkbox']:checked ~ .userImg {
   font-size: 15px;
   text-transform: uppercase;
   padding: 5px;
-  margin: 4px;
+  margin: 5px 0;
   width: 60px;
   height: 25px;
   border: none;
@@ -243,6 +243,21 @@ input[type='checkbox']:checked ~ .userImg {
     width: 80%;
   }
   .divContainer {
-    width: 78%;
+    width: 80%;
+  }
+  .cardsInfo h3{
+    font-size: xx-large;
+  }
+  .cardsInfo button{
+    font-size: xx-large;
+  }
+}
+
+@media (max-width: 985px) {
+  .cardsInfo h3{
+    font-size: small;
+  }
+  .cardsInfo button{
+    font-size: small;
   }
 }

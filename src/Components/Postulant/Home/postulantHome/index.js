@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function PostulantHome() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [selectedInterview, setselectedInterview] = useState('');
+  const [selectedInterview, setSelectedInterview] = useState('');
   const [availableValue, setAvailableValue] = useState(true);
   const sessions = useSelector((store) => store.sessions.list);
   const interviews = useSelector((store) => store.interviews.list);
@@ -123,17 +123,15 @@ function PostulantHome() {
           <h2 className={styles.userInfo}>
             {postulant?.city}, {postulant?.province} - {postulant?.country}
           </h2>
-          {!loading.postulantLoading && (
-            <div className={styles.toggleSwitch}>
-              <ToggleSwitch
-                label="Available"
-                toggled={postulant?.availability}
-                onClick={changeAvailability}
-                className={styles.toggled}
-              />
-            </div>
-          )}
-          ;
+          <div className={styles.toggleSwitch}>
+            <ToggleSwitch
+              label="Available"
+              toggled={postulant?.availability}
+              onClick={changeAvailability}
+              className={styles.toggled}
+              disabled={loading.postulantLoading}
+            />
+          </div>
           <div className={styles.btnContainer}>
             <button onClick={EditBtn} className={styles.btn}>
               edit
@@ -155,14 +153,14 @@ function PostulantHome() {
                 )}
                 {sessions.map((session, i) => {
                   const sessionDate = new Date(session.date);
-                  const formatedSessionsDate = sessionDate.toLocaleDateString(undefined, {
+                  const formattedSessionsDate = sessionDate.toLocaleDateString(undefined, {
                     year: 'numeric',
                     month: '2-digit',
                     day: '2-digit'
                   });
                   return (
                     <div key={i} className={styles.cardsInfo}>
-                      <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
+                      <h3>{`${formattedSessionsDate} at ${session.time}`}</h3>
                       <button>take</button>
                     </div>
                   );
@@ -192,7 +190,7 @@ function PostulantHome() {
                           className={styles.sessionsBtn}
                           onClick={(e) => {
                             e.stopPropagation();
-                            setselectedInterview(interview._id);
+                            setSelectedInterview(interview._id);
                             setShowConfirmModal(true);
                           }}
                         >
