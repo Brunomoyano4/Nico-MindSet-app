@@ -225,8 +225,7 @@
 .sessionsButton:focus,
 .sessionsButton:active,
 .sessionsButton.active{
-  border-bottom: 10px solid #27ae5fc0;
-  background-color: #32e77e83 ;
+  border-bottom: 5px solid #72bc8e;
   border-radius: 5px;
   transform: scale(1, 1);
   transition-timing-function: ease-in;
