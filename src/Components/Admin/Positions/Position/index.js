@@ -11,6 +11,7 @@ function Position({ position }) {
   const error = useSelector((store) => store.positions.error);
   const history = useHistory();
   const dispatch = useDispatch();
+  const createdDate = new Date(position.createdAt);
 
   const openEditForm = () => {
     history.push(`/admin/positions/form?id=${position._id}`);
@@ -36,10 +37,10 @@ function Position({ position }) {
         type={'Error'}
       />
       <tr key={position._id} onClick={openEditForm}>
-        <td>{position.clientId}</td>
+        <td>{position.clientId.customerName}</td>
         <td>{position.job}</td>
-        <td title={position.description}>{position.description}</td>
-        <td>{position.createdAt}</td>
+        <td>{position.description}</td>
+        <td>{createdDate.toLocaleDateString()}</td>
         <td>
           <DeleteBtn
             onClick={(e) => {
