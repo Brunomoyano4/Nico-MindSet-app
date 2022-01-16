@@ -4,9 +4,10 @@
   align-items: center;
 }
 
+
+
 .list {
   border-collapse: collapse;
-  margin: 10px 0;
   font-size: 16px;
   min-width: 400px;
   max-width: 800px;
@@ -17,6 +18,13 @@
   background-color: #27ae60;
   color: #ffffff;
   text-align: center;
+}
+
+td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
 }
 
 .list th,

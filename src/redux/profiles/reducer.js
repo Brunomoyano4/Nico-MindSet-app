@@ -1,4 +1,7 @@
 import {
+  GET_PROFILES_OPTIONS_FETCHING,
+  GET_PROFILES_OPTIONS_FULFILLED,
+  GET_PROFILES_OPTIONS_REJECTED,
   GET_PROFILES_FETCHING,
   GET_PROFILES_FULFILLED,
   GET_PROFILES_REJECTED,
@@ -23,11 +26,38 @@ const initialState = {
   list: [],
   error: '',
   profile: [],
-  selectedItem: {}
+  selectedItem: {},
+  options: []
 };
 
 const profilesReducer = (state = initialState, action) => {
   switch (action.type) {
+    case GET_PROFILES_OPTIONS_FETCHING:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case GET_PROFILES_OPTIONS_FULFILLED: {
+      const addedOptions = action.payload.map((option) => {
+        return {
+          value: option._id,
+          label: option.profileName
+        };
+      });
+      const options = { ...state.options };
+      options[action.resource] = addedOptions;
+      return {
+        ...state,
+        options,
+        isLoading: false
+      };
+    }
+    case GET_PROFILES_OPTIONS_REJECTED:
+      return {
+        ...state,
+        error: action.error,
+        isLoading: false
+      };
     case GET_PROFILES_FETCHING:
       return {
         ...state,
