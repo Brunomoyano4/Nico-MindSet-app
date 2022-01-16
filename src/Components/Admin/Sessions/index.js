@@ -32,15 +32,15 @@ function GetSessions() {
         <table className={styles.tableSessions}>
           <thead>
             <tr>
-              <th>PSYCHOLOGY</th>
-              <th>POSTULANT</th>
-              <th>TIME</th>
-              <th>DATE</th>
-              <th>STAT</th>
-              <th>ACTION</th>
+              <th>Psychologist</th>
+              <th>Postulant</th>
+              <th>Time</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th></th>
             </tr>
           </thead>
-          {!Object.values(loading).some(Boolean) && (
+          {!loading && (
             <tbody>
               {sessions.map((session) => {
                 return <Session key={session._id} session={session} />;

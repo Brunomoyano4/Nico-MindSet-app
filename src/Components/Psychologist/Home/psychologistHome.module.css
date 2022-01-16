@@ -66,6 +66,7 @@
 
 .userInfo {
   padding: 5px;
+  margin-bottom: 2%;
   text-transform: uppercase;
   justify-content: center;
   text-align: center;
@@ -75,7 +76,7 @@
 }
 
 .userInfo span {
-  margin-left: 20px;
+  margin-left: 10px;
   color: #fff;
   background-color: #228adb;
 }
@@ -125,12 +126,12 @@
   border: none;
   margin: 20px;
   background-color: #27ae60;
-  text-transform: uppercase;
   color: #ffff;
   font-size: 20px;
   width: 150px;
   height: 50px;
   cursor: pointer;
+  text-transform: uppercase;
 }
 
 .btn:hover {
