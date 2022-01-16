@@ -156,8 +156,8 @@ h2 {
 .rightSideContainer {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-content: flex-start;
-  margin-top: 5%;
   margin-right: 5%;
 }
 
@@ -170,4 +170,65 @@ h2 {
   display: flex;
   justify-content: center;
   padding-bottom: 8px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 20px !important;
+  width: 80% !important;  
+  margin-top: 0;
+  border-radius: 5px;
+}
+
+.sessionsDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.sessionsDiv button{
+  width: 130px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.confirmCancel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid rgb(192, 175, 132);
+  background-color: rgb(247, 245, 245);
+}
+
+.confirmBtns {
+  flex-direction: row;
+}
+
+.btnYes {
+  width: 45px !important;
+  color: white;
+  background-color: crimson;
+  cursor: pointer;
+}
+
+.btnNo {
+  width: 45px !important;
+  color: white;
+  background-color: darkslategray;
+  cursor: pointer;
 }

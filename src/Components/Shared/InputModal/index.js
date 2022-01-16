@@ -1,7 +1,6 @@
 import styles from './inputModal.module.css';
 import React, { useState } from 'react';
 import Button from '../Button';
-import Modal from 'Components/Shared/Modal';
 import Select from 'Components/Shared/Select';
 import PostulantForm from 'Components/Admin/Postulants/Form';
 import PsychologistsForm from 'Components/Admin/Psychologists/Form';
@@ -9,20 +8,20 @@ import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import { deleteSession } from 'redux/sessions/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Field } from 'react-final-form';
+import { useHistory } from 'react-router-dom';
 
 function InputModal(props) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const session = props.session;
   const postulant = props.session.postulant;
-  const [selectedSession, setSelectedSession] = useState('');
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showConfirmButtons, setShowConfirmButtons] = useState(false);
   const loading = {
     sessionsLoading: useSelector((store) => store.sessions.isLoading),
-    profilesLoading: useSelector((store) => store.profiles.isLoading),
     postulantsLoading: useSelector((store) => store.postulants.isLoading)
   };
   const selectedItem = useSelector((store) => store.sessions.selectedItem);
-  const options = useSelector((store) => store.profiles.options);
+  //const options = useSelector((store) => store.profiles.list);
 
   if (!props.show) {
     return null;
@@ -125,10 +124,10 @@ function InputModal(props) {
                         <Field
                           className={styles.select}
                           component={Select}
-                          label="Add a new Profile:"
+                          label="Add a new Profile: "
                           name="profiles"
                           id="profiles"
-                          options={options?.profiles}
+                          options={props.profiles}
                         />
                         <Button
                           className={styles.button}
@@ -147,19 +146,47 @@ function InputModal(props) {
                     )}
                   />
                   <span>{postulant?.profile}</span>
-                  <span>Session date:</span>
-                  <span>{new Date(session.date).toLocaleDateString()}</span>
-                  <Button
-                    content="Cancel session"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedSession(session._id);
-                      setShowConfirmModal(true);
-                    }}
-                  />
                 </div>
                 <div className={styles.rightSideContainer}>
                   <span>{checkPostulantStudies()}</span>
+                  <div className={styles.sessionsDiv}>
+                    <span>Session date:</span>
+                    <span>{new Date(session.date).toLocaleDateString()}</span>
+                    <span>at {session.time}</span>
+                    <Button
+                      content="Cancel session"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowConfirmButtons(true);
+                      }}
+                    />
+                    {showConfirmButtons && (
+                      <div className={styles.confirmCancel}>
+                        <span>Are you sure?</span>
+                        <div className={styles.confirmBtns}>
+                          <button
+                            className={styles.btnYes}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              cancelSession();
+                            }}
+                          >
+                            Yes
+                          </button>
+                          <button
+                            className={styles.btnNo}
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowConfirmButtons(false);
+                            }}
+                          >
+                            No
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </>
@@ -169,22 +196,12 @@ function InputModal(props) {
   };
 
   const cancelSession = () => {
-    dispatch(deleteSession(selectedSession));
-    setShowConfirmModal(false);
+    dispatch(deleteSession(session._id));
+    history.go(0);
   };
 
   return (
     <>
-      <Modal
-        title="Are you sure you want to delete the selected session?"
-        onConfirm={(e) => {
-          e.stopPropagation();
-          cancelSession();
-        }}
-        show={showConfirmModal}
-        closeModal={() => setShowConfirmModal(false)}
-        type={'Confirm'}
-      />
       <div className={styles.container}>
         <div className={styles.modal}>
           <div className={styles.title}>

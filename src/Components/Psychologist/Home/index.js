@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import InputModal from 'Components/Shared/InputModal';
 import { getPostulantById, updatePostulant } from 'redux/postulants/thunks';
 import { deleteSession, getSessions } from 'redux/sessions/thunks';
+import { getProfilesOptions } from 'redux/profiles/thunks';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPsychologistById } from 'redux/psychologists/thunks';
@@ -18,6 +19,7 @@ function PsychologistHome() {
   const [selectedSession, setselectedSession] = useState('psychologist');
   const [inputState, setInputState] = useState('');
   const sessions = useSelector((store) => store.sessions.list);
+  const profiles = useSelector((store) => store.profiles.list);
   const psychologist = useSelector((store) => store.psychologists.selectedItem);
   const loading = {
     psychologistLoading: useSelector((store) => store.psychologists.isLoading),
@@ -39,6 +41,7 @@ function PsychologistHome() {
 
   useEffect(() => {
     dispatch(getSessions());
+    dispatch(getProfilesOptions());
   }, [dispatch]);
 
   const cancelSession = () => {
@@ -80,6 +83,7 @@ function PsychologistHome() {
         show={showInputModal}
         type={inputState}
         session={selectedSession}
+        profiles={profiles}
         closeModal={() => setShowInputModal(false)}
       />
       <section className={styles.container}>
