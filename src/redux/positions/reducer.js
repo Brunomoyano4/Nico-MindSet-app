@@ -76,15 +76,15 @@ const positionsReducer = (state = initialState, action) => {
       };
     case GET_POSITION_OPTIONS_FULFILLED: {
       const addedOptions = action.payload.map((option) => {
-        let prueba;
+        let alternative;
         {
           option.profileName
-            ? (prueba = `${option.profileName}`)
-            : (prueba = `${option.customerName}`);
+            ? (alternative = `${option.profileName}`)
+            : (alternative = `${option.customerName}`);
         }
         return {
           value: option._id,
-          label: prueba
+          label: alternative
         };
       });
       const options = { ...state.options };
