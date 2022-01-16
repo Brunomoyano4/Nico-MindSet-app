@@ -9,32 +9,32 @@ function StudiesForm({ number }) {
       <h3>Study {number + 1}:</h3>
       <Field
         className={styles.input}
-        name={`education[${number}].tertiaryStudieInstitute`}
-        placeholder="tertiaryStudieInstitute"
+        name={`education[${number}].StudyInstitute`}
+        placeholder="Study Institute Name"
         type="text"
         validate={required}
         component={Input}
       />
       <Field
         className={styles.input}
-        name={`education[${number}].tertiaryStudieDescription`}
-        placeholder="tertiaryStudieDescription"
+        name={`education[${number}].StudyInstituteDescription`}
+        placeholder="Study Institute description"
         type="text"
         validate={required}
         component={Input}
       />
       <Field
         className={styles.input}
-        name={`education[${number}].tertiaryStudieStartDate`}
-        placeholder="tertiaryStudieStartDate"
+        name={`education[${number}].StudyInstituteStartDate`}
+        placeholder="Study Institute start date"
         type="date"
         validate={required}
         component={Input}
       />
       <Field
         className={styles.input}
-        name={`education[${number}].tertiaryStudieEndDate`}
-        placeholder="tertiaryStudieEndDate"
+        name={`education[${number}].StudyInstituteEndDate`}
+        placeholder="Study Institute end date"
         type="date"
         validate={required}
         component={Input}

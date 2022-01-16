@@ -12,7 +12,7 @@ function EducationForm({ formArrayPush }) {
       <Field
         className={styles.input}
         name="education[0].elementarySchool"
-        placeholder="elementarySchool"
+        placeholder="Name"
         type="text"
         validate={required}
         component={Input}
@@ -20,7 +20,7 @@ function EducationForm({ formArrayPush }) {
       <Field
         className={styles.input}
         name="education[0].elementarySchoolFYear"
-        placeholder="elementarySchoolFYear"
+        placeholder="End year"
         type="number"
         validate={required}
         component={Input}
@@ -29,7 +29,7 @@ function EducationForm({ formArrayPush }) {
       <Field
         className={styles.input}
         name="education[0].highSchool"
-        placeholder="highSchool"
+        placeholder="Name"
         type="text"
         validate={required}
         component={Input}
@@ -37,15 +37,11 @@ function EducationForm({ formArrayPush }) {
       <Field
         className={styles.input}
         name="education[0].highSchoolFYear"
-        placeholder="highSchoolFYear"
+        placeholder="End year"
         type="number"
         validate={required}
         component={Input}
       />
-
-      <button type="button" onClick={() => formArrayPush('studies', undefined)}>
-        Add Study
-      </button>
 
       <FieldArray name="studies">
         {({ fields }) =>
@@ -53,7 +49,11 @@ function EducationForm({ formArrayPush }) {
             return (
               <div key={index} className={styles.form}>
                 <StudiesForm number={index} />
-                <button type="button" onClick={() => fields.remove(index)}>
+                <button
+                  className={styles.button}
+                  type="button"
+                  onClick={() => fields.remove(index)}
+                >
                   Delete Study
                 </button>
               </div>
@@ -61,6 +61,14 @@ function EducationForm({ formArrayPush }) {
           })
         }
       </FieldArray>
+
+      <button
+        className={styles.button}
+        type="button"
+        onClick={() => formArrayPush('studies', undefined)}
+      >
+        Add Study
+      </button>
     </>
   );
 }
