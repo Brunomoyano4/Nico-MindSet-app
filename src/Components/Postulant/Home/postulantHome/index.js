@@ -57,7 +57,7 @@ function PostulantHome() {
     if (postulant) {
       dispatch(
         updatePostulant(postulantId, {
-          availabilty: availableValue
+          availability: availableValue
         })
       );
     }
@@ -123,14 +123,17 @@ function PostulantHome() {
           <h2 className={styles.userInfo}>
             {postulant?.city}, {postulant?.province} - {postulant?.country}
           </h2>
-          <div className={styles.toggleSwitch}>
-            <ToggleSwitch
-              label="Available"
-              toggled={postulant?.availability}
-              onClick={changeAvailability}
-              className={styles.toggled}
-            />
-          </div>
+          {!loading.postulantLoading && (
+            <div className={styles.toggleSwitch}>
+              <ToggleSwitch
+                label="Available"
+                toggled={postulant?.availability}
+                onClick={changeAvailability}
+                className={styles.toggled}
+              />
+            </div>
+          )}
+          ;
           <div className={styles.btnContainer}>
             <button onClick={EditBtn} className={styles.btn}>
               edit
@@ -152,7 +155,11 @@ function PostulantHome() {
                 )}
                 {sessions.map((session, i) => {
                   const sessionDate = new Date(session.date);
-                  const formatedSessionsDate = sessionDate.toLocaleDateString();
+                  const formatedSessionsDate = sessionDate.toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                  });
                   return (
                     <div key={i} className={styles.cardsInfo}>
                       <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
