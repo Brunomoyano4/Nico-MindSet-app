@@ -66,6 +66,7 @@
 
 .userInfo {
   padding: 5px;
+  margin-bottom: 2%;
   text-transform: uppercase;
   justify-content: center;
   text-align: center;
@@ -75,7 +76,7 @@
 }
 
 .userInfo span {
-  margin-left: 20px;
+  margin-left: 10px;
   color: #fff;
   background-color: #228adb;
 }

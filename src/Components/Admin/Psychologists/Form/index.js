@@ -71,38 +71,47 @@ function PsychologistsForm(props) {
         initialValues={selectedItem}
         render={(formProps) => (
           <form className={styles.form} onSubmit={formProps.handleSubmit}>
-            <h2>Form</h2>
+            <h2>Account Info</h2>
             <div className={styles.form}>
               {loading && (
                 <div className={styles.spinnerContainer}>
                   <LoadingSpinner />
                 </div>
               )}
+              {!props.edit && (
+                <>
+                  <label htmlFor="psychoFirstName">First Name</label>
+                  <Field
+                    id="psychoFirstName"
+                    className={styles.input}
+                    name="firstName"
+                    type="text"
+                    validate={composeValidators(required, mustBeString)}
+                    component={Input}
+                  />
+                  <label htmlFor="psychoLastName">Last name</label>
+                  <Field
+                    id="psychoLastName"
+                    className={styles.input}
+                    name="lastName"
+                    type="text"
+                    validate={composeValidators(required, mustBeString)}
+                    component={Input}
+                  />
+                </>
+              )}
+              <label htmlFor="psychoUserName">User Name</label>
               <Field
-                className={styles.input}
-                name="firstName"
-                placeholder="First name"
-                type="text"
-                validate={composeValidators(required, mustBeString)}
-                component={Input}
-              />
-              <Field
-                className={styles.input}
-                name="lastName"
-                placeholder="Last name"
-                type="text"
-                validate={composeValidators(required, mustBeString)}
-                component={Input}
-              />
-              <Field
+                id="psychoUserName"
                 className={styles.input}
                 name="userName"
-                placeholder="Username"
                 type="text"
                 validate={composeValidators(required, mustBeAlphanumeric)}
                 component={Input}
               />
+              <label htmlFor="psychoEmail">Email</label>
               <Field
+                id="psychoEmail"
                 className={styles.input}
                 name="email"
                 placeholder="example@foo.com"
@@ -110,10 +119,10 @@ function PsychologistsForm(props) {
                 validate={composeValidators(required, mustBeEmail)}
                 component={Input}
               />
+              <label htmlFor="psychoPassword">Password</label>
               <Field
                 className={styles.input}
                 name="password"
-                placeholder="Password"
                 type="password"
                 validate={composeValidators(required, minLength)}
                 component={Input}

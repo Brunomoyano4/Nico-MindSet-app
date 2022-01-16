@@ -74,37 +74,42 @@ function PostulantsForm(props) {
         initialValues={selectedItem}
         render={(formProps) => (
           <form className={styles.form} onSubmit={formProps.handleSubmit}>
-            <h2>Form</h2>
+            <h2>Personal Info</h2>
             {loading && (
               <div className={styles.spinnerContainer}>
                 <LoadingSpinner />
               </div>
             )}
+            <label htmlFor="postulantFirstName">First Name</label>
             <Field
+              id="postulantFirstName"
               className={styles.input}
               name="firstName"
-              placeholder="First name"
               type="text"
               validate={composeValidators(required, mustBeString)}
               component={Input}
             />
+            <label htmlFor="postulantLastName">Last Name</label>
             <Field
+              id="postulantLastName"
               className={styles.input}
               name="lastName"
-              placeholder="Last name"
               type="text"
               validate={composeValidators(required, mustBeStringNoSpace)}
               component={Input}
             />
+            <label htmlFor="postulantUserName">User Name</label>
             <Field
+              id="postulantUserName"
               className={styles.input}
               name="userName"
-              placeholder="Username"
               type="text"
               validate={composeValidators(required, mustBeAlphanumeric)}
               component={Input}
             />
+            <label htmlFor="postulantEmail">Email</label>
             <Field
+              id="postulantEmail"
               className={styles.input}
               name="email"
               placeholder="example@foo.com"
@@ -112,118 +117,136 @@ function PostulantsForm(props) {
               validate={composeValidators(required, mustBeEmail)}
               component={Input}
             />
+            {!props.edit && (
+              <>
+                <label htmlFor="postulantPassword">Password</label>
+                <Field
+                  id="postulantPassword"
+                  className={styles.input}
+                  name="password"
+                  type="password"
+                  validate={composeValidators(required, minLength)}
+                  component={Input}
+                />
+              </>
+            )}
+            <label htmlFor="postulantBirthDate">Birth Date</label>
             <Field
-              className={styles.input}
-              name="password"
-              placeholder="Password"
-              type="password"
-              validate={composeValidators(required, minLength)}
-              component={Input}
-            />
-            <Field
+              id="postulantBirthDate"
               className={styles.input}
               name="birthDate"
               type="date"
               validate={required}
               component={Input}
             />
+            <label htmlFor="postulantStreet">Street</label>
             <Field
+              id="postulantStreet"
               className={styles.input}
               name="street"
-              placeholder="Street"
               type="text"
               validate={composeValidators(required, mustBeString)}
               component={Input}
             />
+            <label htmlFor="postulantStreetNumber">Street Number</label>
             <Field
+              id="postulantStreetNumber"
               className={styles.input}
               name="streetNumber"
-              placeholder="Street number"
               type="number"
               min="0"
               validate={composeValidators(required, mustBeNumber)}
               component={Input}
             />
+            <label htmlFor="postulantPostalCode">Postal Code</label>
             <Field
+              id="postulantPostalCode"
               className={styles.input}
               name="postalCode"
-              placeholder="Zip Code"
               type="number"
               min="0"
               validate={composeValidators(required, mustBeNumber)}
               component={Input}
             />
+            <label htmlFor="postulantCity">City</label>
             <Field
+              id="postulantCity"
               className={styles.input}
               name="city"
-              placeholder="City"
               type="text"
               validate={composeValidators(required, mustBeString)}
               component={Input}
             />
+            <label htmlFor="postulantProvince">Province</label>
             <Field
+              id="postulantProvince"
               className={styles.input}
               name="province"
-              placeholder="Province"
               type="text"
               validate={composeValidators(required, mustBeString)}
               component={Input}
             />
+            <label htmlFor="postulantCountry">Country</label>
             <Field
+              id="postulantCountry"
               className={styles.input}
               name="country"
-              placeholder="Country"
               type="text"
               validate={composeValidators(required, mustBeString)}
               component={Input}
             />
+            <label htmlFor="postulantTelephone">Telephone</label>
             <Field
+              id="postulantTelephone"
               className={styles.input}
               name="telephone"
-              placeholder="Telephone"
               type="text"
               validate={composeValidators(required, mustBeNumber, minLength)}
               component={Input}
             />
             <h2>Postulant Experience</h2>
             <div className={styles.form}>
-              <h3>Job info</h3>
+              <label htmlFor="postulantJobPosition">Job Position</label>
               <Field
+                id="postulantJobPosition"
                 className={styles.input}
                 name="experience[0].jobPosition"
-                placeholder="Job Position"
                 type="text"
                 validate={composeValidators(required, mustBeString)}
                 component={Input}
               />
+              <label htmlFor="postulantEmployer">Employer</label>
               <Field
+                id="postulantEmployer"
                 className={styles.input}
                 name="experience[0].employer"
-                placeholder="Employer"
                 type="text"
                 validate={composeValidators(required, mustBeString)}
                 component={Input}
               />
+              <label htmlFor="postulantStartDate">Start date</label>
               <Field
+                id="postulantStartDate"
                 className={styles.input}
                 name="experience[0].startDate"
-                placeholder="Start date"
                 type="date"
                 validate={required}
                 component={Input}
               />
+              <label htmlFor="postulantEndDate">End date</label>
               <Field
+                id="postulantEndDate"
                 className={styles.input}
                 name="experience[0].endDate"
-                placeholder="End date"
                 type="date"
                 validate={required}
                 component={Input}
               />
+              <label htmlFor="postulantDescription">Description</label>
               <Field
+                id="postulantDescription"
                 className={styles.input}
                 name="experience[0].description"
-                placeholder="Description"
                 type="text"
                 validate={required}
                 component={Input}

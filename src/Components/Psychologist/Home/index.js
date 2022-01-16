@@ -14,6 +14,7 @@ function PsychologistHome() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showPrevSessions, setShowPrevSessions] = useState(false);
   const [showInputModal, setShowInputModal] = useState(false);
+  const [inputModalTitle, setInputModalTitle] = useState('');
   const [selectedSession, setselectedSession] = useState('psychologist');
   const [inputState, setInputState] = useState('');
   const sessions = useSelector((store) => store.sessions.list);
@@ -72,10 +73,9 @@ function PsychologistHome() {
         type={'Confirm'}
       />
       <InputModal
-        title="Info"
+        title={inputModalTitle}
         onConfirm={(e) => {
           e.stopPropagation();
-          console.log('llego al confirm');
         }}
         show={showInputModal}
         type={inputState}
@@ -114,6 +114,7 @@ function PsychologistHome() {
               onClick={() => {
                 setInputState('psychologist');
                 setShowInputModal(true);
+                setInputModalTitle('Edit your info');
               }}
               className={styles.btn}
               disabled={loading.psychologistLoading}
@@ -146,14 +147,14 @@ function PsychologistHome() {
           <div className={styles.sessionsContainer}>
             {!showPrevSessions ? (
               <>
-                {sessions.map((session, i) => {
+                {sessions.map((session) => {
                   const today = new Date();
                   const sessionDate = new Date(session.date);
                   const formatedSessionsDate = sessionDate.toLocaleDateString();
                   return (
                     <>
                       {session.psychology._id === psychologistId && sessionDate >= today && (
-                        <div key={i} className={styles.cardsInfo}>
+                        <div key={session._id} className={styles.cardsInfo}>
                           <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
                           <span className={styles.postulantInfo}>
                             with: {`${session.postulant?.firstName} ${session.postulant?.lastName}`}
@@ -167,6 +168,7 @@ function PsychologistHome() {
                               setselectedSession(session);
                               setInputState('postulantProfile');
                               setShowInputModal(true);
+                              setInputModalTitle('Session info');
                             }}
                           >
                             MORE INFO
@@ -179,13 +181,13 @@ function PsychologistHome() {
               </>
             ) : (
               <>
-                {sessions.map((session, i) => {
+                {sessions.map((session) => {
                   const sessionDate = new Date(session.date);
                   const formatedSessionsDate = sessionDate.toLocaleDateString();
                   return (
                     <>
                       {session.psychology._id === psychologistId && sessionDate <= today && (
-                        <div key={i} className={styles.cardsInfo}>
+                        <div key={session._id} className={styles.cardsInfo}>
                           <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
                           <span className={styles.postulantInfo}>
                             with: {`${session.postulant?.firstName} ${session.postulant?.lastName}`}
