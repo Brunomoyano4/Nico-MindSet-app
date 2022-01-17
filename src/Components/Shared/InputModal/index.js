@@ -6,6 +6,7 @@ import PostulantForm from 'Components/Admin/Postulants/Form';
 import PsychologistsForm from 'Components/Admin/Psychologists/Form';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import { deleteSession } from 'redux/sessions/thunks';
+import { updatePostulant } from 'redux/postulants/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Field } from 'react-final-form';
 import { useHistory } from 'react-router-dom';
@@ -87,12 +88,8 @@ function InputModal(props) {
   };
 
   const onSubmit = (formValues) => {
-    /* if (sessionId) {
-      dispatch(updateSession(sessionId, formValues));
-    } else {
-      dispatch(addSession(formValues));
-    }
-    history.replace('/admin/sessions/list');*/
+    dispatch(updatePostulant(postulant._id, { profiles: [{ profile: formValues.profiles }] }));
+    props.closeModal();
   };
 
   const setModalContent = (type) => {
@@ -130,16 +127,11 @@ function InputModal(props) {
                           options={props.profiles}
                         />
                         <Button
-                          className={styles.button}
+                          className={styles.profilesBtn}
                           type="submit"
                           content={'Add profile'}
                           disabled={
-                            loading.postulantsLoading ||
-                            loading.sessionsLoading ||
-                            loading.profilesLoading ||
-                            formProps.submitting ||
-                            formProps.pristine ||
-                            formProps.hasValidationErrors
+                            loading.profilesLoading || formProps.submitting || formProps.pristine
                           }
                         />
                       </form>
@@ -154,6 +146,7 @@ function InputModal(props) {
                     <span>{new Date(session.date).toLocaleDateString()}</span>
                     <span>at {session.time}</span>
                     <Button
+                      className={styles.cancelSessionBtn}
                       content="Cancel session"
                       onClick={(e) => {
                         e.stopPropagation();

@@ -20,7 +20,6 @@
   margin: 0 auto;
   display: block;
   width: 90%;
-  /* Change the max-width value on a media query breakpoint to make this example more "responsive" */
   max-width: 800px;
   height: 95%;
   overflow-y: initial !important;
@@ -70,19 +69,19 @@
   cursor: not-allowed;
 }
 
-.modal button {
+.cancelSessionBtn {
   display: inline-block;
   justify-content: center;
   box-sizing: border-box;
+  background: #72bc8e;
+  color: #fff;
   width: 40%;
-  max-width: 580px;
   padding: 15px;
   margin: 10px;
   border-top-style: none;
   border-right-style: none;
   border-left-style: none;
-  color: #fff;
-  text-align: center;
+  cursor: pointer;
 }
 
 .subtitle {
@@ -179,15 +178,22 @@ h2 {
   align-items: center;
 }
 
-.form button {
+.profilesBtn {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  background-color: #72bc8e;
+  color: #fff;
   height: 20px !important;
-  width: 80% !important;  
+  width: 70% !important;  
   margin-top: 0;
-  border-radius: 5px;
+  padding: 20px;
+  border-radius: 10px;
+  border-top-style: none;
+  border-right-style: none;
+  border-left-style: none;
+  cursor: pointer;
 }
 
 .sessionsDiv {
