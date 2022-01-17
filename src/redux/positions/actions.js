@@ -5,6 +5,9 @@ import {
   GET_POSITION_BY_ID_FETCHING,
   GET_POSITION_BY_ID_FULFILLED,
   GET_POSITION_BY_ID_REJECTED,
+  GET_POSITION_OPTIONS_FETCHING,
+  GET_POSITION_OPTIONS_FULFILLED,
+  GET_POSITION_OPTIONS_REJECTED,
   ADD_POSITIONS_FETCHING,
   ADD_POSITIONS_FULFILLED,
   ADD_POSITIONS_REJECTED,
@@ -49,6 +52,24 @@ export const getPositionByIdRejected = (error) => {
   return {
     type: GET_POSITION_BY_ID_REJECTED,
     payload: error
+  };
+};
+
+export const getPositionOptionsFetching = () => {
+  return {
+    type: GET_POSITION_OPTIONS_FETCHING
+  };
+};
+export const getPositionOptionsFulfilled = (resource, payload) => {
+  return {
+    type: GET_POSITION_OPTIONS_FULFILLED,
+    resource,
+    payload
+  };
+};
+export const getPositionOptionsRejected = () => {
+  return {
+    type: GET_POSITION_OPTIONS_REJECTED
   };
 };
 

@@ -3,8 +3,10 @@ import Modal from 'Components/Shared/Modal';
 import Button from 'Components/Shared/Button';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import React, { useEffect, useState } from 'react';
+import InputModal from 'Components/Shared/InputModal';
 import { getPostulantById, updatePostulant } from 'redux/postulants/thunks';
 import { deleteSession, getSessions } from 'redux/sessions/thunks';
+import { getProfilesOptions } from 'redux/profiles/thunks';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPsychologistById } from 'redux/psychologists/thunks';
@@ -12,8 +14,12 @@ import { getPsychologistById } from 'redux/psychologists/thunks';
 function PsychologistHome() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showPrevSessions, setShowPrevSessions] = useState(false);
-  const [selectedSession, setselectedSession] = useState('');
+  const [showInputModal, setShowInputModal] = useState(false);
+  const [inputModalTitle, setInputModalTitle] = useState('');
+  const [selectedSession, setselectedSession] = useState('psychologist');
+  const [inputState, setInputState] = useState('');
   const sessions = useSelector((store) => store.sessions.list);
+  const profiles = useSelector((store) => store.profiles.list);
   const psychologist = useSelector((store) => store.psychologists.selectedItem);
   const loading = {
     psychologistLoading: useSelector((store) => store.psychologists.isLoading),
@@ -35,6 +41,7 @@ function PsychologistHome() {
 
   useEffect(() => {
     dispatch(getSessions());
+    dispatch(getProfilesOptions());
   }, [dispatch]);
 
   const cancelSession = () => {
@@ -50,6 +57,8 @@ function PsychologistHome() {
           return <span className={styles.succesfullSession}>{session.status}</span>;
         case 'cancelled':
           return <span className={styles.cancelledSession}>{session.status}</span>;
+        case 'default':
+          return <span>No sessions yet</span>;
       }
     }
   };
@@ -65,6 +74,17 @@ function PsychologistHome() {
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
         type={'Confirm'}
+      />
+      <InputModal
+        title={inputModalTitle}
+        onConfirm={(e) => {
+          e.stopPropagation();
+        }}
+        show={showInputModal}
+        type={inputState}
+        session={selectedSession}
+        profiles={profiles}
+        closeModal={() => setShowInputModal(false)}
       />
       <section className={styles.container}>
         <div className={styles.userInfoContainer}>
@@ -95,12 +115,15 @@ function PsychologistHome() {
               content={'settings'}
             />
             <Button
-              onClick={() => console.log('SettingsBtn')}
+              onClick={() => {
+                setInputState('psychologist');
+                setShowInputModal(true);
+                setInputModalTitle('Edit your info');
+              }}
               className={styles.btn}
               disabled={loading.psychologistLoading}
               content={'edit'}
             />
-            {/* <button onClick={() => console.log('EditBtn')} className={styles.btn}></button> */}
           </div>
         </div>
         <div className={styles.sessionCard}>
@@ -128,14 +151,14 @@ function PsychologistHome() {
           <div className={styles.sessionsContainer}>
             {!showPrevSessions ? (
               <>
-                {sessions.map((session, i) => {
+                {sessions.map((session) => {
                   const today = new Date();
                   const sessionDate = new Date(session.date);
                   const formatedSessionsDate = sessionDate.toLocaleDateString();
                   return (
                     <>
                       {session.psychology._id === psychologistId && sessionDate >= today && (
-                        <div key={i} className={styles.cardsInfo}>
+                        <div key={session._id} className={styles.cardsInfo}>
                           <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
                           <span className={styles.postulantInfo}>
                             with: {`${session.postulant?.firstName} ${session.postulant?.lastName}`}
@@ -143,7 +166,17 @@ function PsychologistHome() {
                           <h3 className={styles.statusInfo}>
                             status: {checkSessionStatus(session)}
                           </h3>
-                          <button className={styles.sessionInfoBtn}>MORE INFO</button>
+                          <button
+                            className={styles.sessionInfoBtn}
+                            onClick={() => {
+                              setselectedSession(session);
+                              setInputState('postulantProfile');
+                              setShowInputModal(true);
+                              setInputModalTitle('Session info');
+                            }}
+                          >
+                            MORE INFO
+                          </button>
                         </div>
                       )}
                     </>
@@ -152,13 +185,13 @@ function PsychologistHome() {
               </>
             ) : (
               <>
-                {sessions.map((session, i) => {
+                {sessions.map((session) => {
                   const sessionDate = new Date(session.date);
                   const formatedSessionsDate = sessionDate.toLocaleDateString();
                   return (
                     <>
                       {session.psychology._id === psychologistId && sessionDate <= today && (
-                        <div key={i} className={styles.cardsInfo}>
+                        <div key={session._id} className={styles.cardsInfo}>
                           <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
                           <span className={styles.postulantInfo}>
                             with: {`${session.postulant?.firstName} ${session.postulant?.lastName}`}

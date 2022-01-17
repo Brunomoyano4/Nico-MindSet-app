@@ -1,4 +1,7 @@
 import {
+  getProfilesOptionsFulfilled,
+  getProfilesOptionsRejected,
+  getProfilesOptionsFetching,
   getProfilesFetching,
   getProfilesFulfilled,
   getProfilesRejected,
@@ -18,6 +21,25 @@ import {
 
 const URL = `${process.env.REACT_APP_API}/profiles`;
 let token;
+
+export const getProfilesOptions = (resource) => {
+  return (dispatch) => {
+    token = sessionStorage.getItem('token');
+    dispatch(getProfilesOptionsFetching());
+    fetch(`${process.env.REACT_APP_API}/${resource}`, { headers: { token } })
+      .then(async (res) => {
+        if (res.status === 200) {
+          const data = await res.json();
+          dispatch(getProfilesOptionsFulfilled(resource, data));
+        }
+        const data = await res.json();
+        dispatch(getProfilesOptionsRejected(data));
+      })
+      .catch((error) => {
+        dispatch(getProfilesOptionsRejected(error.toString()));
+      });
+  };
+};
 
 export const getProfiles = () => {
   return (dispatch) => {
