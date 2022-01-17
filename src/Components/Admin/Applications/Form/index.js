@@ -3,7 +3,7 @@ import Modal from 'Components/Shared/Modal';
 import Input from 'Components/Shared/Input';
 import Select from 'Components/Shared/Select';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'Components/Shared/Button';
@@ -25,6 +25,7 @@ function AppForm() {
   const loading = useSelector((store) => store.applications.isLoading);
   const selectedItem = useSelector((store) => store.applications.selectedItem);
   const options = useSelector((store) => store.applications.options);
+  const [initialValues, setInitialValues] = useState({});
 
   useEffect(() => {
     if (applicationId) {
@@ -42,6 +43,15 @@ function AppForm() {
       dispatch(cleanSelectedApplications());
     }
   }, []);
+
+  useEffect(() => {
+    setInitialValues({
+      ...selectedItem,
+      positions: selectedItem.positions?._id,
+      postulants: selectedItem.postulants?._id,
+      client: selectedItem.client?._id
+    });
+  }, [selectedItem]);
 
   function useQuery() {
     const { search } = useLocation();
@@ -64,7 +74,7 @@ function AppForm() {
       <div className={styles.container}>
         <Form
           onSubmit={onSubmit}
-          initialValues={selectedItem}
+          initialValues={initialValues}
           render={(formProps) => (
             <form className={styles.form} onSubmit={formProps.handleSubmit}>
               <h2>Form</h2>
