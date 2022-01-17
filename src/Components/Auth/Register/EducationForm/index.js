@@ -11,39 +11,55 @@ function EducationForm({ formArrayPush }) {
       <h3>Elementary School</h3>
       <Field
         className={styles.input}
-        name="education[0].elementarySchool"
-        placeholder="Name"
+        name="studies.primaryStudies.school"
+        placeholder="Elementary School"
         type="text"
         validate={required}
         component={Input}
       />
       <Field
         className={styles.input}
-        name="education[0].elementarySchoolFYear"
-        placeholder="End year"
-        type="number"
+        name="studies.primaryStudies.startDate"
+        placeholder="Elementary Start date"
+        type="date"
+        validate={required}
+        component={Input}
+      />
+      <Field
+        className={styles.input}
+        name="studies.primaryStudies.endDate"
+        placeholder="Study Institute end date"
+        type="date"
         validate={required}
         component={Input}
       />
       <h3>High School</h3>
       <Field
         className={styles.input}
-        name="education[0].highSchool"
-        placeholder="Name"
+        name="studies.secondaryStudies.school"
+        placeholder="High Shool"
         type="text"
         validate={required}
         component={Input}
       />
       <Field
         className={styles.input}
-        name="education[0].highSchoolFYear"
-        placeholder="End year"
-        type="number"
+        name="studies.secondaryStudies.startDate"
+        placeholder="Elementary Start date"
+        type="date"
+        validate={required}
+        component={Input}
+      />
+      <Field
+        className={styles.input}
+        name="studies.secondaryStudies.endDate"
+        placeholder="Study Institute end date"
+        type="date"
         validate={required}
         component={Input}
       />
 
-      <FieldArray name="studies">
+      <FieldArray name="additionalStudies">
         {({ fields }) =>
           fields.map((name, index) => {
             return (
@@ -65,7 +81,7 @@ function EducationForm({ formArrayPush }) {
       <button
         className={styles.button}
         type="button"
-        onClick={() => formArrayPush('studies', undefined)}
+        onClick={() => formArrayPush('additionalStudies', undefined)}
       >
         Add Study
       </button>

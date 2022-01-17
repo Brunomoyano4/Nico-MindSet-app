@@ -1,7 +1,6 @@
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addPostulant } from 'redux/postulants/thunks';
-import { login } from 'redux/auth/thunks';
 import { Form, Field } from 'react-final-form';
 import Input from 'Components/Shared/Input';
 import styles from './register.module.css';
@@ -9,24 +8,35 @@ import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Button from 'Components/Shared/Button';
 import EducationForm from './EducationForm/index';
 import arrayMutators from 'final-form-arrays';
+import Modal from '../../Shared/Modal';
+import { useState } from 'react';
 
 function PostulantsForm() {
   const dispatch = useDispatch();
   const loading = useSelector((store) => store.postulants.isLoading);
   const history = useHistory();
+  const [title, setTitle] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const onSubmit = (formValues) => {
-    const credentials = {
-      email: formValues.email,
-      password: formValues.password
-    };
     dispatch(addPostulant(formValues))
-      .then(() => dispatch(login(credentials)))
       .then((response) => {
+        setTitle('Postulant created successfully');
+        setShowModal(true);
         if (response) {
           history.push(`/postulant?id=${response.payload.mongoDBID}`);
         }
+      })
+      .catch((err) => {
+        console.log('Error:', err);
+        setTitle('Something happenned creating postulant');
+        setShowModal(true);
       });
+  };
+
+  const onConfirmModal = () => {
+    setShowModal(false);
+    history.push('/');
   };
 
   const required = (value) => (value ? undefined : 'Required');
@@ -223,6 +233,12 @@ function PostulantsForm() {
             </form>
           );
         }}
+      />
+      <Modal
+        title={title}
+        show={showModal}
+        onConfirm={onConfirmModal}
+        closeModal={onConfirmModal}
       />
     </div>
   );
