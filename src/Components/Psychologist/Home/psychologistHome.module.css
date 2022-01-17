@@ -146,6 +146,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  /* border-bottom: 5px solid rgb(148, 148, 148); */
 }
 
 .cardsInfo {
@@ -191,7 +192,7 @@
 .sessionsButtonsContainer {
   display: flex;
   justify-content: space-around;
-  border-bottom: 2px solid olive;
+  /* border-bottom: 2px solid olive; */
 }
 
 .sessionsContainer {
@@ -210,6 +211,8 @@
   width: 50%;
   font-size: 15px;
   font-weight: 800;
+  border-bottom: 5px solid #c3bdbdda;
+
 }
 .verticalLine {
   display: inline-block;
@@ -221,12 +224,8 @@
   background: #eeeeee;
 }
 
-.sessionsButton:hover,
-.sessionsButton:focus,
-.sessionsButton:active,
-.sessionsButton.active{
+.selectedButton{
   border-bottom: 5px solid #72bc8e;
-  border-radius: 5px;
   transform: scale(1, 1);
   transition-timing-function: ease-in;
   transition: 0.2s;

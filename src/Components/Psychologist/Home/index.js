@@ -100,17 +100,23 @@ function PsychologistHome() {
               disabled={loading.psychologistLoading}
               content={'edit'}
             />
-            {/* <button onClick={() => console.log('EditBtn')} className={styles.btn}></button> */}
           </div>
         </div>
         <div className={styles.sessionCard}>
           <div className={styles.cardsInfoContainer}>
             <div className={styles.sessionsButtonsContainer}>
-              <button className={styles.sessionsButton} onClick={() => setShowPrevSessions(false)}>
+              <button
+                id="scheduled"
+                className={`${styles.sessionsButton} ${!showPrevSessions && styles.selectedButton}`}
+                onClick={() => setShowPrevSessions(false)}
+              >
                 scheduled sessions
               </button>
-              <span className={styles.verticalLine} />
-              <button className={styles.sessionsButton} onClick={() => setShowPrevSessions(true)}>
+              <button
+                id="previous"
+                className={`${styles.sessionsButton} ${showPrevSessions && styles.selectedButton}`}
+                onClick={() => setShowPrevSessions(true)}
+              >
                 previous sessions
               </button>
             </div>
