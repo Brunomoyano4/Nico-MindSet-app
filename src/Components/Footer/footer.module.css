@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 20px;
 }
 
 .main {
@@ -11,15 +12,18 @@
   padding: 0 5%;
   width: 90%;
   min-height: 100px;
+  z-index: 2;
 }
 
 .license {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 1;
   height: 50px;
   width: 90%;
-  padding: 0 5%;
+  padding: 0 5vw;
+  margin-top: auto;
   background-color: #f2f2f2;
 }
 
@@ -29,8 +33,8 @@
   color: black;
 }
 
-.socialIcon {
-  margin-left: 5px;
+.itemContainer{
+  display: flex;
 }
 
 @media screen and (min-width: 750px) {

@@ -19,7 +19,7 @@ import Psychologists from 'Components/Admin/Psychologists';
 import PsychologistsForm from 'Components/Admin/Psychologists/Form';
 import Sessions from 'Components/Admin/Sessions';
 import SessionsForm from 'Components/Admin/Sessions/Form';
-import Layout from 'Components/Layout';
+import AdminLayout from 'Components/AdminLayout';
 import PrivateRoute from 'Routes/PrivateRoute';
 
 const adminsRoutes = [
@@ -41,7 +41,7 @@ const AdminRoutes = () => {
   }, []);
 
   return (
-    <Layout routes={adminsRoutes} authenticated={true}>
+    <AdminLayout routes={adminsRoutes} authenticated={true}>
       <Switch>
         <PrivateRoute path={`${url}/admins/list`} component={Admins} />
         <PrivateRoute path={`${url}/admins/form`} component={AdminsForm} />
@@ -63,7 +63,7 @@ const AdminRoutes = () => {
         <PrivateRoute path={`${url}/sessions/form`} component={SessionsForm} />
         <Redirect to={`${url}/admins/list`} />
       </Switch>
-    </Layout>
+    </AdminLayout>
   );
 };
 

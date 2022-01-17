@@ -1,7 +1,7 @@
 import styles from './toggleSwitch.module.css';
 import React from 'react';
 
-const ToggleSwitch = ({ label, toggled, onClick }) => {
+const ToggleSwitch = ({ label, toggled, onClick, disabled }) => {
   return (
     <div className={styles.toggle}>
       {label}{' '}
@@ -13,6 +13,7 @@ const ToggleSwitch = ({ label, toggled, onClick }) => {
           id={label}
           defaultChecked={toggled}
           onClick={onClick}
+          disabled={disabled}
         />
         <label className={styles.label} htmlFor={label}>
           <span className={styles.inner} />

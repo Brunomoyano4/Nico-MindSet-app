@@ -5,6 +5,7 @@ const AdminRoutes = lazy(() => import('Routes/admin'));
 const PostulantRoutes = lazy(() => import('Routes/postulant'));
 const PsychologistRoutes = lazy(() => import('Routes/psychologist'));
 const AuthRoutes = lazy(() => import('Routes/auth'));
+const HomeRoutes = lazy(() => import('Routes/homePage'));
 
 const Routes = () => {
   return (
@@ -15,7 +16,8 @@ const Routes = () => {
           <Route path="/psychologists" exact component={PsychologistRoutes} />
           <Route path="/admin" component={AdminRoutes} />
           <Route path="/auth" component={AuthRoutes} />
-          <Redirect to="/auth" />
+          <Route path="/" component={HomeRoutes} />
+          <Redirect to="/" />
         </Switch>
       </Suspense>
     </Router>

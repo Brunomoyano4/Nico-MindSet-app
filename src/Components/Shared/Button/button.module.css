@@ -3,7 +3,6 @@
   width: 100%;
   max-width: 100%;
   padding: 15px;
-  margin: 5px;
   background: #27ae60;
   border-bottom: none;
   border-top-style: none;
@@ -11,6 +10,8 @@
   border-left-style: none;
   color: #fff;
   cursor: pointer;
+  text-transform: capitalize !important;
+  border-radius: 5px;
 }
 
 .button:hover {

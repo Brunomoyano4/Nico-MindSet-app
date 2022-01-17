@@ -1,5 +1,6 @@
 import styles from './postulantHome.module.css';
 import Modal from 'Components/Shared/Modal';
+import InputModal from 'Components/Shared/InputModal';
 import ToggleSwitch from 'Components/Shared/ToggleSwitch';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import React, { useEffect, useState, useRef } from 'react';
@@ -8,12 +9,12 @@ import { getSessions } from 'redux/sessions/thunks';
 import { getInterviews } from 'redux/interviews/thunks';
 import { deleteInterviews } from 'redux/interviews/thunks';
 import { useLocation } from 'react-router-dom';
-import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 function PostulantHome() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [selectedInterview, setselectedInterview] = useState('');
+  const [showInputModal, setShowInputModal] = useState(false);
+  const [selectedInterview, setSelectedInterview] = useState('');
   const [availableValue, setAvailableValue] = useState(true);
   const sessions = useSelector((store) => store.sessions.list);
   const interviews = useSelector((store) => store.interviews.list);
@@ -23,7 +24,7 @@ function PostulantHome() {
     interviewsLoading: useSelector((store) => store.interviews.isLoading),
     postulantLoading: useSelector((store) => store.postulants.isLoading)
   };
-  const history = useHistory();
+
   const dispatch = useDispatch();
   const params = useQuery();
   const postulantId = params.get('id');
@@ -57,14 +58,15 @@ function PostulantHome() {
     if (postulant) {
       dispatch(
         updatePostulant(postulantId, {
-          availabilty: availableValue
+          availability: availableValue
         })
       );
     }
   }, [availableValue]);
 
   const EditBtn = () => {
-    history.push(`/admin/postulants/form?id=${postulantId}`);
+    //history.push(`/admin/postulants/form?id=${postulantId}`);
+    setShowInputModal(true);
   };
 
   const changeAvailability = () => {
@@ -78,7 +80,7 @@ function PostulantHome() {
   return (
     <>
       <Modal
-        title="Are you sure you want to delete the selected session?"
+        title="Are you sure you want to delete the selected interview?"
         onConfirm={(e) => {
           e.stopPropagation();
           cancelInterview();
@@ -86,6 +88,16 @@ function PostulantHome() {
         show={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
         type={'Confirm'}
+      />
+      <InputModal
+        title="Edit your data"
+        onConfirm={(e) => {
+          e.stopPropagation();
+          console.log('llego al confirm');
+        }}
+        show={showInputModal}
+        type={'postulant'}
+        closeModal={() => setShowInputModal(false)}
       />
       <section className={styles.container}>
         <div className={styles.userInfoContainer}>
@@ -129,73 +141,81 @@ function PostulantHome() {
               toggled={postulant?.availability}
               onClick={changeAvailability}
               className={styles.toggled}
+              disabled={loading.postulantLoading}
             />
           </div>
           <div className={styles.btnContainer}>
             <button onClick={EditBtn} className={styles.btn}>
-              EDIT
+              edit
             </button>
           </div>
         </div>
-        <div className={styles.divContainer}>
-          <div className={styles.cardsInfoContainer}>
-            <h2 className={styles.cardsInfoTitle}>AVAILABLE SESSIONS</h2>
-            <div>
-              {loading.sessionsLoading && (
-                <div className={styles.spinnerContainer}>
-                  <LoadingSpinner />
-                </div>
-              )}
-              {!loading && !interviews.length && (
-                <h3 className={styles.nothingHere}>No sessions available!</h3>
-              )}
-              {sessions.map((session, i) => {
-                const sessionDate = new Date(session.date);
-                const formatedSessionsDate = sessionDate.toLocaleDateString();
-                return (
-                  <div key={i} className={styles.cardsInfo}>
-                    <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
-                    <button className={styles.sessionsBtn}>TAKE</button>
+        {postulant.profiles?.length <= 0 ? (
+          <div className={styles.divContainer}>
+            <div className={styles.cardsInfoContainer}>
+              <h2 className={styles.cardsInfoTitle}>available sessions</h2>
+              <div className={styles.sessionsDiv}>
+                {loading.sessionsLoading && (
+                  <div className={styles.spinnerContainer}>
+                    <LoadingSpinner />
                   </div>
-                );
-              })}
+                )}
+                {!loading && !interviews.length && (
+                  <h3 className={styles.nothingHere}>No sessions available!</h3>
+                )}
+                {sessions.map((session, i) => {
+                  const sessionDate = new Date(session.date);
+                  const formattedSessionsDate = sessionDate.toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                  });
+                  return (
+                    <div key={i} className={styles.cardsInfo}>
+                      <h3>{`${formattedSessionsDate} at ${session.time}`}</h3>
+                      <button>take</button>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
-        <div className={styles.divContainer}>
-          <div className={styles.infoCardsContainer}>
-            <h2 className={styles.cardsInfoTitle}>JOB INTERVIEWS</h2>
-            <div>
-              {loading.interviewsLoading && (
-                <div className={styles.spinnerContainer}>
-                  <LoadingSpinner />
-                </div>
-              )}
-              {!loading && !interviews.length && (
-                <h3 className={styles.nothingHere}>No interviews yet!</h3>
-              )}
-              {interviews.map((interview, i) => {
-                return (
-                  <div key={i} className={styles.cardsInfo}>
-                    <h3>{`${interview.dateTime} ${interview.status}`}</h3>
-                    {interview.status === 'pending' && (
-                      <button
-                        className={styles.sessionsBtn}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setselectedInterview(interview._id);
-                          setShowConfirmModal(true);
-                        }}
-                      >
-                        CANCEL
-                      </button>
-                    )}
+        ) : (
+          <div className={styles.divContainer}>
+            <div className={styles.cardsInfoContainer}>
+              <h2 className={styles.cardsInfoTitle}>JOB INTERVIEWS</h2>
+              <div>
+                {loading.interviewsLoading && (
+                  <div className={styles.spinnerContainer}>
+                    <LoadingSpinner />
                   </div>
-                );
-              })}
+                )}
+                {!loading && !interviews.length && (
+                  <h3 className={styles.nothingHere}>No interviews yet!</h3>
+                )}
+                {interviews.map((interview, i) => {
+                  return (
+                    <div key={i} className={styles.cardsInfo}>
+                      <h3>{`${interview.dateTime} ${interview.status}`}</h3>
+                      {interview.status === 'pending' && (
+                        <button
+                          className={styles.sessionsBtn}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedInterview(interview._id);
+                            setShowConfirmModal(true);
+                          }}
+                        >
+                          CANCEL
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </section>
     </>
   );

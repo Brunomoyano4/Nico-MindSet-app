@@ -1,13 +1,13 @@
 .input {
   padding: 10px;
-  width: 100%;
-  border-color: #72bc8eaa;
-  border-radius: 2px;
   outline: none;
   box-sizing: border-box;
   background: #fff;
-  margin-top: 4%;
-  color: #555;
+  margin-top: 2%;
+  width: 13vw;
+  border-color: #72bc8eaa;
+  border-radius: 6px;
+  min-width: 10vw;
 }
 
 .input:first-of-type {
@@ -34,3 +34,20 @@
   font-size: 14px;
   color: #f00;
 }
+
+@media (max-width: 1024px) {
+
+
+  .input {
+    padding: 10px;
+    outline: none;
+    box-sizing: border-box;
+    background: #fff;
+    margin-top: 2%;
+    width: 20vw;
+    border-color: #72bc8eaa;
+    border-radius: 6px;
+    min-width: 20vw;
+  }
+}
+
