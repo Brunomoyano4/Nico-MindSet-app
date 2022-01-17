@@ -21,11 +21,11 @@ function PostulantsForm() {
   const onSubmit = (formValues) => {
     dispatch(addPostulant(formValues))
       .then((response) => {
-        setTitle('Postulant created successfully');
-        setShowModal(true);
         if (response) {
           history.push(`/postulant?id=${response.payload.mongoDBID}`);
         }
+        setShowModal(true);
+        setTitle('Postulant created successfully');
       })
       .catch((err) => {
         console.log('Error:', err);
