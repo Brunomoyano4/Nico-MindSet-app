@@ -192,7 +192,6 @@
 .sessionsButtonsContainer {
   display: flex;
   justify-content: space-around;
-  border-bottom: 2px solid olive;
 }
 
 .sessionsContainer {
@@ -202,6 +201,7 @@
 
 .sessionsButton {
   padding: 5px 40px 5px 40px;
+  margin-bottom: 5px;
   text-transform: uppercase;
   text-align: center;
   background: transparent;
@@ -210,6 +210,8 @@
   width: 50%;
   font-size: 15px;
   font-weight: 800;
+  border-bottom: 5px solid #c3bdbdda;
+
 }
 .verticalLine {
   display: inline-block;
@@ -219,6 +221,13 @@
 }
 .sessionsButton:hover {
   background: #eeeeee;
+}
+
+.selectedButton{
+  border-bottom: 5px solid #72bc8e;
+  transform: scale(1, 1);
+  transition-timing-function: ease-in;
+  transition: 0.2s;
 }
 
 .sessionInfoBtn {
