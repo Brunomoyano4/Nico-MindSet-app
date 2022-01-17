@@ -147,7 +147,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* border-bottom: 5px solid rgb(148, 148, 148); */
 }
 
 .cardsInfo {
@@ -193,7 +192,6 @@
 .sessionsButtonsContainer {
   display: flex;
   justify-content: space-around;
-  /* border-bottom: 2px solid olive; */
 }
 
 .sessionsContainer {
