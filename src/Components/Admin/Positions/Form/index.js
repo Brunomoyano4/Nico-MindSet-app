@@ -6,16 +6,25 @@ import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import Modal from 'Components/Shared/Modal';
 import Button from 'Components/Shared/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPosition, getPositionById, updatePosition } from 'redux/positions/thunks';
+import {
+  addPosition,
+  getPositionById,
+  updatePosition,
+  getPositionsOptions
+} from 'redux/positions/thunks';
 import { clearPositionsError, cleanSelectedPosition } from 'redux/positions/actions';
 import { Form, Field } from 'react-final-form';
+import Select from 'Components/Shared/Select';
+import TextArea from 'Components/Shared/TextArea';
 
 function PositionsForm() {
   const selectedItem = useSelector((store) => store.positions.selectedItem);
   const loading = useSelector((store) => store.positions.isLoading);
   const error = useSelector((store) => store.positions.error);
+
   const dispatch = useDispatch();
   const history = useHistory();
+  const options = useSelector((store) => store.positions.options);
 
   const params = useQuery();
   const positionId = params.get('id');
@@ -24,10 +33,10 @@ function PositionsForm() {
     if (positionId) {
       dispatch(getPositionById(positionId));
     }
-    return () => {
-      dispatch(cleanSelectedPosition());
-    };
-  }, []);
+    dispatch(getPositionsOptions('profiles'));
+    dispatch(getPositionsOptions('clients'));
+    dispatch(cleanSelectedPosition());
+  }, [dispatch]);
 
   function useQuery() {
     const { search } = useLocation();
@@ -35,6 +44,7 @@ function PositionsForm() {
   }
 
   const onSubmit = (formValues) => {
+    console.log(options.profiles);
     if (positionId) {
       dispatch(updatePosition(positionId, formValues));
     } else {
@@ -60,13 +70,23 @@ function PositionsForm() {
                 </div>
               )}
               <Field
-                className={styles.input}
-                label="Id"
+                className={styles.select}
+                component={Select}
+                label="Profile:"
+                name="profiles"
+                id="profiles"
+                options={options.profiles}
+                validate={required}
+              />
+              <Field
+                className={styles.select}
+                label="Client:"
+                component={Select}
                 name="clientId"
                 placeholder="Id"
                 type="text"
                 validate={required}
-                component={Input}
+                options={options.clients}
               />
               <Field
                 className={styles.input}
@@ -78,13 +98,12 @@ function PositionsForm() {
                 component={Input}
               />
               <Field
-                className={styles.input}
+                className={styles.textArea}
                 label="Description"
                 name="description"
                 placeholder="Description"
-                type="text"
                 validate={required}
-                component={Input}
+                component={TextArea}
               />
             </div>
             <Button

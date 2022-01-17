@@ -32,18 +32,20 @@ function Positions() {
         <table className={styles.list}>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>JOB</th>
-              <th>DESCRIPTION</th>
-              <th>DATE</th>
-              <th>ACTIONS</th>
+              <th>Client Id</th>
+              <th>Job</th>
+              <th>Description</th>
+              <th>Date</th>
+              <th></th>
             </tr>
           </thead>
-          <tbody>
-            {positions.map((position) => {
-              return <Position key={position._id} position={position} />;
-            })}
-          </tbody>
+          {!loading && (
+            <tbody>
+              {positions.map((position) => {
+                return <Position key={position._id} position={position} />;
+              })}
+            </tbody>
+          )}
         </table>
         {loading && <LoadingSpinner circle={false} />}
         {!loading && !positions.length && (

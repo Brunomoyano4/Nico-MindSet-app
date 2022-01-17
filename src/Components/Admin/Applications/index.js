@@ -38,11 +38,13 @@ function Applications() {
               <th></th>
             </tr>
           </thead>
-          <tbody>
-            {applications.map((application) => {
-              return <Application key={application._id} application={application} />;
-            })}
-          </tbody>
+          {!loading && (
+            <tbody>
+              {applications.map((application) => {
+                return <Application key={application._id} application={application} />;
+              })}
+            </tbody>
+          )}
         </table>
         {loading && <LoadingSpinner circle={false} />}
         {!loading && !applications.length && (

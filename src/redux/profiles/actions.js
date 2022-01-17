@@ -1,4 +1,7 @@
 import {
+  GET_PROFILES_OPTIONS_FETCHING,
+  GET_PROFILES_OPTIONS_FULFILLED,
+  GET_PROFILES_OPTIONS_REJECTED,
   GET_PROFILES_FETCHING,
   GET_PROFILES_FULFILLED,
   GET_PROFILES_REJECTED,
@@ -17,6 +20,24 @@ import {
   CLEAR_PROFILES_ERROR,
   CLEAN_SELECTED_ITEM
 } from './constants';
+
+export const getProfilesOptionsFetching = () => {
+  return {
+    type: GET_PROFILES_OPTIONS_FETCHING
+  };
+};
+export const getProfilesOptionsFulfilled = (resource, payload) => {
+  return {
+    type: GET_PROFILES_OPTIONS_FULFILLED,
+    resource,
+    payload
+  };
+};
+export const getProfilesOptionsRejected = () => {
+  return {
+    type: GET_PROFILES_OPTIONS_REJECTED
+  };
+};
 
 export const getProfilesFetching = () => {
   return {
