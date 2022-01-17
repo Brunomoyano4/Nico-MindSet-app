@@ -6,7 +6,7 @@ import {
   getSessionsOptions
 } from 'redux/sessions/thunks';
 import { clearSessionsError, cleanSelectedSession } from 'redux/sessions/actions';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import styles from './form.module.css';
 import Input from 'Components/Shared/Input';
@@ -25,6 +25,7 @@ const SessionsForm = () => {
     postulantsLoading: useSelector((store) => store.postulants.isLoading)
   };
   const options = useSelector((store) => store.sessions.options);
+  const [initialValues, setInitialValues] = useState({});
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -54,13 +55,21 @@ const SessionsForm = () => {
     history.replace('/admin/sessions/list');
   };
 
+  useEffect(() => {
+    setInitialValues({
+      ...selectedItem,
+      psychology: selectedItem.psychology?._id,
+      postulant: selectedItem.postulant?._id
+    });
+  }, [selectedItem]);
+
   const required = (value) => (value ? undefined : 'Required');
 
   return (
     <div className={styles.container}>
       <Form
         onSubmit={onSubmit}
-        initialValues={selectedItem}
+        initialValues={initialValues}
         render={(formProps) => (
           <form className={styles.form} onSubmit={formProps.handleSubmit}>
             {Object.values(loading).some(Boolean) && (
