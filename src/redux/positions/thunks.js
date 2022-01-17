@@ -5,6 +5,9 @@ import {
   getPositionByIdFetching,
   getPositionByIdFulfilled,
   getPositionByIdRejected,
+  getPositionOptionsFulfilled,
+  getPositionOptionsRejected,
+  getPositionOptionsFetching,
   addPositionsFetching,
   addPositionsFulfilled,
   addPositionsRejected,
@@ -60,6 +63,25 @@ export const getPositionById = (id) => {
       })
       .catch((error) => {
         dispatch(getPositionByIdRejected(error.toString()));
+      });
+  };
+};
+
+export const getPositionsOptions = (resource) => {
+  return (dispatch) => {
+    token = sessionStorage.getItem('token');
+    dispatch(getPositionOptionsFetching());
+    fetch(`${process.env.REACT_APP_API}/${resource}`, { headers: { token } })
+      .then(async (res) => {
+        if (res.status === 200) {
+          const data = await res.json();
+          dispatch(getPositionOptionsFulfilled(resource, data));
+        }
+        const data = await res.json();
+        dispatch(getPositionOptionsRejected(data));
+      })
+      .catch((error) => {
+        dispatch(getPositionOptionsRejected(error.toString()));
       });
   };
 };
