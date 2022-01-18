@@ -1,5 +1,5 @@
 import { Field } from 'react-final-form';
-import styles from '../../register.module.css';
+import styles from './study.module.css';
 import Input from 'Components/Shared/Input';
 import Select from 'Components/Shared/Select';
 import { useState } from 'react';

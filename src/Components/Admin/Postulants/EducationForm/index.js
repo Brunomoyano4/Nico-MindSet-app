@@ -1,5 +1,5 @@
 import { Field } from 'react-final-form';
-import styles from '../register.module.css';
+import styles from './Study/study.module.css';
 import Input from 'Components/Shared/Input';
 const required = (value) => (value ? undefined : 'Required');
 import { FieldArray } from 'react-final-form-arrays';
