@@ -37,6 +37,7 @@ export const getPositions = () => {
       })
       .then((response) => {
         dispatch(getPositionsFulfilled(response));
+        return response;
       })
       .catch((error) => {
         dispatch(getPositionsRejected(error.toString()));
@@ -108,6 +109,7 @@ export const addPosition = (position) => {
       })
       .then((response) => {
         dispatch(addPositionsFulfilled(response));
+        return response;
       })
       .catch((error) => {
         dispatch(addPositionsRejected(error.toString()));
@@ -137,6 +139,7 @@ export const updatePosition = (positionId, position) => {
       })
       .then((response) => {
         dispatch(updatePositionsFulfilled(response));
+        return response;
       })
       .catch((error) => {
         dispatch(updatePositionsRejected(error.toString()));
