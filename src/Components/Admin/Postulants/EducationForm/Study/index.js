@@ -37,13 +37,12 @@ function StudiesForm({ number }) {
       />
       <OnChange name={`typeOfStudy-${number}`}>
         {(value) => {
-          console.log(value);
           setType(value);
         }}
       </OnChange>
       <Field
         className={styles.input}
-        name={`studies[${type}][${number}].institute`}
+        name={`studies[${type}][0].institute`}
         placeholder="Study Institute Name"
         type="text"
         validate={required}
@@ -51,7 +50,7 @@ function StudiesForm({ number }) {
       />
       <Field
         className={styles.input}
-        name={`studies[${type}][${number}].description`}
+        name={`studies[${type}][0].description`}
         placeholder="Study Institute description"
         type="text"
         validate={required}
@@ -59,7 +58,7 @@ function StudiesForm({ number }) {
       />
       <Field
         className={styles.input}
-        name={`studies[${type}][${number}].startDate`}
+        name={`studies[${type}][0].startDate`}
         placeholder="Study Institute start date"
         type="date"
         validate={required}
@@ -67,7 +66,7 @@ function StudiesForm({ number }) {
       />
       <Field
         className={styles.input}
-        name={`studies[${type}][${number}].endDate`}
+        name={`studies[${type}][0].endDate`}
         placeholder="Study Institute end date"
         type="date"
         validate={required}
