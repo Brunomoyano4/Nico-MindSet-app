@@ -93,7 +93,6 @@ function PostulantHome() {
         title="Edit your data"
         onConfirm={(e) => {
           e.stopPropagation();
-          console.log('llego al confirm');
         }}
         show={showInputModal}
         type={'postulant'}

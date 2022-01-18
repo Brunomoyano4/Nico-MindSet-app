@@ -44,7 +44,6 @@ function PositionsForm() {
   }
 
   const onSubmit = (formValues) => {
-    console.log(options.profiles);
     if (positionId) {
       dispatch(updatePosition(positionId, formValues));
     } else {

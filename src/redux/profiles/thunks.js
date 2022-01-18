@@ -28,7 +28,6 @@ export const getProfilesOptions = (resource) => {
     dispatch(getProfilesOptionsFetching());
     fetch(URL, { headers: { token } })
       .then(async (res) => {
-        console.log(res);
         if (res.status !== 200) {
           return res.json().then(({ msg }) => {
             throw new Error(msg);
