@@ -36,7 +36,7 @@ function PostulantsForm() {
 
   const onConfirmModal = () => {
     setShowModal(false);
-    history.push('/');
+    history.push('/auth/login');
   };
 
   const required = (value) => (value ? undefined : 'Required');
