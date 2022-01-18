@@ -50,8 +50,6 @@ function PostulantsForm(props) {
       history.replace('/admin/postulants/list');
     }
     dispatch(updatePostulant(postulantId, formValues)).then(history.go(0));
-
-    // console.log(props.edit);
   };
 
   const required = (value) => (value ? undefined : 'Required');

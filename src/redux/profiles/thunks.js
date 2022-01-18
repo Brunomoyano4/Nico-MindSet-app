@@ -26,14 +26,15 @@ export const getProfilesOptions = (resource) => {
   return (dispatch) => {
     token = sessionStorage.getItem('token');
     dispatch(getProfilesOptionsFetching());
-    fetch(`${process.env.REACT_APP_API}/${resource}`, { headers: { token } })
+    fetch(URL, { headers: { token } })
       .then(async (res) => {
-        if (res.status === 200) {
-          const data = await res.json();
-          dispatch(getProfilesOptionsFulfilled(resource, data));
+        if (res.status !== 200) {
+          return res.json().then(({ msg }) => {
+            throw new Error(msg);
+          });
         }
         const data = await res.json();
-        dispatch(getProfilesOptionsRejected(data));
+        return dispatch(getProfilesOptionsFulfilled(resource, data));
       })
       .catch((error) => {
         dispatch(getProfilesOptionsRejected(error.toString()));
