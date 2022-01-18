@@ -38,14 +38,12 @@ const profilesReducer = (state = initialState, action) => {
         isLoading: true
       };
     case GET_PROFILES_OPTIONS_FULFILLED: {
-      const addedOptions = action.payload.map((option) => {
+      const options = action.payload.map((option) => {
         return {
           value: option._id,
           label: option.profileName
         };
       });
-      const options = { ...state.options };
-      options[action.resource] = addedOptions;
       return {
         ...state,
         options,

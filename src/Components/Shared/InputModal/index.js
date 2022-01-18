@@ -6,6 +6,9 @@ import PostulantForm from 'Components/Admin/Postulants/Form';
 import PsychologistsForm from 'Components/Admin/Psychologists/Form';
 import LoadingSpinner from 'Components/Shared/LoadingSpinner';
 import { deleteSession } from 'redux/sessions/thunks';
+import { updatePostulant } from 'redux/postulants/thunks';
+import { getPositions } from 'redux/positions/thunks';
+import { addInterviews } from 'redux/interviews/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Field } from 'react-final-form';
 import { useHistory } from 'react-router-dom';
@@ -86,13 +89,42 @@ function InputModal(props) {
     }
   };
 
-  const onSubmit = (formValues) => {
-    /* if (sessionId) {
-      dispatch(updateSession(sessionId, formValues));
-    } else {
-      dispatch(addSession(formValues));
+  const onSubmit = async (formValues) => {
+    const updatedPostulant = await dispatch(
+      updatePostulant(postulant._id, { profiles: [{ profile: formValues.profiles }] })
+    );
+    if (updatedPostulant?.availability) {
+      const positions = await dispatch(getPositions());
+      const filteredPositions = positions.filter(
+        (position) => position.profiles?._id === formValues.profiles
+      );
+      let dayOffset = 1;
+      filteredPositions.forEach(async (position, id) => {
+        const today = new Date(Date.now());
+        const date = new Date(
+          today.getYear() + 1900,
+          today.getMonth(),
+          today.getDate() + id + dayOffset,
+          Math.floor(Math.random() * (14 - 8 + 1)) + 8
+        );
+        if (!date.getDay()) {
+          date.setDate(date.getDate() + 1);
+          dayOffset += 1;
+        }
+        if (date.getDay() === 6) {
+          date.setDate(date.getDate() + 2);
+          dayOffset += 2;
+        }
+        const newInterview = {
+          postulantId: postulant._id,
+          positionId: position._id,
+          status: 'pending',
+          dateTime: date.toISOString()
+        };
+        await dispatch(addInterviews(newInterview));
+      });
     }
-    history.replace('/admin/sessions/list');*/
+    props.closeModal();
   };
 
   const setModalContent = (type) => {
@@ -130,16 +162,11 @@ function InputModal(props) {
                           options={props.profiles}
                         />
                         <Button
-                          className={styles.button}
+                          className={styles.profilesBtn}
                           type="submit"
                           content={'Add profile'}
                           disabled={
-                            loading.postulantsLoading ||
-                            loading.sessionsLoading ||
-                            loading.profilesLoading ||
-                            formProps.submitting ||
-                            formProps.pristine ||
-                            formProps.hasValidationErrors
+                            loading.profilesLoading || formProps.submitting || formProps.pristine
                           }
                         />
                       </form>
@@ -154,6 +181,7 @@ function InputModal(props) {
                     <span>{new Date(session.date).toLocaleDateString()}</span>
                     <span>at {session.time}</span>
                     <Button
+                      className={styles.cancelSessionBtn}
                       content="Cancel session"
                       onClick={(e) => {
                         e.stopPropagation();

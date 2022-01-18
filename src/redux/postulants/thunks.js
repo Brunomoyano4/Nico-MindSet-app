@@ -114,6 +114,7 @@ export const updatePostulant = (postulantId, postulant) => {
       })
       .then((response) => {
         dispatch(updatePostulantsFulfilled(response));
+        return response;
       })
       .catch((error) => {
         dispatch(updatePostulantsRejected(error.toString()));
