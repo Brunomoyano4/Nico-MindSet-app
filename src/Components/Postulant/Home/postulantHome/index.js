@@ -124,7 +124,7 @@ function PostulantHome() {
                 {postulant?.profiles?.map((profile) => {
                   return (
                     <span className={styles.userInfo} key={profile.profile.profileName}>
-                      -{`${profile.profile.profileName}`}
+                      {`${profile.profile.profileName}`}
                     </span>
                   );
                 })}
@@ -153,7 +153,7 @@ function PostulantHome() {
           <div className={styles.divContainer}>
             <div className={styles.cardsInfoContainer}>
               <h2 className={styles.cardsInfoTitle}>available sessions</h2>
-              <div className={styles.sessionsDiv}>
+              <div className={styles.sessionInterviewsDiv}>
                 {loading.sessionsLoading && (
                   <div className={styles.spinnerContainer}>
                     <LoadingSpinner />
@@ -183,7 +183,7 @@ function PostulantHome() {
           <div className={styles.divContainer}>
             <div className={styles.cardsInfoContainer}>
               <h2 className={styles.cardsInfoTitle}>JOB INTERVIEWS</h2>
-              <div>
+              <div className={styles.sessionInterviewsDiv}>
                 {loading.interviewsLoading && (
                   <div className={styles.spinnerContainer}>
                     <LoadingSpinner />
@@ -193,9 +193,18 @@ function PostulantHome() {
                   <h3 className={styles.nothingHere}>No interviews yet!</h3>
                 )}
                 {interviews.map((interview, i) => {
+                  console.log(interview.dateTime);
+                  const interviewDate = new Date(interview.dateTime);
+                  const formattedInterviewDate = interviewDate.toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  });
                   return (
                     <div key={i} className={styles.cardsInfo}>
-                      <h3>{`${interview.dateTime} ${interview.status}`}</h3>
+                      <h3>{`${formattedInterviewDate} - Status: ${interview.status}`}</h3>
                       {interview.status === 'pending' && (
                         <button
                           className={styles.sessionsBtn}
