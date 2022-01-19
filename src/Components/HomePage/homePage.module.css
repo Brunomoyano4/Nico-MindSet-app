@@ -26,9 +26,13 @@
   width: 15%;
   padding: 15px;
   margin: 9px;
-  height: 200px;
+  height: 220px;
   text-align: center;
   overflow: hidden;
+}
+
+.divContainer > * {
+  margin-bottom: 5px;
 }
 
 @media (max-width: 675px) {

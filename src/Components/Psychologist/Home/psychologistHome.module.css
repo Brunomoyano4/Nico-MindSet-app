@@ -140,7 +140,12 @@
 
 .btnContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+}
+
+.btnContainer button{
+  border-radius: 5px;
+  background-color: #72bc8e;
 }
 
 .cardsInfoContainer {
