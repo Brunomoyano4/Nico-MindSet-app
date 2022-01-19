@@ -161,7 +161,7 @@ function PsychologistHome() {
                         <div key={session._id} className={styles.cardsInfo}>
                           <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
                           <span className={styles.postulantInfo}>
-                            with: {`${session.postulant?.firstName} ${session.postulant?.lastName}`}
+                            {`${session.postulant?.firstName} ${session.postulant?.lastName}`}
                           </span>
                           <h3 className={styles.statusInfo}>
                             status: {checkSessionStatus(session)}
@@ -194,7 +194,7 @@ function PsychologistHome() {
                         <div key={session._id} className={styles.cardsInfo}>
                           <h3>{`${formatedSessionsDate} at ${session.time}`}</h3>
                           <span className={styles.postulantInfo}>
-                            with: {`${session.postulant?.firstName} ${session.postulant?.lastName}`}
+                            {`${session.postulant?.firstName} ${session.postulant?.lastName}`}
                           </span>
                           <h3 className={styles.statusInfo}>
                             status: {checkSessionStatus(session)}

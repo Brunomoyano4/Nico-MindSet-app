@@ -21,7 +21,7 @@
   display: block;
   width: 90%;
   max-width: 800px;
-  height: 95%;
+  height: 89%;
   overflow-y: initial !important;
 }
 
@@ -229,6 +229,8 @@ h2 {
   width: 45px !important;
   color: white;
   background-color: crimson;
+  margin: 9px 5px 5px 5px;
+  padding: 7px 10px !important;
   cursor: pointer;
 }
 
@@ -236,5 +238,7 @@ h2 {
   width: 45px !important;
   color: white;
   background-color: darkslategray;
+  margin: 9px 5px 5px 5px;
+  padding: 7px 10px !important;
   cursor: pointer;
 }

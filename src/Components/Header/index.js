@@ -9,13 +9,15 @@ function Header(props) {
         <Link to="/" className={styles.appName}>
           Mind<span className={styles.nameColor}>SET</span>
         </Link>
-        <ul className={styles.routes}>
-          {props.routes.map((route) => (
-            <li key={route.name}>
-              <Link to={route.path}>{route.name}</Link>
-            </li>
-          ))}
-        </ul>
+        <div className={styles.routesContainer}>
+          <ul className={styles.routes}>
+            {props.routes.map((route) => (
+              <li key={route.name}>
+                <Link to={route.path}>{route.name}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
         {props.authenticated && <LogOutButton />}
       </nav>
     </header>

@@ -111,14 +111,17 @@
 }
 
 .succesfullSession {
-  color: #27ae60;
+  font-weight: bold;
+  color: green;
 }
 
 .assignedSession {
+  font-weight: bold;
   color: #0068bd;
 }
 
 .cancelledSession {
+  font-weight: bold;
   color: crimson;
 }
 
@@ -147,6 +150,11 @@
   border-radius: 5px;
   background-color: #72bc8e;
 }
+
+.btnContainer button {
+  border-radius: 5px;
+  background-color: #72bc8e;
+}
 .cardsInfoContainer {
   display: flex;
   flex-direction: column;
@@ -157,7 +165,7 @@
   display: flex;
   flex: 1 0 21%;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   background: #d3f5cd;
   margin: 10px;
@@ -191,6 +199,8 @@
 .postulantInfo {
   text-transform: capitalize;
   padding-top: 15px;
+  font-weight: bold;
+  margin-bottom: 3px;
 }
 
 .sessionsButtonsContainer {
