@@ -124,7 +124,7 @@ function PostulantHome() {
                 {postulant?.profiles?.map((profile) => {
                   return (
                     <span className={styles.userInfo} key={profile.profile.profileName}>
-                      -{`${profile.profile.profileName}`}
+                      {`${profile.profile.profileName}`}
                     </span>
                   );
                 })}
