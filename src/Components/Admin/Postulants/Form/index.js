@@ -84,6 +84,7 @@ function PostulantsForm(props) {
             )}
             <label htmlFor="postulantFirstName">First Name</label>
             <Field
+              id="postulantFirstName"
               className={styles.input}
               name="firstName"
               placeholder="First name"
@@ -92,6 +93,7 @@ function PostulantsForm(props) {
               component={Input}
             />
             <Field
+              id="postulantLastName"
               className={styles.input}
               name="lastName"
               placeholder="Last name"
@@ -100,6 +102,7 @@ function PostulantsForm(props) {
               component={Input}
             />
             <Field
+              id="postulantUserName"
               className={styles.input}
               name="userName"
               placeholder="Username"
@@ -108,6 +111,7 @@ function PostulantsForm(props) {
               component={Input}
             />
             <Field
+              id="postulantEmail"
               className={styles.input}
               name="email"
               placeholder="example@foo.com"
@@ -124,6 +128,7 @@ function PostulantsForm(props) {
               component={Input}
             />
             <Field
+              id="postulantBirthDate"
               className={styles.input}
               name="birthDate"
               type="date"
@@ -131,6 +136,7 @@ function PostulantsForm(props) {
               component={Input}
             />
             <Field
+              id="postulantStreet"
               className={styles.input}
               name="street"
               placeholder="Street"
@@ -139,6 +145,7 @@ function PostulantsForm(props) {
               component={Input}
             />
             <Field
+              id="postulantStreetNumber"
               className={styles.input}
               name="streetNumber"
               placeholder="Street number"
@@ -148,6 +155,7 @@ function PostulantsForm(props) {
               component={Input}
             />
             <Field
+              id="postulantPostalCode"
               className={styles.input}
               name="postalCode"
               placeholder="Zip Code"
@@ -157,6 +165,7 @@ function PostulantsForm(props) {
               component={Input}
             />
             <Field
+              id="postulantCity"
               className={styles.input}
               name="city"
               placeholder="City"
@@ -165,6 +174,7 @@ function PostulantsForm(props) {
               component={Input}
             />
             <Field
+              id="postulantProvince"
               className={styles.input}
               name="province"
               placeholder="Province"
@@ -173,6 +183,7 @@ function PostulantsForm(props) {
               component={Input}
             />
             <Field
+              id="postulantCountry"
               className={styles.input}
               name="country"
               placeholder="Country"
@@ -181,6 +192,7 @@ function PostulantsForm(props) {
               component={Input}
             />
             <Field
+              id="postulantTelephone"
               className={styles.input}
               name="telephone"
               placeholder="Telephone"
@@ -192,6 +204,7 @@ function PostulantsForm(props) {
             <div className={styles.form}>
               <h3>Job info</h3>
               <Field
+                id="postulantJobPosition"
                 className={styles.input}
                 name="experience[0].jobPosition"
                 placeholder="Job Position"
@@ -200,6 +213,7 @@ function PostulantsForm(props) {
                 component={Input}
               />
               <Field
+                id="postulantEmployer"
                 className={styles.input}
                 name="experience[0].employer"
                 placeholder="Employer"
@@ -208,6 +222,7 @@ function PostulantsForm(props) {
                 component={Input}
               />
               <Field
+                id="postulantStartDate"
                 className={styles.input}
                 name="experience[0].startDate"
                 placeholder="Start date"
@@ -216,6 +231,7 @@ function PostulantsForm(props) {
                 component={Input}
               />
               <Field
+                id="postulantEndDate"
                 className={styles.input}
                 name="experience[0].endDate"
                 placeholder="End date"
@@ -224,6 +240,7 @@ function PostulantsForm(props) {
                 component={Input}
               />
               <Field
+                id="postulantDescription"
                 className={styles.input}
                 name="experience[0].description"
                 placeholder="Description"
@@ -323,7 +340,7 @@ function PostulantsForm(props) {
             />
             <Field
               className={styles.input}
-              name={`studies.universityStudies[0].startDate`}
+              name="studies.universityStudies[0].startDate"
               type="date"
               component={Input}
             />
