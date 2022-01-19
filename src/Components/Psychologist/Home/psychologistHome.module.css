@@ -140,9 +140,13 @@
 
 .btnContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
+.btnContainer button {
+  border-radius: 5px;
+  background-color: #72bc8e;
+}
 .cardsInfoContainer {
   display: flex;
   flex-direction: column;
@@ -211,7 +215,6 @@
   font-size: 15px;
   font-weight: 800;
   border-bottom: 5px solid #c3bdbdda;
-
 }
 .verticalLine {
   display: inline-block;
@@ -223,7 +226,7 @@
   background: #eeeeee;
 }
 
-.selectedButton{
+.selectedButton {
   border-bottom: 5px solid #72bc8e;
   transform: scale(1, 1);
   transition-timing-function: ease-in;

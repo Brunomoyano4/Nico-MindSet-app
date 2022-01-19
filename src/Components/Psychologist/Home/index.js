@@ -108,12 +108,6 @@ function PsychologistHome() {
           </h2>
           <div className={styles.btnContainer}>
             <Button
-              onClick={() => console.log('SettingsBtn')}
-              className={styles.btn}
-              disabled={loading.psychologistLoading}
-              content={'settings'}
-            />
-            <Button
               onClick={() => {
                 setInputState('psychologist');
                 setShowInputModal(true);
