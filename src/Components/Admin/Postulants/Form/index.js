@@ -9,11 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getPostulantById, addPostulant, updatePostulant } from 'redux/postulants/thunks';
 import { clearPostulantsError, cleanSelectedItem } from 'redux/postulants/actions';
 import { Form, Field } from 'react-final-form';
-import EducationForm from '../EducationForm/index';
 import arrayMutators from 'final-form-arrays';
-import { FieldArray } from 'react-final-form-arrays';
-import StudiesForm from '../EducationForm/Study/index';
-import { OnChange } from 'react-final-form-listeners';
 
 function PostulantsForm(props) {
   const dispatch = useDispatch();
@@ -78,12 +74,7 @@ function PostulantsForm(props) {
           ...arrayMutators
         }}
         initialValues={selectedItem}
-        render={({
-          handleSubmit,
-          form: {
-            mutators: { push }
-          }
-        }) => (
+        render={({ handleSubmit }) => (
           <form className={styles.form} onSubmit={handleSubmit}>
             <h2>Personal Info</h2>
             {loading && (
@@ -254,7 +245,6 @@ function PostulantsForm(props) {
             <Field
               className={styles.input}
               name="studies.primaryStudies.startDate"
-              placeholder="Elementary Start date"
               type="date"
               validate={required}
               component={Input}
@@ -262,7 +252,6 @@ function PostulantsForm(props) {
             <Field
               className={styles.input}
               name="studies.primaryStudies.endDate"
-              placeholder="Study Institute end date"
               type="date"
               validate={required}
               component={Input}
@@ -279,7 +268,6 @@ function PostulantsForm(props) {
             <Field
               className={styles.input}
               name="studies.secondaryStudies.startDate"
-              placeholder="Elementary Start date"
               type="date"
               validate={required}
               component={Input}
@@ -287,36 +275,92 @@ function PostulantsForm(props) {
             <Field
               className={styles.input}
               name="studies.secondaryStudies.endDate"
-              placeholder="Study Institute end date"
               type="date"
               validate={required}
               component={Input}
             />
-            <FieldArray name="additionalStudies">
-              {({ fields }) =>
-                fields.map((name, index) => {
-                  return (
-                    <div key={index} className={styles.form}>
-                      <StudiesForm number={index} />
-                      <button
-                        className={styles.button}
-                        type="button"
-                        onClick={() => fields.remove(index)}
-                      >
-                        Delete Study
-                      </button>
-                    </div>
-                  );
-                })
-              }
-            </FieldArray>
-            <button
-              className={styles.button}
-              type="button"
-              onClick={() => push('additionalStudies', selectedItem.studies)}
-            >
-              Add Study
-            </button>
+            <h3>Tertiary Studies</h3>
+            <Field
+              className={styles.input}
+              name={`studies.tertiaryStudies[0].institute`}
+              placeholder="Study Institute Name"
+              type="text"
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name={`studies.tertiaryStudies[0].description`}
+              placeholder="Study Institute description"
+              type="text"
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name={`studies.tertiaryStudies[0].startDate`}
+              type="date"
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name={`studies.tertiaryStudies[0].endDate`}
+              type="date"
+              component={Input}
+            />
+            <h3>University Studies</h3>
+            <Field
+              className={styles.input}
+              name={`studies.universityStudies[0].institute`}
+              placeholder="Study Institute Name"
+              type="text"
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name={`studies.universityStudies[0].description`}
+              placeholder="Study Institute description"
+              type="text"
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name={`studies.universityStudies[0].startDate`}
+              type="date"
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name={`studies.universityStudies[0].endDate`}
+              type="date"
+              component={Input}
+            />
+            <h3>Informal Studies</h3>
+            <Field
+              className={styles.input}
+              name={`studies.informalStudies[0].institute`}
+              placeholder="Study Institute Name"
+              type="text"
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name={`studies.informalStudies[0].description`}
+              placeholder="Study Institute description"
+              type="text"
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name={`studies.informalStudies[0].startDate`}
+              type="date"
+              component={Input}
+            />
+            <Field
+              className={styles.input}
+              name={`studies.informalStudies[0].endDate`}
+              type="date"
+              component={Input}
+            />
+            <Button className={styles.button} content={'SAVE'} />
           </form>
         )}
       />
